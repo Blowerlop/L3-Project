@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90674e77ea264a1fb266c299f817de8b, type: 3}
+  m_Name: Cleanse
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.EmptyResults
+  requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
+    type: 3}
+  spellId: cleanse
+  spellIdHash: 994436503
+  instantiationType: 0
+  spellPrefab: {fileID: 4072781175783423226, guid: c5c8cbdd7a402e54993b24bbcd7b1ba8,
+    type: 3}
+  isInstant: 1
+  cooldown: 0.2
+  channelingTime: 0
+  castingFlags: 0
+  castAnimationDuration: 0
+  spellIcon: {fileID: 21300000, guid: 3b82d601564fd164d8db8367e60ae9b4, type: 3}
+  effects:
+  - rid: 6173595173914935296
+  onCasterEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 6173595173914935296
+      type: {class: CleanseEffect, ns: Project.Effects, asm: Assembly-CSharp}

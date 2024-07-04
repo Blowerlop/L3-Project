@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319452ba98e24818952eecfbb7dde52b, type: 3}
+  m_Name: DarkWillowAttackProjectile
+  m_EditorClassIdentifier: 
+  <modelPrefab>k__BackingField: {fileID: 2544146090136337729, guid: c036dc8f66e9bb6458d4d5f10c9a6aef,
+    type: 3}
+  _speed: 10

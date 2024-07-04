@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd61ab76d014bb2a04cc5c468583d48, type: 3}
+  m_Name: Zone
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.SingleVectorResults
+  requiredCaster: {fileID: 2732994462002990536, guid: 55dc4e10969599d4784bac0821ca0ff5,
+    type: 3}
+  spellId: zone
+  spellIdHash: 162900
+  instantiationType: 0
+  spellPrefab: {fileID: 7774840793179866475, guid: 2d656620d4c6696439f5ab0d2fc58415,
+    type: 3}
+  isInstant: 0
+  cooldown: 10
+  channelingTime: 0
+  castingFlags: 0
+  castAnimationDuration: 0
+  spellIcon: {fileID: 0}
+  effects:
+  - rid: 2778045279059050498
+  onCasterEffects: []
+  limitRadius: 5
+  zoneRadius: 1.5
+  lookAtCenter: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 2778045279059050498
+      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        DamageType: 0
+        DamageAmount: 50

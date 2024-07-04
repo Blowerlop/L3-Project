@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12f004e1e03a54140ba2f0472c646de7, type: 3}
+  m_Name: UI Manager
+  m_EditorClassIdentifier: 
+  baseColor: {r: 0.9411765, g: 0.9019608, b: 0.8235294, a: 1}
+  secondaryColor: {r: 0.03529412, g: 0.078431375, b: 0.15686275, a: 1}
+  accentColor: {r: 0.78431374, g: 0.60784316, b: 0.23529412, a: 1}
+  positiveColor: {r: 0.011764701, g: 0.67058825, b: 0.018309107, a: 1}
+  negativeColor: {r: 0.92941177, g: 0.25882354, b: 0.3137255, a: 1}
+  titleFont: {fileID: 11400000, guid: 634d9b85c7b62a14eb6869ce4da1b638, type: 2}
+  contentFont: {fileID: 11400000, guid: d61faadb0b308b446a01bb9e7b62b9da, type: 2}

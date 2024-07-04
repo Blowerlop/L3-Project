@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08e456fbec44e5db6e30ed6a7d6145d, type: 3}
+  m_Name: 2_Assassin
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.SingleVectorResults
+  requiredCaster: {fileID: 6659489374371741918, guid: 0e857f00997a879418d612dd4d69bd73,
+    type: 3}
+  spellId: assassin_2
+  spellIdHash: -773798087
+  instantiationType: 0
+  spellPrefab: {fileID: 6644908066795306404, guid: 7fd9923724057f14589028b353d887af,
+    type: 3}
+  isInstant: 0
+  cooldown: 13
+  channelingTime: 0.29
+  castingFlags: 0
+  castAnimationDuration: 0.4
+  spellName: Rake
+  spellIcon: {fileID: 21300000, guid: 5a1cd75884447b04894af2c94cce6dcf, type: 3}
+  spellDescription:
+    descriptionText: NightShade throws daggers in a circular shape in the target
+      direction that deals {0} damage to enemies hit and stun them for {3} seconds. 
+      At maximum range, the daggers homes back to NightShade, applying the same effects.
+    effects:
+    - rid: 1951814749556572177
+    - rid: 49919011783180293
+  effects:
+  - rid: 1951814749556572177
+  - rid: 49919011783180293
+  onCasterEffects: []
+  length: 11
+  references:
+    version: 2
+    RefIds:
+    - rid: 49919011783180293
+      type: {class: StunEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        Duration: 0.5
+    - rid: 1951814749556572177
+      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        DamageType: 0
+        DamageAmount: 175

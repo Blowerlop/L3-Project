@@ -1,0 +1,374 @@
+fileFormatVersion: 2
+guid: 2e18c2bc6ec15264a944710a5baac8e1
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BorderMat
+    second: {fileID: 2100000, guid: 077fb7dcd8169874a8ce7a0f413cf518, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ground
+    second: {fileID: 2100000, guid: f98e3e2cb13cb124a884b07b20f3945d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: IslandMat
+    second: {fileID: 2100000, guid: 9429d6a4eae3a7140880300be46802f8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: armandpine.001
+    second: {fileID: 2100000, guid: cf8f3cfb123e16546b4e53a3ba42a292, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: armandpine.002
+    second: {fileID: 2100000, guid: 560bb5f5ad1de964fbfb010141da0841, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bush_spring_02
+    second: {fileID: 2100000, guid: 0722997d71c89514ba553078e1d4363e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bush_spring_02.001
+    second: {fileID: 2100000, guid: 59132b1179e300b4a824911b85072c7c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: classical_column001_ivy001
+    second: {fileID: 2100000, guid: 783803c8768a976488dc5ea9c4a22d23, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: classical_fountain001
+    second: {fileID: 2100000, guid: 5a6f367f8aaa03847960063c97c550f0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: good_barracks_melee001
+    second: {fileID: 2100000, guid: eed2720b03ee7e5428a1f91e43ead8b3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: good_barracks_ranged001
+    second: {fileID: 2100000, guid: f9de7c8e4abab8943832b441b40c04d9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: good_base_wall005
+    second: {fileID: 2100000, guid: 1ebc6205bd640544093e069100eb8df7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: good_statue008a.004
+    second: {fileID: 2100000, guid: eccae1f3651f2694299c0b293466895d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: good_statue008a.005
+    second: {fileID: 2100000, guid: f4e5305c2e031a34fa7394f4803a2bac, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: good_statue010.002
+    second: {fileID: 2100000, guid: dfa68168ded17fb4e9b1e99d8f565ad1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: good_statue010a.004
+    second: {fileID: 2100000, guid: 09678c1cf77df26459ceecf27e93692d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: good_statue010a.005
+    second: {fileID: 2100000, guid: e716c2c387b3efd44b5ce11e81865e5e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: plants_jungle_001
+    second: {fileID: 2100000, guid: d14f86d9e649b4d4ba02cabcbb95a86f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stone_universal001a
+    second: {fileID: 2100000, guid: d241feb331c81ba4eb21c84a0568012c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stone_universal001a.001
+    second: {fileID: 2100000, guid: 894bb1411c593e24aa2b2e9b0d0c4957, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: universal_vines001
+    second: {fileID: 2100000, guid: f5eb1e99168d5404982e1591351abb9b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: universal_vines001.001
+    second: {fileID: 2100000, guid: aeab7d3c0f30d9e499908a1a1946ac03, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: universal_vines001.002
+    second: {fileID: 2100000, guid: 31e63b298c3a03042a48ffdd9f158bcf, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 1
+    second: {fileID: 2800000, guid: 163918d6aaca11546a4edcb9813ad9c1, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: FinalMapTerxture
+    second: {fileID: 2800000, guid: 343422fcc655461418d213e4464bb754, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: armandpine_color_psd_449eea2e
+    second: {fileID: 2800000, guid: d22a03d2fda68fc499b3c53cdbdacb81, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: armandpine_normal_psd_39687c13
+    second: {fileID: 2800000, guid: 71d93302977ad0c47bdf1034f4b7a18b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: armandpine_refl_psd_a1d37b81
+    second: {fileID: 2800000, guid: 5f9fcc60869e87543a5a418c9aec3ad6, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: bush_spring_02_color_psd_a25e5d87
+    second: {fileID: 2800000, guid: 0c2973f8001d89d4990b24bc02ecc3e3, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: bush_spring_02_normal_psd_27d369e5
+    second: {fileID: 2800000, guid: 22a7340fa6d982e49834aaf15482646b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: bush_spring_02_refl_psd_266532df
+    second: {fileID: 2800000, guid: 0a0ae32465b2c0f41b73974563a5fa7e, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: classical_column001_ivy001_color_psd_cb0eaffd
+    second: {fileID: 2800000, guid: 6f4faed19398cc244aaa5d5499305c3e, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: classical_column001_ivy001_normal_psd_ebc101f1
+    second: {fileID: 2800000, guid: 86e25480eea740546b1986d306e05d51, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: classical_fountain001_color_psd_8d01b5ff
+    second: {fileID: 2800000, guid: 09b23ec0543ba3f4f91ef13b72dd923f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: classical_fountain001_normal_psd_bb855e83
+    second: {fileID: 2800000, guid: b7b7e3f845671774599bcd342756e084, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_barracks_melee001_color_psd_1beb4b8
+    second: {fileID: 2800000, guid: 8eadc383b8f384644befb7eebe516e50, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_barracks_melee001_refl_tga_e4f3a785
+    second: {fileID: 2800000, guid: ba864444303bf5e468c5ca705d3b1ddb, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_barracks_ranged001_color_psd_582a00e5
+    second: {fileID: 2800000, guid: 14b05d77f2c2a8943ae2f62b2787cac6, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_barracks_ranged001_refl_tga_c92dc582
+    second: {fileID: 2800000, guid: e5533a3da7f436442b9ed25cc2ded204, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_base_wall005_color_psd_dbd98991
+    second: {fileID: 2800000, guid: d2ab9404d987bff4680ff23e3b4e923a, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_base_wall005_refl_tga_b352ee25
+    second: {fileID: 2800000, guid: 1672e400d8522ca46a55bf08d751f4fc, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_statue008a_color_psd_8ee5de97
+    second: {fileID: 2800000, guid: 643af0dd5c2b76a40991bc1f0ffb186a, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_statue008a_refl_tga_96834f2d
+    second: {fileID: 2800000, guid: d628565d25df96f4c833358102d818db, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_statue010_color_psd_7cedd79c
+    second: {fileID: 2800000, guid: 2e4b963f675fbca44994029c1286df72, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_statue010a_color_psd_6a8fca68
+    second: {fileID: 2800000, guid: 48269eece6e1743428100c79d3bf3632, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: good_statue010a_refl_tga_a8234311
+    second: {fileID: 2800000, guid: 2468eed99c5cd3245aa63866df3955aa, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: grace-liu-tft-04
+    second: {fileID: 2800000, guid: 1d12a9b82d639a247827bc2261ad26bf, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: plants_jungle_001_color_psd_d1d70e40
+    second: {fileID: 2800000, guid: c160857c382ff0046b110461744366f1, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: plants_jungle_001_normal_psd_8c3a24d
+    second: {fileID: 2800000, guid: 19abf3ade4b031f4794928232f34bc82, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: plants_jungle_001_refl_psd_6727a79f
+    second: {fileID: 2800000, guid: 7ec7a19d04295824b8c99bd94926ea32, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: stone_universal001a_color_psd_44ef4249
+    second: {fileID: 2800000, guid: db01c8795b5f02143ab72d6b180a80fb, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: universal_vines001_color_psd_8a269b29
+    second: {fileID: 2800000, guid: 3f341dfbf21cfed478c79ed526857095, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: universal_vines001_refl_tga_6b1e90fe
+    second: {fileID: 2800000, guid: 157d3d191bbb8a040a872bce94cb9fa6, type: 3}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

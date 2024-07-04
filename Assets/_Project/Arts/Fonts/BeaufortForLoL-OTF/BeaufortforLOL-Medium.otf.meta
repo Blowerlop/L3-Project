@@ -1,0 +1,32 @@
+fileFormatVersion: 2
+guid: 0ff14473041047847b62104db3f04d6c
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Beaufort for LOL
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 79d93db2e75015d4ea738ef4fc6fbebb, type: 3}
+  - {fileID: 12800000, guid: 468d60471114b434e93ab0c28978dec7, type: 3}
+  - {fileID: 12800000, guid: ec087f00f219e284c94d11524e7e85c7, type: 3}
+  - {fileID: 12800000, guid: acef2e9c28d9b0745aff43666b785532, type: 3}
+  - {fileID: 12800000, guid: f50e4b940cc501d47ab4cb893e535a7f, type: 3}
+  - {fileID: 12800000, guid: d890e7c2ace05a2499f961117a1f4387, type: 3}
+  - {fileID: 12800000, guid: 4834e7732db3ec74593c20dd606b65bf, type: 3}
+  - {fileID: 12800000, guid: 4ec2c3ae4047c3b42b224236c5366487, type: 3}
+  - {fileID: 12800000, guid: dc524efc0c7ae854885674c86eece466, type: 3}
+  - {fileID: 12800000, guid: 1b45c3912ae6e7a419245efd6d36c9a6, type: 3}
+  - {fileID: 12800000, guid: 82242f50cc3af1249b7e4c87c6a1e961, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

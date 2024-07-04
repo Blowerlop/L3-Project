@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a933036e9ac32488c84340715fd6e3, type: 3}
+  m_Name: WraithKing
+  m_EditorClassIdentifier: 
+  id: 152084797
+  <characterName>k__BackingField: Valiant
+  <avatar>k__BackingField: {fileID: 21300000, guid: b1debf5ce481d0445b3232a040566461,
+    type: 3}
+  <avatar2>k__BackingField: {fileID: 21300000, guid: a06a8d0b87c881c4c99a5dc5739813a8,
+    type: 3}
+  <model>k__BackingField: {fileID: 6010882323663221475, guid: 51d4bd8232cbc9b419dff7285ddc8fc1,
+    type: 3}
+  <prefab>k__BackingField: {fileID: 4541552331273825574, guid: fdad279ff921e6b4992b30b0722a12e9,
+    type: 3}
+  spells:
+  - {fileID: 11400000, guid: c8cad886b5d748e4cb205f3eae4a2854, type: 2}
+  - {fileID: 11400000, guid: 8871f8650ca6b154fa78e33e13c0a090, type: 2}
+  - {fileID: 11400000, guid: f268316820b712c46b073c9c53f165c9, type: 2}
+  - {fileID: 11400000, guid: 07a638d92fe3d774bb49609e794557b9, type: 2}
+  stats:
+  - rid: 8967663378920636439
+  - rid: 8967663378920636440
+  - rid: 8967663378920636441
+  - rid: 8967663378920636442
+  - rid: 2778045172259749888
+  - rid: 2778045199733227520
+  <attackType>k__BackingField: 0
+  projectileData: {fileID: 11400000, guid: ea5f7947448615a4ab5e6580f97c5004, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 2778045172259749888
+      type: {class: MoveSpeedStat, ns: Project, asm: Assembly-CSharp}
+      data:
+        _defaultValue: 7
+        _value: 7
+        _minValue: 1
+        _maxValue: 15
+    - rid: 2778045199733227520
+      type: {class: ShieldStat, ns: Project, asm: Assembly-CSharp}
+      data:
+        _defaultValue: 0
+        _value: 0
+        _minValue: 0
+        _maxValue: 999
+    - rid: 8967663378920636439
+      type: {class: HealthStat, ns: Project, asm: Assembly-CSharp}
+      data:
+        _defaultValue: 3000
+        _value: 3000
+        _minValue: 0
+        _maxValue: 3000
+    - rid: 8967663378920636440
+      type: {class: AttackDamageStat, ns: Project, asm: Assembly-CSharp}
+      data:
+        _defaultValue: 175
+        _value: 175
+        _minValue: 0
+        _maxValue: 400
+    - rid: 8967663378920636441
+      type: {class: AttackRangeStat, ns: Project, asm: Assembly-CSharp}
+      data:
+        _defaultValue: 5
+        _value: 5
+        _minValue: 0
+        _maxValue: 8
+    - rid: 8967663378920636442
+      type: {class: AttackSpeedStat, ns: Project, asm: Assembly-CSharp}
+      data:
+        _defaultValue: 1.25
+        _value: 1.25
+        _minValue: 0
+        _maxValue: 2

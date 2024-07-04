@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a933036e9ac32488c84340715fd6e3, type: 3}
+  m_Name: mobile_character
+  m_EditorClassIdentifier: 
+  id: 540008469
+  <characterName>k__BackingField: mobile_character
+  <avatar>k__BackingField: {fileID: 21300000, guid: 700501e0927233444865bee2355d30de,
+    type: 3}
+  <prefab>k__BackingField: {fileID: 8566652343378925700, guid: 2ba8c0c9a11590248a63992bd0b3d1e1,
+    type: 3}
+  <model>k__BackingField: {fileID: 0}
+  spells:
+  - {fileID: 11400000, guid: 5895892d18a0d2a408b7c331d1bda849, type: 2}
+  - {fileID: 11400000, guid: 5895892d18a0d2a408b7c331d1bda849, type: 2}
+  - {fileID: 11400000, guid: 5895892d18a0d2a408b7c331d1bda849, type: 2}
+  - {fileID: 11400000, guid: 5895892d18a0d2a408b7c331d1bda849, type: 2}
+  <BaseHealth>k__BackingField: 0

@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90674e77ea264a1fb266c299f817de8b, type: 3}
+  m_Name: 3_Mage
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.EmptyResults
+  requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
+    type: 3}
+  spellId: mage_3
+  spellIdHash: -289079581
+  instantiationType: 2
+  spellPrefab: {fileID: 0}
+  isInstant: 1
+  cooldown: 18
+  channelingTime: 0.75
+  castingFlags: 0
+  castAnimationDuration: 0
+  spellName: Molten Shield
+  spellIcon: {fileID: 21300000, guid: 6d1ce23f8ee525f4e8c1be74278b7a28, type: 3}
+  spellDescription:
+    descriptionText: Ashenblaze grants himself a shield blocking {0} damages for
+      {1} seconds and gains movement speed for {3} seconds.
+    effects:
+    - rid: 1951814709268185091
+    - rid: 49919011783180288
+  effects:
+  - rid: 1951814709268185091
+  - rid: 49919011783180288
+  onCasterEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 49919011783180288
+      type: {class: SlowEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        SlowAmount: -4
+        Duration: 3
+    - rid: 1951814709268185091
+      type: {class: ShieldEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        ShieldAmount: 400
+        HasDuration: 1
+        Duration: 4

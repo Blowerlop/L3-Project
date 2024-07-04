@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90674e77ea264a1fb266c299f817de8b, type: 3}
+  m_Name: SelfDamage
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.EmptyResults
+  requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
+    type: 3}
+  spellId: self_damage
+  spellIdHash: 307776932
+  instantiationType: 0
+  spellPrefab: {fileID: 4072781175783423226, guid: 51947ef2a5f7a7249a22ee39841a16e7,
+    type: 3}
+  isInstant: 1
+  cooldown: 0.2
+  channelingTime: 0
+  castingFlags: 0
+  castAnimationDuration: 0
+  spellIcon: {fileID: 0}
+  effects:
+  - rid: 2778045199733227522
+  onCasterEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 2778045199733227522
+      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        DamageType: 0
+        DamageAmount: 50

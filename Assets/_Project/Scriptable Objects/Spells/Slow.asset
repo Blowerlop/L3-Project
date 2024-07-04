@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd61ab76d014bb2a04cc5c468583d48, type: 3}
+  m_Name: Slow
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.SingleVectorResults
+  requiredCaster: {fileID: 2732994462002990536, guid: 55dc4e10969599d4784bac0821ca0ff5,
+    type: 3}
+  spellId: slow
+  spellIdHash: 699999
+  instantiationType: 0
+  spellPrefab: {fileID: 7774840793179866475, guid: 71456acd1c5897b4a85a5ec3298bada1,
+    type: 3}
+  isInstant: 0
+  cooldown: 0.2
+  channelingTime: 0
+  castingFlags: 0
+  castAnimationDuration: 0
+  spellName: 
+  spellIcon: {fileID: 21300000, guid: b03e1b0c18908f340916d4f8b6356074, type: 3}
+  spellDescription:
+    descriptionText: 
+    effects: []
+  effects:
+  - rid: 6173595388760555523
+  onCasterEffects: []
+  limitRadius: 10
+  zoneRadius: 6.5
+  lookAtCenter: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 6173595388760555523
+      type: {class: SlowEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        SlowAmount: 15
+        Duration: 3

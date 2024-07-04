@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90674e77ea264a1fb266c299f817de8b, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.EmptyResults
+  requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
+    type: 3}
+  spellId: shield
+  spellIdHash: 125756727
+  instantiationType: 0
+  spellPrefab: {fileID: 5062626919631026114, guid: 94253597b80421446861be5a2e5a48fb,
+    type: 3}
+  isInstant: 1
+  cooldown: 0.2
+  channelingTime: 0
+  castingFlags: 0
+  castAnimationDuration: 0
+  spellIcon: {fileID: 21300000, guid: 0badcbba2438d6f4790804b01200bcc9, type: 3}
+  effects:
+  - rid: 2778045199733227521
+  onCasterEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 2778045199733227521
+      type: {class: ShieldEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        ShieldAmount: 300
+        HasDuration: 1
+        Duration: 2
