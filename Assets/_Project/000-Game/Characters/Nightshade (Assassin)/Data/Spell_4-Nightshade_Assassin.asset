@@ -19,7 +19,7 @@ MonoBehaviour:
   overridePreviewPrefab: {fileID: 8663423836947423225, guid: 80fd70b4046e8bf4eaad7bc5e7362bca,
     type: 3}
   spellId: assassin_4
-  spellIdHash: -529952656
+  spellIdHash: -1190680216
   instantiationType: 0
   spellPrefab: {fileID: 3732644935445707112, guid: 8d83bab3cc299b24d815937ca32caecd,
     type: 3}
@@ -33,24 +33,22 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Nightshade attempts to execute all the ennemy in a cone shape
       in front of him, dealing {0} damages increased by {2}% of their missing health.
-    effects:
-    - rid: 1951814773975023617
-    - rid: 714726027457462273
+    effects: []
   effects:
-  - rid: 1951814773975023617
-  - rid: 714726027457462273
+  - rid: 4536526872778637598
+  - rid: 4536526872778637599
   onCasterEffects: []
   length: 8
   references:
     version: 2
     RefIds:
-    - rid: 714726027457462273
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
-      data:
-        DamageType: 1
-        DamageAmount: 10
-    - rid: 1951814773975023617
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526872778637598
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 850
+    - rid: 4536526872778637599
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
+      data:
+        DamageType: 1
+        DamageAmount: 10

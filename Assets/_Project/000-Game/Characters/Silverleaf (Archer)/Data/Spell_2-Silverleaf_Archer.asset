@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.EmptyResults
   requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: sniper_2
-  spellIdHash: -947313321
+  spellIdHash: 1068140044
   instantiationType: 2
   spellPrefab: {fileID: 4032526782687921832, guid: 3358c38594496724dbecb95ef16690c9,
     type: 3}
@@ -29,16 +31,15 @@ MonoBehaviour:
   spellIcon: {fileID: 21300000, guid: f937f5fa3898cf84fa3ed33d474edebf, type: 3}
   spellDescription:
     descriptionText: SilverLeaf's basic attacks gain {0} bonus range for {1} seconds.
-    effects:
-    - rid: 1951814749556572166
+    effects: []
   effects:
-  - rid: 1951814749556572166
+  - rid: 4536526881260830803
   onCasterEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 1951814749556572166
-      type: {class: RangeEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830803
+      type: {class: RangeEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         _rangeAmount: 10
         _duration: 5

@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.EmptyResults
   requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: shield
-  spellIdHash: 125756727
+  spellIdHash: -239800497
   instantiationType: 0
   spellPrefab: {fileID: 5062626919631026114, guid: 94253597b80421446861be5a2e5a48fb,
     type: 3}
@@ -25,15 +27,19 @@ MonoBehaviour:
   channelingTime: 0
   castingFlags: 0
   castAnimationDuration: 0
+  spellName: 
   spellIcon: {fileID: 21300000, guid: 0badcbba2438d6f4790804b01200bcc9, type: 3}
+  spellDescription:
+    descriptionText: 
+    effects: []
   effects:
-  - rid: 2778045199733227521
+  - rid: 4536526881260830813
   onCasterEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 2778045199733227521
-      type: {class: ShieldEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830813
+      type: {class: ShieldEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         ShieldAmount: 300
         HasDuration: 1

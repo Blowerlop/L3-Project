@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.EmptyResults
   requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: heal
-  spellIdHash: 358616
+  spellIdHash: -514975768
   instantiationType: 0
   spellPrefab: {fileID: 4072781175783423226, guid: c09f9c93f89aa2c4393aef531c06ffbf,
     type: 3}
@@ -25,14 +27,18 @@ MonoBehaviour:
   channelingTime: 0
   castingFlags: 0
   castAnimationDuration: 0
+  spellName: 
   spellIcon: {fileID: 21300000, guid: 16fc69256dead1144b5c638b01dc75b9, type: 3}
+  spellDescription:
+    descriptionText: 
+    effects: []
   effects:
-  - rid: 2778045304719278080
+  - rid: 4536526881260830811
   onCasterEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 2778045304719278080
-      type: {class: HealEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830811
+      type: {class: HealEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         HealAmount: 150

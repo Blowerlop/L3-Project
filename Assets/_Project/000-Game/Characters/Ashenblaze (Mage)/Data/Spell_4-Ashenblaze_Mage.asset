@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.SingleVectorResults
   requiredCaster: {fileID: 2732994462002990536, guid: 55dc4e10969599d4784bac0821ca0ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: mage_4
-  spellIdHash: -260450430
+  spellIdHash: -646204423
   instantiationType: 0
   spellPrefab: {fileID: 7579399146284048163, guid: d8b23d05dbca177449bce4313c8a53f1,
     type: 3}
@@ -30,12 +32,10 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Ashenblaze invokes a falling fireball at the target location
       dealing {0} damages to enemies and stun them for {3} seconds.
-    effects:
-    - rid: 1951814749556572165
-    - rid: 49919016300445697
+    effects: []
   effects:
-  - rid: 1951814749556572165
-  - rid: 49919016300445697
+  - rid: 4536526872778637596
+  - rid: 4536526872778637597
   onCasterEffects: []
   limitRadius: 15
   zoneRadius: 8.75
@@ -43,12 +43,12 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 49919016300445697
-      type: {class: StunEffect, ns: Project.Effects, asm: Assembly-CSharp}
-      data:
-        Duration: 3
-    - rid: 1951814749556572165
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526872778637596
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 700
+    - rid: 4536526872778637597
+      type: {class: StunEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
+      data:
+        Duration: 3

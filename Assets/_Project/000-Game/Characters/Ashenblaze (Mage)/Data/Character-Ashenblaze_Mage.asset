@@ -28,56 +28,59 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1fba36bfbbc9c424a86a4a9bc43eb482, type: 2}
   - {fileID: 11400000, guid: ba300de25e0d3a9408e8df8127846988, type: 2}
   stats:
-  - rid: 8967663378920636439
-  - rid: 8967663378920636440
-  - rid: 8967663378920636441
-  - rid: 8967663378920636442
-  - rid: 2778045172259749888
-  - rid: 2778045199733227520
+  - rid: 4536526872778637569
+  - rid: 4536526872778637570
+  - rid: 4536526872778637571
+  - rid: 4536526872778637572
+  - rid: 4536526872778637573
+  - rid: 4536526872778637574
   <attackType>k__BackingField: 1
   projectileData: {fileID: 11400000, guid: 8d61cf52d08065a4aa9a4b0fb42320be, type: 2}
   references:
     version: 2
     RefIds:
-    - rid: 2778045172259749888
-      type: {class: MoveSpeedStat, ns: Project, asm: Assembly-CSharp}
-      data:
-        _defaultValue: 6
-        _value: 6
-        _minValue: 1
-        _maxValue: 100
-    - rid: 2778045199733227520
-      type: {class: ShieldStat, ns: Project, asm: Assembly-CSharp}
-      data:
-        _defaultValue: 0
-        _value: 0
-        _minValue: 0
-        _maxValue: 999
-    - rid: 8967663378920636439
-      type: {class: HealthStat, ns: Project, asm: Assembly-CSharp}
+    - rid: 4536526872778637569
+      type: {class: HealthStat, ns: _Project._200_Dev.Entities.Player.Stats, asm: Project}
       data:
         _defaultValue: 2300
-        _value: 2550
+        _value: 2300
         _minValue: 0
         _maxValue: 2400
-    - rid: 8967663378920636440
-      type: {class: AttackDamageStat, ns: Project, asm: Assembly-CSharp}
+    - rid: 4536526872778637570
+      type: {class: AttackDamageStat, ns: _Project._200_Dev.Entities.Player.Stats,
+        asm: Project}
       data:
         _defaultValue: 75
         _value: 75
         _minValue: 0
         _maxValue: 150
-    - rid: 8967663378920636441
-      type: {class: AttackRangeStat, ns: Project, asm: Assembly-CSharp}
+    - rid: 4536526872778637571
+      type: {class: AttackRangeStat, ns: _Project._200_Dev.Entities.Player.Stats,
+        asm: Project}
       data:
         _defaultValue: 15
         _value: 15
         _minValue: 0
         _maxValue: 30
-    - rid: 8967663378920636442
-      type: {class: AttackSpeedStat, ns: Project, asm: Assembly-CSharp}
+    - rid: 4536526872778637572
+      type: {class: AttackSpeedStat, ns: _Project._200_Dev.Entities.Player.Stats,
+        asm: Project}
       data:
         _defaultValue: 1
         _value: 1
         _minValue: 0
         _maxValue: 2
+    - rid: 4536526872778637573
+      type: {class: MoveSpeedStat, ns: _Project._200_Dev.Entities.Player.Stats, asm: Project}
+      data:
+        _defaultValue: 6
+        _value: 6
+        _minValue: 1
+        _maxValue: 100
+    - rid: 4536526872778637574
+      type: {class: ShieldStat, ns: _Project._200_Dev.Entities.Player.Stats, asm: Project}
+      data:
+        _defaultValue: 0
+        _value: 0
+        _minValue: 0
+        _maxValue: 999

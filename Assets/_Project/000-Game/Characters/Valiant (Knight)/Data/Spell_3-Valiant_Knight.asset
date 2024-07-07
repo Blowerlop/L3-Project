@@ -19,7 +19,7 @@ MonoBehaviour:
   overridePreviewPrefab: {fileID: 6298642733815016104, guid: f72816703920def4fbcaf6d279d07bf3,
     type: 3}
   spellId: nerag_3
-  spellIdHash: -959782540
+  spellIdHash: 1548987203
   instantiationType: 1
   spellPrefab: {fileID: 2263156651372379009, guid: ccd9bfb88b8d492449828005085e034f,
     type: 3}
@@ -34,16 +34,15 @@ MonoBehaviour:
     descriptionText: 'Valiant rapidly spins his sword around himself over 3 seconds,
       becoming unable to basic attack, and dealing physical damage to nearby enemies
       periodically. Damage per spin : {0}'
-    effects:
-    - rid: 1951814709268185092
+    effects: []
   effects:
-  - rid: 1951814709268185092
+  - rid: 4536526872778637603
   onCasterEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 1951814709268185092
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526872778637603
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 75

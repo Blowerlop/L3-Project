@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.IntResults
   requiredCaster: {fileID: -3665153243824835686, guid: a055cf036774de84594cb432236bf128,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: nerag_4
-  spellIdHash: -72278859
+  spellIdHash: 1548987200
   instantiationType: 0
   spellPrefab: {fileID: -9117457690191773062, guid: 6cba74a68115b5c4a97235a5251e9d7d,
     type: 3}
@@ -30,25 +32,23 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Valiant calls upon the might of Convergence onto the target
       enemy, dealing them {0} damages and {2}% missing health percentage.
-    effects:
-    - rid: 1951814709268185093
-    - rid: 1951814709268185094
+    effects: []
   effects:
-  - rid: 1951814709268185093
-  - rid: 1951814709268185094
+  - rid: 4536526872778637593
+  - rid: 4536526872778637594
   onCasterEffects: []
   targetType: 0
   limitRadius: 6
   references:
     version: 2
     RefIds:
-    - rid: 1951814709268185093
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526872778637593
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 750
-    - rid: 1951814709268185094
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526872778637594
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 1
         DamageAmount: 20

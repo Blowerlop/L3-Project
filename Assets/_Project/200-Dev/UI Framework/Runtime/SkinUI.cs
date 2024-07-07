@@ -16,7 +16,7 @@ namespace _Project._200_Dev.UI_Framework.Runtime
     public sealed class SkinUI : MonoBehaviour
     {
         [SerializeField] private EColorType _colorType;
-        [SerializeField, ShowIf("@_componentType == EComponentTypeUI.Text")] private ETextType _textType;
+        [SerializeField, ShowIf("@GetComponent<TMP_Text>() != null")] private ETextType _textType;
         [SerializeField] private bool _useCustomAlpha;
 
 
@@ -24,6 +24,7 @@ namespace _Project._200_Dev.UI_Framework.Runtime
         private void Start()
         {
             OnValidate();
+            
         }
         
         public void OnValidate()

@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.SingleVectorResults
   requiredCaster: {fileID: 2732994462002990536, guid: 55dc4e10969599d4784bac0821ca0ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: assassin_3
-  spellIdHash: -151875367
+  spellIdHash: -431165329
   instantiationType: 1
   spellPrefab: {fileID: -5568349316116306161, guid: 0872ab5e09d460245b493cc1799cc71b,
     type: 3}
@@ -30,24 +32,24 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Nightshade blinks toward the target location, dealing {0} damage
       to all nearby enemies upon arrival.
-    effects:
-    - rid: 611475241524527104
+    effects: []
   effects:
-  - rid: 611475241524527104
+  - rid: 4536526881260830804
   onCasterEffects:
-  - rid: 611475241524527105
+  - rid: 4536526881260830805
   limitRadius: 17
   zoneRadius: 4
   lookAtCenter: 0
   references:
     version: 2
     RefIds:
-    - rid: 611475241524527104
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830804
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 225
-    - rid: 611475241524527105
-      type: {class: TeleportEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830805
+      type: {class: TeleportEffect, ns: _Project._200_Dev.Entities.Player.Effects,
+        asm: Project}
       data:
         _distanceToTarget: 0.25

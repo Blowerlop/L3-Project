@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.EmptyResults
   requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: nerag_2
-  spellIdHash: -847286212
+  spellIdHash: 1548987202
   instantiationType: 2
   spellPrefab: {fileID: 0}
   isInstant: 1
@@ -29,16 +31,15 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Valiant reduces incoming damage by creating a shield of {0}
       for {1} seconds
-    effects:
-    - rid: 1951814709268185091
+    effects: []
   effects:
-  - rid: 1951814709268185091
+  - rid: 4536526872778637595
   onCasterEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 1951814709268185091
-      type: {class: ShieldEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526872778637595
+      type: {class: ShieldEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         ShieldAmount: 350
         HasDuration: 1

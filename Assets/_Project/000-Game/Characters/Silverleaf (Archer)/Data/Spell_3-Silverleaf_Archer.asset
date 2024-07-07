@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.IntResults
   requiredCaster: {fileID: -3665153243824835686, guid: a055cf036774de84594cb432236bf128,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: sniper_3
-  spellIdHash: -434699453
+  spellIdHash: -497943897
   instantiationType: 0
   spellPrefab: {fileID: 9140298656200164716, guid: 49deba1de7e9598459986f31fce7af22,
     type: 3}
@@ -30,25 +32,23 @@ MonoBehaviour:
   spellDescription:
     descriptionText: SilverLeaf fires a magical arrow that slow the ennemy for {1}
       seconds and grants her more movement speed for {3} seconds.
-    effects:
-    - rid: 1951814749556572167
-    - rid: 611475172293607424
+    effects: []
   effects:
-  - rid: 1951814749556572167
+  - rid: 4536526881260830797
   onCasterEffects:
-  - rid: 611475172293607424
+  - rid: 4536526881260830798
   targetType: 0
   limitRadius: 20
   references:
     version: 2
     RefIds:
-    - rid: 611475172293607424
-      type: {class: SlowEffect, ns: Project.Effects, asm: Assembly-CSharp}
-      data:
-        SlowAmount: -3
-        Duration: 4
-    - rid: 1951814749556572167
-      type: {class: SlowEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830797
+      type: {class: SlowEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         SlowAmount: 2
         Duration: 2
+    - rid: 4536526881260830798
+      type: {class: SlowEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
+      data:
+        SlowAmount: -3
+        Duration: 4

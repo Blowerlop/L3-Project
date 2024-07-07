@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.SingleVectorResults
   requiredCaster: {fileID: 6659489374371741918, guid: 0e857f00997a879418d612dd4d69bd73,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: skillshot
-  spellIdHash: 165235253
+  spellIdHash: 667286149
   instantiationType: 0
   spellPrefab: {fileID: 7716055719088318621, guid: d36295997fb1bec4f88a5540858e8f78,
     type: 3}
@@ -25,22 +27,26 @@ MonoBehaviour:
   channelingTime: 0
   castingFlags: 0
   castAnimationDuration: 0
+  spellName: 
   spellIcon: {fileID: 0}
+  spellDescription:
+    descriptionText: 
+    effects: []
   effects:
-  - rid: 2921934589571366912
-  - rid: 2921934589586046976
+  - rid: 4536526881260830815
+  - rid: 4536526881260830816
   onCasterEffects: []
   length: 6
   references:
     version: 2
     RefIds:
-    - rid: 2921934589571366912
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830815
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 25
-    - rid: 2921934589586046976
-      type: {class: SlowEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830816
+      type: {class: SlowEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         SlowAmount: 150
         Duration: 5

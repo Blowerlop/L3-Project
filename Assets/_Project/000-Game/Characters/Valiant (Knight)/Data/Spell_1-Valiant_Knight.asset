@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.EmptyResults
   requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: nerag_1
-  spellIdHash: -734789884
+  spellIdHash: 1548987205
   instantiationType: 2
   spellPrefab: {fileID: 2330759950052180646, guid: cd70979e06b56b54383d6ea947cf9cae,
     type: 3}
@@ -30,27 +32,27 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Valiant empowers his next basic attack to deal {0} bonus damage
       and silence them for {3} seconds.
-    effects:
-    - rid: 1951814709268185089
-    - rid: 1951814709268185090
+    effects: []
   effects:
-  - rid: 1951814709268185088
+  - rid: 4536526872778637604
   onCasterEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 1951814709268185088
-      type: {class: NextAutoEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526872778637604
+      type: {class: NextAutoEffect, ns: _Project._200_Dev.Entities.Player.Effects,
+        asm: Project}
       data:
         _effectsOnAuto:
-        - rid: 1951814709268185089
-        - rid: 1951814709268185090
-    - rid: 1951814709268185089
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+        - rid: 4536526872778637605
+        - rid: 4536526872778637606
+    - rid: 4536526872778637605
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 250
-    - rid: 1951814709268185090
-      type: {class: SilenceEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526872778637606
+      type: {class: SilenceEffect, ns: _Project._200_Dev.Entities.Player.Effects,
+        asm: Project}
       data:
         Duration: 1.5

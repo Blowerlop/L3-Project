@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.SingleVectorResults
   requiredCaster: {fileID: 2732994462002990536, guid: 55dc4e10969599d4784bac0821ca0ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: zone
-  spellIdHash: 162900
+  spellIdHash: 1414245788
   instantiationType: 0
   spellPrefab: {fileID: 7774840793179866475, guid: 2d656620d4c6696439f5ab0d2fc58415,
     type: 3}
@@ -25,9 +27,13 @@ MonoBehaviour:
   channelingTime: 0
   castingFlags: 0
   castAnimationDuration: 0
+  spellName: 
   spellIcon: {fileID: 0}
+  spellDescription:
+    descriptionText: 
+    effects: []
   effects:
-  - rid: 2778045279059050498
+  - rid: 4536526881260830820
   onCasterEffects: []
   limitRadius: 5
   zoneRadius: 1.5
@@ -35,8 +41,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 2778045279059050498
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830820
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 50

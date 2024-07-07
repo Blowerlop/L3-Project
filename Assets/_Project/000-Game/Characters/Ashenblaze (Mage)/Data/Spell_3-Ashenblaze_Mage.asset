@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.EmptyResults
   requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: mage_3
-  spellIdHash: -289079581
+  spellIdHash: -1049488950
   instantiationType: 2
   spellPrefab: {fileID: 0}
   isInstant: 1
@@ -29,24 +31,22 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Ashenblaze grants himself a shield blocking {0} damages for
       {1} seconds and gains movement speed for {3} seconds.
-    effects:
-    - rid: 1951814709268185091
-    - rid: 49919011783180288
+    effects: []
   effects:
-  - rid: 1951814709268185091
-  - rid: 49919011783180288
+  - rid: 4536526881260830806
+  - rid: 4536526881260830807
   onCasterEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 49919011783180288
-      type: {class: SlowEffect, ns: Project.Effects, asm: Assembly-CSharp}
-      data:
-        SlowAmount: -4
-        Duration: 3
-    - rid: 1951814709268185091
-      type: {class: ShieldEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830806
+      type: {class: ShieldEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         ShieldAmount: 400
         HasDuration: 1
         Duration: 4
+    - rid: 4536526881260830807
+      type: {class: SlowEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
+      data:
+        SlowAmount: -4
+        Duration: 3

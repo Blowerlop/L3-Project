@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.SingleVectorResults
   requiredCaster: {fileID: 2732994462002990536, guid: 55dc4e10969599d4784bac0821ca0ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: sniper_1
-  spellIdHash: -459927180
+  spellIdHash: 664855517
   instantiationType: 0
   spellPrefab: {fileID: 7579399146284048163, guid: 60e0088a4cb5c40469dd21afe8556a87,
     type: 3}
@@ -30,12 +32,10 @@ MonoBehaviour:
   spellDescription:
     descriptionText: SilverLeaf shoots a volley of arrows in the zone targetted, 
       dealing physical {2}  damage to enemy hit,  and applying a {1} seconds slow.
-    effects:
-    - rid: 1951814749556572164
-    - rid: 1951814749556572165
+    effects: []
   effects:
-  - rid: 1951814749556572164
-  - rid: 1951814749556572165
+  - rid: 4536526881260830799
+  - rid: 4536526881260830800
   onCasterEffects: []
   limitRadius: 15
   zoneRadius: 4
@@ -43,13 +43,13 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1951814749556572164
-      type: {class: SlowEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830799
+      type: {class: SlowEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         SlowAmount: 3
         Duration: 2
-    - rid: 1951814749556572165
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830800
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 285

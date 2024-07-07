@@ -18,7 +18,6 @@ MonoBehaviour:
   <beforeSceneLoad>k__BackingField:
   - {fileID: 1765682051150463369, guid: ce9b0904bfe516b40b3780f52281d8ae, type: 3}
   - {fileID: 881529722694306890, guid: ce9b0904bfe516b40b3780f52281d8ae, type: 3}
-  - {fileID: 2681849166981374674, guid: 8ffb356552d89254ea25c2bae1abf027, type: 3}
   - {fileID: 8897260045845080591, guid: 51c7b9cff5bc57c4f9b846616e6c56b8, type: 3}
   - {fileID: 6081436526929384584, guid: 42c8cba60aa1ab64195d8b451f1d948c, type: 3}
   - {fileID: 1892950470809605460, guid: 340ff278362f1804588e36042bb06555, type: 3}

@@ -15,8 +15,10 @@ MonoBehaviour:
   resultTypeSelection: Project.Spells.EmptyResults
   requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
     type: 3}
+  overrideCasterPreview: 0
+  overridePreviewPrefab: {fileID: 0}
   spellId: self_damage
-  spellIdHash: 307776932
+  spellIdHash: 664560456
   instantiationType: 0
   spellPrefab: {fileID: 4072781175783423226, guid: 51947ef2a5f7a7249a22ee39841a16e7,
     type: 3}
@@ -25,15 +27,19 @@ MonoBehaviour:
   channelingTime: 0
   castingFlags: 0
   castAnimationDuration: 0
+  spellName: 
   spellIcon: {fileID: 0}
+  spellDescription:
+    descriptionText: 
+    effects: []
   effects:
-  - rid: 2778045199733227522
+  - rid: 4536526881260830812
   onCasterEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 2778045199733227522
-      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+    - rid: 4536526881260830812
+      type: {class: DamageEffect, ns: _Project._200_Dev.Entities.Player.Effects, asm: Project}
       data:
         DamageType: 0
         DamageAmount: 50
