@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90674e77ea264a1fb266c299f817de8b, type: 3}
+  m_Name: Spell_1-Nightshade_Assassin
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.EmptyResults
+  requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
+    type: 3}
+  spellId: assassin_1
+  spellIdHash: -395720798
+  instantiationType: 2
+  spellPrefab: {fileID: 2881671087779449449, guid: 82d33aa2484433445835c9d1501e1061,
+    type: 3}
+  isInstant: 1
+  cooldown: 10
+  channelingTime: 0
+  castingFlags: 1
+  castAnimationDuration: 0.05
+  spellName: Decimate
+  spellIcon: {fileID: 21300000, guid: 2e61a8d33573e484996edfa61711bc52, type: 3}
+  spellDescription:
+    descriptionText: Nightshade empowers his next basic attack to gain {0} additionnal
+      damages and slow them for {3} seconds.
+    effects:
+    - rid: 1951814749556572171
+    - rid: 49919011783180294
+  effects:
+  - rid: 1951814749556572170
+  onCasterEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 49919011783180294
+      type: {class: SlowEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        SlowAmount: 2
+        Duration: 2
+    - rid: 1951814749556572170
+      type: {class: NextAutoEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        _effectsOnAuto:
+        - rid: 1951814749556572171
+        - rid: 49919011783180294
+    - rid: 1951814749556572171
+      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        DamageType: 0
+        DamageAmount: 250

@@ -6,20 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Project/Scenes/Menu.unity
+    path: Assets/_Project/000-Game/Scenes/Menu.unity
     guid: 7d128a0162b524c4b8a7968d026bb549
   - enabled: 1
-    path: Assets/_Project/Scenes/Lobby.unity
+    path: Assets/_Project/000-Game/Scenes/Lobby.unity
     guid: ad020d0ff299aaa459082ac740099f32
   - enabled: 1
-    path: Assets/_Project/Scenes/Samples/Spell.unity
+    path: Assets/_Project/000-Game/Scenes/Samples/Spell.unity
     guid: 31e119550f8bff5489cb049eb0e441da
   - enabled: 1
-    path: Assets/_Project/Scenes/Samples/Tutorial/Tutorial.unity
+    path: Assets/_Project/000-Game/Scenes/Samples/Tutorial/Tutorial.unity
     guid: f22c9c7469fb0cf47b51b7e501a44e90
   - enabled: 1
-    path: Assets/_Project/Scenes/Samples/Tutorial/SpellAdditive.unity
+    path: Assets/_Project/000-Game/Scenes/Samples/Tutorial/SpellAdditive.unity
     guid: 72fedab2f6fd3284789e47147c4d4ac0
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 0f2779ed084f9934fa7e9dc8d2a6aba6,
       type: 2}
+  m_UseUCBPForAssetBundles: 0

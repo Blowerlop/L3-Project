@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f5fb379806b4752ad601298d3801915, type: 3}
+  m_Name: Spell_4-Silverleaf_Archer
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.IntResults
+  requiredCaster: {fileID: -3665153243824835686, guid: a055cf036774de84594cb432236bf128,
+    type: 3}
+  spellId: sniper_4
+  spellIdHash: -922085594
+  instantiationType: 0
+  spellPrefab: {fileID: 4381795126638224029, guid: a686116b68b681b4790818f52ae41651,
+    type: 3}
+  isInstant: 0
+  cooldown: 40
+  channelingTime: 1.29
+  castingFlags: 0
+  castAnimationDuration: 0.2083
+  spellName: Headshot
+  spellIcon: {fileID: 21300000, guid: a3f78131207186b4791ac3df71e0553c, type: 3}
+  spellDescription:
+    descriptionText: SilverLeaf locks onto the target enemy champion and start channeling.
+      Once  SilverLeaf completes the channel, she fires a homing arrow toward the
+      target that deals {0} damages and silence them for {3} seconds.
+    effects:
+    - rid: 1951814749556572169
+    - rid: 49919011783180290
+  effects:
+  - rid: 1951814749556572169
+  - rid: 49919011783180290
+  onCasterEffects: []
+  targetType: 0
+  limitRadius: 35
+  references:
+    version: 2
+    RefIds:
+    - rid: 49919011783180290
+      type: {class: SilenceEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        Duration: 3
+    - rid: 1951814749556572169
+      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        DamageType: 0
+        DamageAmount: 650

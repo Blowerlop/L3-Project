@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90674e77ea264a1fb266c299f817de8b, type: 3}
+  m_Name: Spell_3-Valiant_Knight
+  m_EditorClassIdentifier: 
+  resultTypeSelection: Project.Spells.EmptyResults
+  requiredCaster: {fileID: -3331929095968915761, guid: 1785605496ef8ea4d9a6818397486ff5,
+    type: 3}
+  overrideCasterPreview: 1
+  overridePreviewPrefab: {fileID: 6298642733815016104, guid: f72816703920def4fbcaf6d279d07bf3,
+    type: 3}
+  spellId: nerag_3
+  spellIdHash: -959782540
+  instantiationType: 1
+  spellPrefab: {fileID: 2263156651372379009, guid: ccd9bfb88b8d492449828005085e034f,
+    type: 3}
+  isInstant: 1
+  cooldown: 9
+  channelingTime: 0
+  castingFlags: 1
+  castAnimationDuration: 3
+  spellName: Judgment
+  spellIcon: {fileID: 21300000, guid: b4609848cc84505429ec4c67382ec292, type: 3}
+  spellDescription:
+    descriptionText: 'Valiant rapidly spins his sword around himself over 3 seconds,
+      becoming unable to basic attack, and dealing physical damage to nearby enemies
+      periodically. Damage per spin : {0}'
+    effects:
+    - rid: 1951814709268185092
+  effects:
+  - rid: 1951814709268185092
+  onCasterEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1951814709268185092
+      type: {class: DamageEffect, ns: Project.Effects, asm: Assembly-CSharp}
+      data:
+        DamageType: 0
+        DamageAmount: 75
