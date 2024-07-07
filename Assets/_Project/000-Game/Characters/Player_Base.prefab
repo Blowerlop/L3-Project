@@ -134,7 +134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a9c87b475764fc0a5d94f5991b94735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cooldownNetVarPrefix: Cooldown_
 --- !u!1 &1296427854538218746
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,21 +481,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultState:
-    rid: -2
+    rid: 4536526881260830829
   <currentState>k__BackingField:
     rid: -2
   _states:
-  - rid: -2
-  - rid: -2
-  - rid: -2
-  - rid: -2
-  - rid: -2
-  - rid: -2
+  - rid: 4536526881260830830
+  - rid: 4536526881260830831
+  - rid: 4536526881260830832
+  - rid: 4536526881260830833
+  - rid: 4536526881260830834
+  - rid: 4536526881260830835
+  - rid: 4536526881260830836
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 4536526881260830829
+      type: {class: IdleState, ns: _Project._200_Dev.Entities.Player.States, asm: Project}
+      data: 
+    - rid: 4536526881260830830
+      type: {class: AirState, ns: _Project._200_Dev.Entities.Player.States, asm: Project}
+      data: 
+    - rid: 4536526881260830831
+      type: {class: AttackState, ns: _Project._200_Dev.Entities.Player.States, asm: Project}
+      data: 
+    - rid: 4536526881260830832
+      type: {class: ChannelingState, ns: _Project._200_Dev.Entities.Player.States,
+        asm: Project}
+      data: 
+    - rid: 4536526881260830833
+      type: {class: DeadState, ns: _Project._200_Dev.Entities.Player.States, asm: Project}
+      data: 
+    - rid: 4536526881260830834
+      type: {class: MoveState, ns: _Project._200_Dev.Entities.Player.States, asm: Project}
+      data: 
+    - rid: 4536526881260830835
+      type: {class: StunState, ns: _Project._200_Dev.Entities.Player.States, asm: Project}
+      data: 
+    - rid: 4536526881260830836
+      type: {class: EmoteState, ns: _Project._200_Dev.Entities.Player.States, asm: Project}
+      data: 
 --- !u!114 &6215435937847373130
 MonoBehaviour:
   m_ObjectHideFlags: 0

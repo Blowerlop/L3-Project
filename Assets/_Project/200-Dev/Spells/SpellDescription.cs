@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using _Project._200_Dev.Entities.Player.Stats;
 using UnityEngine;
 
@@ -12,25 +13,34 @@ namespace _Project._200_Dev.Spells
         public string GenerateText()
         {
             string result = string.Empty;
-            string[] value = new string[effects.Length * 2];
+            object[] value = new object[effects.Length * 2];
             for (int i = 0; i < effects.Length ; i++)
             {
-                value[i * 2] = effects[i].GetEffectValue().ToString();
-                value[i * 2 + 1] = effects[i].GetEffectDuration().ToString();
+                value[i * 2] = effects[i].GetEffectValue().ToString(CultureInfo.InvariantCulture);
+                value[i * 2 + 1] = effects[i].GetEffectDuration().ToString(CultureInfo.InvariantCulture);
             }
-            if (value == null || effects.Length > value.Length)
+            if (effects.Length > value.Length)
             {
-                string[] tempValue = new string[effects.Length];
+                object[] tempValue = new object[effects.Length];
                 for (int i = 0; i < tempValue.Length; i++)
                 {
-                    if (value != null && i < value.Length)
-                        tempValue[i] = value[i];
+                    if (i < value.Length)
+                        tempValue[i] = (string)value[i];
                     else
                         tempValue[i] = "#MISSING_VALUE";
                 }
                 value = tempValue;
             }
-            return String.Format(descriptionText, value);
+
+            try
+            {
+                return string.Format(descriptionText, value);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error while formatting spell description: " + e.Message);
+                return descriptionText;
+            }
         }
         
     }

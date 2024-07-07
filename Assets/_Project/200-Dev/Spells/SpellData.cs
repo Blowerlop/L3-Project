@@ -56,7 +56,7 @@ namespace _Project._200_Dev.Spells
         [Space(40)]
         
         // Effects applied on a defined target when spell asks for it
-        [SerializeReference, PropertyOrder(999)] public Effect[] effects;
+        [SerializeReference, PropertyOrder(999), OnValueChanged(nameof(CopyEffects), InvokeOnInitialize = true)] public Effect[] effects;
         
         // Effects applied on caster when spell is cast
         [SerializeReference, PropertyOrder(1000)] public Effect[] onCasterEffects;
@@ -66,7 +66,7 @@ namespace _Project._200_Dev.Spells
             get
             {
                 Debug.Log($"Result type selection : {resultTypeSelection}");
-                return resultTypeSelection != null ? Type.GetType(resultTypeSelection) : null;
+                return resultTypeSelection != null ? ICastResult.GetTypeFromName(resultTypeSelection) : null;
             }
         }
 
@@ -74,6 +74,8 @@ namespace _Project._200_Dev.Spells
         {
             UpdateHash();
         }
+
+        private Effect[] CopyEffects() => spellDescription.effects = effects;
         
         private void UpdateHash()
         {

@@ -31,8 +31,9 @@ MonoBehaviour:
   spellIcon: {fileID: 21300000, guid: 2e61a8d33573e484996edfa61711bc52, type: 3}
   spellDescription:
     descriptionText: Nightshade empowers his next basic attack to gain {0} additionnal
-      damages and slow them for {3} seconds.
-    effects: []
+      damages and slow them for {1} seconds.
+    effects:
+    - rid: 4536526872778637609
   effects:
   - rid: 4536526872778637609
   onCasterEffects: []

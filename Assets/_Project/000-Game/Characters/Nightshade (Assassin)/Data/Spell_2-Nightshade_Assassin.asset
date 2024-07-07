@@ -33,7 +33,9 @@ MonoBehaviour:
     descriptionText: NightShade throws daggers in a circular shape in the target
       direction that deals {0} damage to enemies hit and stun them for {3} seconds. 
       At maximum range, the daggers homes back to NightShade, applying the same effects.
-    effects: []
+    effects:
+    - rid: 4536526872778637607
+    - rid: 4536526872778637608
   effects:
   - rid: 4536526872778637607
   - rid: 4536526872778637608

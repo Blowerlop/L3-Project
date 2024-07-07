@@ -99,9 +99,9 @@ namespace _Project._200_Dev.Spells
                 }
                 
                 // This should not happen, but just in case
-                if(prefab.CastResultType != spellData.RequiredResultType)
+                if(spellData.RequiredResultType == prefab.CastResultType)
                 {
-                    Debug.LogError($"Spell {spellData.spellId}'s requiredResultType and SpellCaster prefab's ChannelingResultType are different!\n" +
+                    Debug.LogError($"Spell {spellData.spellId}'s requiredResultType and SpellCaster prefab's ChannelingResultType are different! : {prefab.CastResultType.Name} /= {spellData.RequiredResultType.Name}\n" +
                                    $"Maybe you forgot to set the requiredResultType or you picked a SpellCaster prefab that doesn't return the right type.");
                     continue;
                 }

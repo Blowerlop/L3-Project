@@ -31,8 +31,9 @@ MonoBehaviour:
   spellIcon: {fileID: 21300000, guid: a952c95dea55af248a885a7a38b1a286, type: 3}
   spellDescription:
     descriptionText: Valiant empowers his next basic attack to deal {0} bonus damage
-      and silence them for {3} seconds.
-    effects: []
+      and silence them for {1} seconds.
+    effects:
+    - rid: 4536526872778637604
   effects:
   - rid: 4536526872778637604
   onCasterEffects: []
