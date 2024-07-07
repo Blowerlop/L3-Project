@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using _Project._200_Dev.Utilities.Extensions;
 using JetBrains.Annotations;
-using Project.Extensions;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.Console
 {
     public class ConsoleCommandPrediction : MonoBehaviour
     {

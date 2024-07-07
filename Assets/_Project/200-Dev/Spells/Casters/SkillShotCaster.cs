@@ -1,7 +1,10 @@
 using System;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Spells.Data;
+using _Project._200_Dev.Spells.Results;
 using UnityEngine;
 
-namespace Project.Spells.Casters
+namespace _Project._200_Dev.Spells.Casters
 {
     public class SkillShotCaster : SpellCaster
     {
@@ -74,7 +77,7 @@ namespace Project.Spells.Casters
 
         public override void EvaluateResults()
         {
-            Utilities.GetMouseWorldPosition(_camera, groundLayerMask, out Vector3 position);
+            Utilities.Utilities.GetMouseWorldPosition(_camera, groundLayerMask, out Vector3 position);
             position.y = 0;
             
             _currentResults.VectorProp = position;

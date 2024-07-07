@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Project
+namespace _Project._200_Dev.Utilities
 {
     public class AnimationEventHandler : MonoBehaviour
     {

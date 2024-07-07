@@ -1,8 +1,9 @@
 using System;
+using _Project._200_Dev.Entities.Player;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Project.Spells.Casters
+namespace _Project._200_Dev.Spells
 {
     public abstract class SpellCaster : MonoBehaviour
     {

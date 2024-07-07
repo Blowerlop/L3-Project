@@ -1,10 +1,11 @@
 using System;
+using _Project._200_Dev.Tools;
 using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Project.Scripts.UIFramework
+namespace _Project._200_Dev.UI_Framework.Runtime
 {
     public static class UIManager
     {
@@ -26,7 +27,7 @@ namespace Project.Scripts.UIFramework
         #if UNITY_EDITOR
         public static void UpdateUI()
         {
-            Object.FindObjectsOfType<SkinUI>().ForEach(x => x.OnValidate());
+            Object.FindObjectsByType<SkinUI>(FindObjectsSortMode.None).ForEach(x => x.OnValidate());
         }
         #endif
 

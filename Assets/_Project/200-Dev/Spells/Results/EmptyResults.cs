@@ -1,6 +1,6 @@
 using Unity.Netcode;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Results
 {
     public struct EmptyResults : ICastResult
     {

@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
-using System.Threading;
+using _Project._200_Dev.User;
+using _Project._200_Dev.Utilities.NetworkBehaviour;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Lobby
 {
     [Serializable]
     public struct TeamData

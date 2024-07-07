@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Spells
 {
     public class TrailRendererHandler : MonoBehaviour
     {

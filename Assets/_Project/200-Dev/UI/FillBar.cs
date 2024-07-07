@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.UI
 {
     public class FillBar : MonoBehaviour
     {

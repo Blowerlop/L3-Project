@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using _Project._200_Dev.User;
+using _Project._200_Dev.Utilities.Monobehaviour;
 using FMOD;
 using FMOD.Studio;
 using FMODUnity;
@@ -8,7 +10,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 using STOP_MODE = FMOD.Studio.STOP_MODE;
 
-namespace Project._Project.Scripts.Managers
+namespace _Project._200_Dev.Managers
 {
     public class SoundInstance
     {

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project._200_Dev.User;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Lobby
 {
     public class TeamSelectionUI : NetworkBehaviour
     {
@@ -48,7 +49,7 @@ namespace Project
             // Because right now in testing this network spawn might fired first, we have a null ref on our UserInstance.
             // But in the final game, the UserInstance will be the first thing ever fired in the network (normally)
             if (NetworkManager.IsServer && NetworkManager.IsHost == false) return;
-            Utilities.StartWaitUntilAndDoAction(this, () => UserInstance.Me != null,
+            Utilities.Utilities.StartWaitUntilAndDoAction(this, () => UserInstance.Me != null,
                 () =>
                 {
                     if (UserInstance.Me == null)

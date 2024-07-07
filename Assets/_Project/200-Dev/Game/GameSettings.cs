@@ -1,6 +1,7 @@
 using System.Linq;
+using _Project._200_Dev.Tools;
 
-namespace Project
+namespace _Project._200_Dev.Game
 {
     public static class GameSettings
     {

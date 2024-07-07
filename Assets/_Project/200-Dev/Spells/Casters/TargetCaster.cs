@@ -1,8 +1,12 @@
 using System;
-using Project._Project.Scripts;
+using _Project._000_Game.Constants;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Spells.Data;
+using _Project._200_Dev.Spells.Results;
 using UnityEngine;
 
-namespace Project.Spells.Casters
+namespace _Project._200_Dev.Spells.Casters
 {
     public class TargetCaster : SpellCaster
     {
@@ -62,7 +66,7 @@ namespace Project.Spells.Casters
 
         public override void EvaluateResults()
         {
-            if (!Utilities.GetMouseWorldHit(_camera, Constants.Layers.EntityMask, out RaycastHit hitInfo))
+            if (!Utilities.Utilities.GetMouseWorldHit(_camera, Constants.Layers.EntityMask, out RaycastHit hitInfo))
             {
                 InvalidTarget();
                 return;

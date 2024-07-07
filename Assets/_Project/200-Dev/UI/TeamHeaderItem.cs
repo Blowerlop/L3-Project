@@ -1,8 +1,9 @@
+using _Project._200_Dev.User;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.UI
 {
     public class TeamHeaderItem : MonoBehaviour
     {

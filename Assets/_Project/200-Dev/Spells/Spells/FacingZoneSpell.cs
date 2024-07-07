@@ -1,10 +1,13 @@
 using System.Collections.Generic;
-using Project._Project.Scripts;
-using Project._Project.Scripts.Managers;
+using _Project._000_Game.Constants;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Spells.Results;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Spells
 {
     public class FacingZoneSpell : Spell
     {
@@ -32,7 +35,7 @@ namespace Project.Spells
             
             CheckForEffects();
             
-            StartCoroutine(Utilities.WaitForSecondsAndDoActionCoroutine(duration, KillSpell));
+            StartCoroutine(Utilities.Utilities.WaitForSecondsAndDoActionCoroutine(duration, KillSpell));
         }
 
         private void CheckForEffects()

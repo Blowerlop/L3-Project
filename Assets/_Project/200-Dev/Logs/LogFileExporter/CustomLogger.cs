@@ -3,10 +3,11 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
+using _Project._200_Dev.Console;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Logs.LogFileExporter
 {
     public static class CustomLogger
     {
@@ -59,7 +60,7 @@ namespace Project
         private static void WriteLogToFile(string condition, string trace, LogType type)
         {
             #if UNITY_EDITOR
-            if (ParrelSync.ClonesManager.IsClone()) return;
+            if (global::ParrelSync.ClonesManager.IsClone()) return;
             #endif
             
             _stringBuilder.AppendLine($"[{StripMilliseconds(DateTime.Now.TimeOfDay).ToString()}] {type.ToString()}");

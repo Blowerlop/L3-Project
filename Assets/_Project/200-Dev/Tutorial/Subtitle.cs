@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-
-namespace Project
+namespace _Project._200_Dev.Tutorial
 {
     public static class Subtitle
     {

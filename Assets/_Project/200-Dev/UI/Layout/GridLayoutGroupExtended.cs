@@ -1,11 +1,9 @@
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.UI;
-#endif
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.UI.Layout
 {
     public class GridLayoutGroupExtended : GridLayoutGroup
     {

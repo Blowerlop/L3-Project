@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Utilities
 {
     public sealed class ReadMe : MonoBehaviour
     {

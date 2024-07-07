@@ -1,7 +1,9 @@
-using Project._Project.Scripts.Managers;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Spells.Results;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Spells
 {
     public class SelfTargetSpell : Spell
     {
@@ -19,7 +21,7 @@ namespace Project.Spells
 
             TryApplyEffects(Caster.GetPC().Entity);
 
-            StartCoroutine(Utilities.WaitForSecondsAndDoActionCoroutine(duration, KillSpell));
+            StartCoroutine(Utilities.Utilities.WaitForSecondsAndDoActionCoroutine(duration, KillSpell));
         }
 
         public override (Vector3, Quaternion) GetDefaultTransform(ICastResult castResult, PlayerRefs player)

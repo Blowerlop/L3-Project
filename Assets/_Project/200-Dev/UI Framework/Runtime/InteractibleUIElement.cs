@@ -1,12 +1,11 @@
-using Project._Project.Scripts.Managers;
+using _Project._200_Dev.Managers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
-
-namespace Project.Scripts.UIFramework
+namespace _Project._200_Dev.UI_Framework.Runtime
 {
     public abstract class InteractibleUIElement : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {

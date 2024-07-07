@@ -1,7 +1,11 @@
 using System;
+using _Project._000_Game.Constants;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Spells.Data;
+using _Project._200_Dev.Spells.Results;
 using UnityEngine;
 
-namespace Project.Spells.Casters
+namespace _Project._200_Dev.Spells.Casters
 {
     public class ZoneCaster : SpellCaster
     {
@@ -79,7 +83,7 @@ namespace Project.Spells.Casters
 
         public override void EvaluateResults()
         {
-            Utilities.GetMouseWorldPosition(_camera, Constants.Layers.GroundMask, out Vector3 position);
+            Utilities.Utilities.GetMouseWorldPosition(_camera, Constants.Layers.GroundMask, out Vector3 position);
             
             var zoneCenter = zoneVisual.position;
             position = zoneCenter + Vector3.ClampMagnitude(position - zoneCenter, _zoneSpellData.limitRadius);

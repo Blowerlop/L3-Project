@@ -1,10 +1,19 @@
 using System;
 using System.Collections.Generic;
-using Project._Project.Scripts.Player.States;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Entities.Player.States;
+using _Project._200_Dev.Game;
+using _Project._200_Dev.Networking.IL_Weaving.Server;
+using _Project._200_Dev.Spells.Cooldowns;
+using _Project._200_Dev.Spells.Results;
+using _Project._200_Dev.User;
+using _Project._200_Dev.Utilities;
+using _Project._200_Dev.Utilities.NetworkBehaviour;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells
 {
     public class SpellManager : NetworkSingleton<SpellManager>
     {

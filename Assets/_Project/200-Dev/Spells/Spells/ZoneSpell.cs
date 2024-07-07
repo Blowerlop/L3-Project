@@ -1,11 +1,16 @@
 using System;
+using _Project._000_Game.Constants;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Networking.IL_Weaving.Server;
+using _Project._200_Dev.Spells.Data;
+using _Project._200_Dev.Spells.Results;
 using DG.Tweening;
-using Project._Project.Scripts;
-using Project._Project.Scripts.Managers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Spells
 {
     public class ZoneSpell : Spell
     {
@@ -55,7 +60,7 @@ namespace Project.Spells
             }
             
             if (killType == KillType.Timed)
-                StartCoroutine(Utilities.WaitForSecondsAndDoActionCoroutine(duration, KillSpell));
+                StartCoroutine(Utilities.Utilities.WaitForSecondsAndDoActionCoroutine(duration, KillSpell));
         }
 
         public override void OnDestroy()

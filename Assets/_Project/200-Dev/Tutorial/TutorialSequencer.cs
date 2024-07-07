@@ -1,18 +1,24 @@
-using Cysharp.Threading.Tasks;
-using Project._Project.Scripts;
-using Project._Project.TESTT_REBIND;
-using Project.Spells;
-using Project.Spells.Casters;
 using System;
 using System.Threading;
+using _Project._200_Dev.Audio;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Dummy;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.LoadingScreen;
+using _Project._200_Dev.Settings;
+using _Project._200_Dev.Spells;
+using _Project._200_Dev.Spells.Spells;
+using _Project._200_Dev.User;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using SceneManager = _Project._200_Dev.Managers.SceneManager;
 
-namespace Project
+namespace _Project._200_Dev.Tutorial
 {
     public class TutorialSequencer : MonoBehaviour
     {
@@ -112,7 +118,7 @@ namespace Project
         
         public void QuitTutorial()
         {
-            Netcode_ConnectionManager.Disconnect();
+            NetworkManager.Singleton.Shutdown();
             UnityEngine.SceneManagement.SceneManager.LoadScene("Menu", LoadSceneMode.Single);
         }
 
@@ -209,7 +215,7 @@ namespace Project
                 //Disable Spells
                 PcRefs = (PCPlayerRefs)userInstance.LinkedPlayer;
                 Destroy(PcRefs.SpellCastController);
-                SpellCanvas = FindObjectOfType<SpellUI>().transform.root.GetComponent<Canvas>() ;
+                SpellCanvas = FindAnyObjectByType<SpellUI>().transform.root.GetComponent<Canvas>() ;
                 SpellCanvas.enabled = false;
 
 
@@ -222,7 +228,7 @@ namespace Project
                 SceneManager.Network_LoadSceneAsync("Menu", LoadSceneMode.Single, new LoadingScreenParameters(null, Color.black));
             }
         }
-        void StartHost() => Netcode_ConnectionManager.StartHost();
+        void StartHost() => NetworkManager.Singleton.StartHost();
 
         public void LoadScene()
         {

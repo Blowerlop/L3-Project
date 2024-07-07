@@ -1,6 +1,7 @@
 using System;
+using _Project._200_Dev.Spells.Results;
 
-namespace Project.Spells.Casters
+namespace _Project._200_Dev.Spells.Casters
 {
     public class SelfTargetCaster : SpellCaster
     {

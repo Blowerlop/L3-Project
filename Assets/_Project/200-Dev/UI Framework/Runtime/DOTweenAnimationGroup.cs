@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
 
-namespace Project.Scripts.UIFramework
+namespace _Project._200_Dev.UI_Framework.Runtime
 {
     public class DOTweenAnimationGroup : MonoBehaviour
     {

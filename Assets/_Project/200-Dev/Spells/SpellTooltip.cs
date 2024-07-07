@@ -1,11 +1,10 @@
-using Project._Project.TESTT_REBIND;
-using Project.Spells;
+using _Project._200_Dev.Settings;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.Spells
 {
     public class SpellTooltip : MonoBehaviour
     {

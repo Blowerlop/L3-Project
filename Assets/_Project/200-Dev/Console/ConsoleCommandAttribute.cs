@@ -1,6 +1,6 @@
 using System;
 
-namespace Project
+namespace _Project._200_Dev.Console
 {
     /// <summary>
     /// This Attribute only works on static method

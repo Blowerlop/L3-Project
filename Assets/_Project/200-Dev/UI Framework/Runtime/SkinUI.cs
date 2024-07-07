@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project.Scripts.UIFramework
+namespace _Project._200_Dev.UI_Framework.Runtime
 {
     public enum ETextType
     {
@@ -15,13 +15,6 @@ namespace Project.Scripts.UIFramework
     
     public sealed class SkinUI : MonoBehaviour
     {
-        private enum EComponentTypeUI
-        {
-            Image,
-            Text,
-        }
-        
-        [NonSerialized] private EComponentTypeUI _componentType;
         [SerializeField] private EColorType _colorType;
         [SerializeField, ShowIf("@_componentType == EComponentTypeUI.Text")] private ETextType _textType;
         [SerializeField] private bool _useCustomAlpha;
@@ -37,8 +30,6 @@ namespace Project.Scripts.UIFramework
         {
             if (TryGetComponent(out Image image))
             {
-                _componentType = EComponentTypeUI.Image;
-                
                 Color color = GetColor();
                 if (_useCustomAlpha) color.a = image.color.a;
                 
@@ -46,8 +37,6 @@ namespace Project.Scripts.UIFramework
             }
             else if (TryGetComponent(out TMP_Text text))
             {
-                _componentType = EComponentTypeUI.Text;
-                
                 Color color = GetColor();
                 
                 if (_useCustomAlpha) color.a = text.color.a;

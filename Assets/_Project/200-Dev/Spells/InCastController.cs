@@ -1,7 +1,10 @@
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Networking.IL_Weaving.Server;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells
 {
     public class InCastController : NetworkBehaviour
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Managers
 {
     public struct CursorState
     {

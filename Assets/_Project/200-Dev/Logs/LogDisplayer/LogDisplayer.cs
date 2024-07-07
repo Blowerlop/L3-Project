@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project._200_Dev.Console;
+using _Project._200_Dev.Logs.LogFileExporter;
+using _Project._200_Dev.Utilities;
+using _Project._200_Dev.Utilities.Monobehaviour;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Logs.LogDisplayer
 {
     public class LogDisplayer : MonoSingleton<LogDisplayer>
     {
@@ -79,7 +83,7 @@ namespace Project
                 if (Application.isPlaying == false) return;
 #endif
                 
-                Utilities.StartWaitForEndOfFrameAndDoActionCoroutine(this, () =>
+                Utilities.Utilities.StartWaitForEndOfFrameAndDoActionCoroutine(this, () =>
                 {
 #if UNITY_EDITOR
                     if (Application.isPlaying == false) return;

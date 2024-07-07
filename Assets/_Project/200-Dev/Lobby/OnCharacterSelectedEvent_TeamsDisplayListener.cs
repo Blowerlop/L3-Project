@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Lobby
 {
     public class OnCharacterSelectedEvent_TeamsDisplayListener : MonoBehaviour
     {
@@ -9,7 +9,7 @@ namespace Project
 
         private void Awake()
         {
-            _teamsDisplay = FindObjectOfType<TeamsDisplay>();
+            _teamsDisplay = FindAnyObjectByType<TeamsDisplay>();
         }
 
         private void Start()

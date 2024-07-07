@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using System;
 using System.Linq;
 using Mewlist.Weaver;
@@ -7,7 +6,7 @@ using Mono.Cecil.Cil;
 using ParrelSync;
 using OpCodes = Mono.Cecil.Cil.OpCodes;
 
-namespace Project
+namespace _Project._200_Dev.ParrelSync.IL_Weaving
 {
     public class ParrelSyncILInjector : IILInjector
     {
@@ -33,4 +32,3 @@ namespace Project
         }    
     }
 }
-#endif

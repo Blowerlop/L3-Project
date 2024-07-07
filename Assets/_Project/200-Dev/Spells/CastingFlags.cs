@@ -1,6 +1,6 @@
 using System;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells
 {
     [Flags]
     public enum CastingFlags

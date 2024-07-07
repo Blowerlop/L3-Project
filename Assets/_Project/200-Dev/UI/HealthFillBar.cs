@@ -1,8 +1,9 @@
+using _Project._200_Dev.Entities.Player.Stats;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.UI
 {
     public class HealthFillBar : PlayerStatFillBar<HealthStat>
     {

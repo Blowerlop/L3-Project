@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
-using Project._Project.Scripts;
-using Project._Project.Scripts.Managers;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Spells.Results;
 using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Spells
 {
     public class TargetSpell : Spell
     {

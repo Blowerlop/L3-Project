@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using System;
 using System.Linq;
 using System.Reflection;
@@ -8,7 +7,7 @@ using Mono.Cecil.Cil;
 using Sirenix.Utilities;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Networking.IL_Weaving.Server
 {
     public class ServerILInjector : IILInjector
     {
@@ -88,4 +87,3 @@ namespace Project
         } 
     } 
 }
-#endif

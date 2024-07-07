@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Project.Scripts.UIFramework
+namespace _Project._200_Dev.UI_Framework.Runtime
 {
     public class ToggleButton : InteractibleUIElement
     {

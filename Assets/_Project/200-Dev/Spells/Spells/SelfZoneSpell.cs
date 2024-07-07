@@ -1,9 +1,12 @@
-using Project._Project.Scripts;
-using Project._Project.Scripts.Managers;
+using _Project._000_Game.Constants;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Spells.Results;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Spells
 {
     public class SelfZoneSpell : Spell
     {
@@ -30,7 +33,7 @@ namespace Project.Spells
             if (applyType == ApplyType.OnStart)
                 CheckForEffects();
 
-            StartCoroutine(Utilities.WaitForSecondsAndDoActionCoroutine(duration, KillSpell));
+            StartCoroutine(Utilities.Utilities.WaitForSecondsAndDoActionCoroutine(duration, KillSpell));
         }
         
         protected override void KillSpell()

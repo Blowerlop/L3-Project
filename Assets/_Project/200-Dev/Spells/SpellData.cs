@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Project.Extensions;
-using Project.Spells.Casters;
+using _Project._200_Dev.Entities.Player.Stats;
+using _Project._200_Dev.ParrelSync.IL_Weaving;
+using _Project._200_Dev.Tools;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells
 {
     public enum SpellInstantiationType
     {
@@ -78,7 +79,7 @@ namespace Project.Spells
         {
             if (spellId == null) return;
             
-            spellIdHash = spellId.ToHashIsSameAlgoOnUnreal();
+            spellIdHash = spellId.GetHashCode();
         }
 
         private static List<SpellData> _spellsCache;

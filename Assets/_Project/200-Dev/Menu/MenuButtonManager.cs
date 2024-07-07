@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.Menu
 {
     public class MenuButtonManager : MonoBehaviour
     {

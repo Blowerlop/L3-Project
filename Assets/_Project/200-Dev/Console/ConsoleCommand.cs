@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using Sirenix.OdinInspector;
 
-namespace Project
+namespace _Project._200_Dev.Console
 {
     [Serializable]
     public class ConsoleCommand

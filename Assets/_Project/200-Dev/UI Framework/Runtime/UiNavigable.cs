@@ -2,8 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-
-namespace Project.Scripts.UIFramework
+namespace _Project._200_Dev.UI_Framework.Runtime
 {
     public class UiNavigable : MonoBehaviour
     {

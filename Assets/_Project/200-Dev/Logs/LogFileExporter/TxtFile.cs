@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Logs.LogFileExporter
 {
     public static class TxtFile
     {

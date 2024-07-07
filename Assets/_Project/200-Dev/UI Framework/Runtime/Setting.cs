@@ -1,11 +1,11 @@
-using Project.Extensions;
+using _Project._200_Dev.Utilities.Extensions;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Project.Scripts.UIFramework
+namespace _Project._200_Dev.UI_Framework.Runtime
 {
     public class Setting : InteractibleUIElement
     {

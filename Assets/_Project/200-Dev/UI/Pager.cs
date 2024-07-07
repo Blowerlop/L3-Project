@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using _Project._200_Dev.Utilities.Extensions;
 using DG.Tweening;
-using Project.Extensions;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Project
+namespace _Project._200_Dev.UI
 {
     [Serializable]
     public class Page

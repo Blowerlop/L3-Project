@@ -1,14 +1,22 @@
 using System.Linq;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Entities.Player.States;
+using _Project._200_Dev.Entities.Projectile;
+using _Project._200_Dev.LoadingScreen;
+using _Project._200_Dev.Logs.Game_DataLogger;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Spells;
+using _Project._200_Dev.UI;
+using _Project._200_Dev.User;
+using _Project._200_Dev.Utilities;
+using _Project._200_Dev.Utilities.NetworkBehaviour;
 using DG.Tweening;
-using Project._Project.Scripts;
-using Project._Project.Scripts.Managers;
-using Project._Project.Scripts.Player.States;
-using Project.Spells;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using SceneManager = _Project._200_Dev.Managers.SceneManager;
 
-namespace Project
+namespace _Project._200_Dev.Game
 {
     public class Gameloop : NetworkSingleton<Gameloop>
     {
@@ -80,7 +88,7 @@ namespace Project
                 DataLogger.LogTeamInfo(TeamIndex);
                 DOVirtual.DelayedCall(roundEndTime, () =>
                 {
-                    Netcode_ConnectionManager.Disconnect();
+                    NetworkManager.Shutdown();
                     UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(0);
                 });
             }

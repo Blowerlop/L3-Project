@@ -1,11 +1,13 @@
 using System;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.User;
 using Sirenix.OdinInspector;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.Lobby
 {
     public class CharacterSelectionUI : NetworkBehaviour
     {

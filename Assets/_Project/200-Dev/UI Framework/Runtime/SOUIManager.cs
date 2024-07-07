@@ -1,9 +1,9 @@
+using _Project._200_Dev.Tools;
 using Sirenix.OdinInspector;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
-namespace Project.Scripts.UIFramework
+namespace _Project._200_Dev.UI_Framework.Runtime
 {
     public enum EColorType
     {
@@ -32,19 +32,5 @@ namespace Project.Scripts.UIFramework
         // [Title("Sounds")]
         // public AudioClip hoverSound;
         // public AudioClip clickSound;
-        
-        
-        #region Editor
-#if UNITY_EDITOR
-        [Button]
-        [Tooltip("Sometimes Github don't detect the changes made on the ScriptableObject, so we need to force the write on the disk")]
-        private void ForceSaveOnDisk()
-        {
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-#endif
-        #endregion
     }
 }

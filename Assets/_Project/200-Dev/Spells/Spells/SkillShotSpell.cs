@@ -1,11 +1,15 @@
+using _Project._000_Game.Constants;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Networking.IL_Weaving.Server;
+using _Project._200_Dev.Spells.Results;
 using DG.Tweening;
-using Project._Project.Scripts;
-using Project._Project.Scripts.Managers;
 using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Spells
 {
     public class SkillShotSpell : Spell
     {
@@ -151,7 +155,7 @@ namespace Project.Spells
             
             _moveSeq.Kill();
             
-            StartCoroutine(Utilities.WaitForSecondsAndDoActionCoroutine(_impactDuration, () => KillSpell()));
+            StartCoroutine(Utilities.Utilities.WaitForSecondsAndDoActionCoroutine(_impactDuration, () => KillSpell()));
             return true;
         }
 

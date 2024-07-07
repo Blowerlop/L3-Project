@@ -4,7 +4,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using Unity.Netcode;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells
 {
     public interface ICastResult : INetworkSerializable
     {

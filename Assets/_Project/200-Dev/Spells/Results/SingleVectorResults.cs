@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Results
 {
     public struct SingleVectorResults : ICastResult
     {

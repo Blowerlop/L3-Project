@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
-using Project.Extensions;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Networking.IL_Weaving.Server;
+using _Project._200_Dev.User;
+using _Project._200_Dev.Utilities.Extensions;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.Lobby
 {
     public class TeamsDisplay : NetworkBehaviour
     {

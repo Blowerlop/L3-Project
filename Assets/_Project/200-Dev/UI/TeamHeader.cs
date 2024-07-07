@@ -1,7 +1,7 @@
-using System.Linq;
+using _Project._200_Dev.User;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.UI
 {
     public class TeamHeader : MonoBehaviour
     {

@@ -1,20 +1,23 @@
 using System;
+using _Project._200_Dev.Networking.IL_Weaving.Server;
+using _Project._200_Dev.Utilities;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Cooldowns
 {
     /// <summary>
-    /// Used by clients and server to determine if a spell can be casted.
+    /// Used by clients and server to determine if a spell can be cast.
     /// </summary>
     public class CooldownController : NetworkBehaviour
     {
-        [SerializeField] private string cooldownNetVarPrefix = "Cooldown_";
-        
-        private NetworkVariable<int>[] _cooldowns = new NetworkVariable<int>[SpellData.CharacterSpellsCount];
+        private readonly NetworkVariable<int>[] _cooldowns = new NetworkVariable<int>[SpellData.CharacterSpellsCount];
 
-        private NetworkVariable<int> _cd1 = new(), _cd2 = new(), _cd3 = new(), _cd4 = new();
-        
+        private readonly NetworkVariable<int> _cd1 = new();
+        private readonly NetworkVariable<int> _cd2 = new();
+        private readonly NetworkVariable<int> _cd3 = new();
+        private readonly NetworkVariable<int> _cd4 = new();
+
         private readonly Timer[] _timers = new Timer[SpellData.CharacterSpellsCount];
         
         public event Action<int, float> OnLocalCooldownStarted; 
@@ -45,7 +48,7 @@ namespace Project.Spells
                 var cd = _cooldowns[i];
                 var temp = i;
                 
-                cd.OnValueChanged += (x, newValue) =>
+                cd.OnValueChanged += (_, newValue) =>
                 {
                     OnServerCooldownUpdated?.Invoke(temp, newValue);
                     if (newValue <= 0)

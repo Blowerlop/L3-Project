@@ -1,8 +1,12 @@
+using _Project._200_Dev.Console;
+using _Project._200_Dev.LoadingScreen;
+using _Project._200_Dev.Networking.IL_Weaving.Server;
+using _Project._200_Dev.User;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Project
+namespace _Project._200_Dev.Managers
 {
     public class SceneManager : NetworkBehaviour
     {

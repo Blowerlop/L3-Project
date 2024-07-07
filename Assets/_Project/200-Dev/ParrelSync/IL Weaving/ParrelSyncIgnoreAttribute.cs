@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Project
+namespace _Project._200_Dev.ParrelSync.IL_Weaving
 {
     [Conditional("UNITY_EDITOR")]
     [AttributeUsage(AttributeTargets.Method)]

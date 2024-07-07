@@ -3,7 +3,7 @@ using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Utilities
 {
     public enum TimeType
     {

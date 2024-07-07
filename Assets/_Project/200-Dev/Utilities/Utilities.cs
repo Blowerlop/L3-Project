@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Project.Extensions;
+using _Project._200_Dev.Console;
+using _Project._200_Dev.Utilities.Extensions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Project
+namespace _Project._200_Dev.Utilities
 {
     public class Utilities : MonoBehaviour
     {
@@ -178,18 +179,18 @@ namespace Project
         [ConsoleCommand("ui_disable", "Disable all UI elements in the scene.")]
         private static void DisableAllUi()
         {
-            foreach (var canvas in FindObjectsOfType<Canvas>(true))
+            foreach (var canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
             {
                 canvas.enabled = false;
             }
             
-            Console.instance.GetComponentsInChildren<Canvas>().ForEach(x => x.enabled = true);
+            Console.Console.instance.GetComponentsInChildren<Canvas>().ForEach(x => x.enabled = true);
         }
         
         [ConsoleCommand("ui_enable", "Enable all UI elements in the scene.")]
         private static void EnableAllUi()
         {
-            foreach (var canvas in FindObjectsOfType<Canvas>(true))
+            foreach (var canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
             {
                 canvas.enabled = true;
             }

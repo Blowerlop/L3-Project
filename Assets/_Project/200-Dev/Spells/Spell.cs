@@ -1,10 +1,11 @@
 using System.Linq;
-using Project._Project.Scripts;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
 using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells
 {
     public abstract class Spell : NetworkBehaviour
     {

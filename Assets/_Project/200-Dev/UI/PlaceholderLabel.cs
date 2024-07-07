@@ -1,8 +1,9 @@
+using _Project._200_Dev.Utilities.Monobehaviour;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.UI
 {
     public class PlaceholderLabel : MonoSingleton<PlaceholderLabel>
     {

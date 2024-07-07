@@ -4,7 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Project.Extensions;
+using _Project._200_Dev.Logs.LogFileExporter;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Utilities.Extensions;
+using _Project._200_Dev.Utilities.Monobehaviour;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using TMPro;
@@ -15,7 +18,7 @@ using UnityEngine.Profiling;
 using UnityEngine.UI;
 using ColorUtility = UnityEngine.ColorUtility;
 
-namespace Project
+namespace _Project._200_Dev.Console
 {
     [DefaultExecutionOrder(-1)]
     public class Console : MonoSingleton<Console>
@@ -87,7 +90,7 @@ namespace Project
             _inputInputField.onValueChanged.RemoveListener(_commandPrediction.Predict);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             Application.logMessageReceived -= LogConsole;
 
@@ -504,7 +507,7 @@ namespace Project
             if (setAtBottom)
             #endif
             {
-                StartCoroutine(Utilities.WaitForEndOfFrameAndDoActionCoroutine(() =>
+                StartCoroutine(Utilities.Utilities.WaitForEndOfFrameAndDoActionCoroutine(() =>
                 {
                     {
                         Canvas.ForceUpdateCanvases();

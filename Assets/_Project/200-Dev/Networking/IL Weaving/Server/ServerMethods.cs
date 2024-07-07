@@ -1,6 +1,6 @@
 using Unity.Netcode;
 
-namespace Project
+namespace _Project._200_Dev.Networking.IL_Weaving.Server
 {
     public static class ServerMethods
     {

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using _Project._200_Dev.Utilities.Monobehaviour;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.UI
 {
     public class HealthTextPool : MonoSingleton<HealthTextPool>
     {

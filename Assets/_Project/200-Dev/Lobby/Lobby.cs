@@ -1,11 +1,17 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using _Project._200_Dev.Console;
+using _Project._200_Dev.LoadingScreen;
+using _Project._200_Dev.UI;
+using _Project._200_Dev.User;
+using _Project._200_Dev.Utilities.NetworkBehaviour;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using SceneManager = _Project._200_Dev.Managers.SceneManager;
 
-namespace Project
+namespace _Project._200_Dev.Lobby
 {
     public enum ELobbyState
     {

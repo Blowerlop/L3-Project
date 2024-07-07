@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Logs.LogFileExporter
 {
     public sealed class Discord
     {

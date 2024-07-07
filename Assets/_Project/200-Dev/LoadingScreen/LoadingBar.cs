@@ -1,10 +1,10 @@
 using System.Globalization;
-using Project.Extensions;
+using _Project._200_Dev.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.LoadingScreen
 {
     public class LoadingBar : MonoBehaviour
     {

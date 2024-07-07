@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Project.Spells
+namespace _Project._200_Dev.Spells.Data
 {
     [CreateAssetMenu(fileName = "New ZoneData", menuName = "Spells/Data/Zone", order = 1)]
     public class ZoneSpellData : SpellData

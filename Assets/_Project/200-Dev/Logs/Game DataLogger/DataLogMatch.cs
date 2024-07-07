@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Project
+namespace _Project._200_Dev.Logs.Game_DataLogger
 {
     [System.Serializable]
     public class DataLogTeamInfo{

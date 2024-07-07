@@ -1,14 +1,13 @@
 using System;
+using _Project._200_Dev.Utilities.Monobehaviour;
 using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
-#if UNITY_EDITOR
-using Sirenix.OdinInspector.Editor;
-#endif
 
-namespace Project
+namespace _Project._200_Dev.Managers
 {
     [DefaultExecutionOrder(-1)]
     public class InputManager : MonoSingleton<InputManager>
@@ -171,7 +170,7 @@ namespace Project
             previousActionMap = currentActionMap;
             currentActionMap = actionMap;
 
-            Utilities.StartWaitForFramesAndDoActionCoroutine(this, 1, () =>
+            Utilities.Utilities.StartWaitForFramesAndDoActionCoroutine(this, 1, () =>
             {
                 currentActionMap.Enable();
                 inputAction.Persistant.Enable();

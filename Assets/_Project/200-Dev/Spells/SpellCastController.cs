@@ -1,9 +1,14 @@
 using System.Linq;
+using _Project._200_Dev.Entities;
+using _Project._200_Dev.Entities.Player;
+using _Project._200_Dev.Managers;
+using _Project._200_Dev.Spells.Cooldowns;
+using _Project._200_Dev.User;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Project.Spells.Casters
+namespace _Project._200_Dev.Spells
 {
     public class SpellCastController : MonoBehaviour
     {

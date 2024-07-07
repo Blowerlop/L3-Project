@@ -1,7 +1,6 @@
-#if UNITY_EDITOR
 using Mewlist.Weaver;
 
-namespace Project
+namespace _Project._200_Dev.ParrelSync.IL_Weaving
 {
     public class ParrelSyncWeaver : IWeaver
     {
@@ -15,4 +14,3 @@ namespace Project
         }
     }
 }
-#endif 

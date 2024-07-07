@@ -1,4 +1,4 @@
-namespace Project
+namespace _Project._000_Game.Constants
 {
     public static class Constants
     {

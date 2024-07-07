@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project
+namespace _Project._200_Dev.LoadingScreen
 {
     public class LoadingScreen : MonoBehaviour
     {

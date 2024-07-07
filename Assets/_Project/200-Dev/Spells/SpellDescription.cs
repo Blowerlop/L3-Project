@@ -1,7 +1,8 @@
 using System;
+using _Project._200_Dev.Entities.Player.Stats;
 using UnityEngine;
 
-namespace Project
+namespace _Project._200_Dev.Spells
 {
     [Serializable]
     public class SpellDescription
