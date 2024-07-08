@@ -1,10 +1,10 @@
-using _Project._000_Game.Constants;
 using _Project._200_Dev.Entities;
 using _Project._200_Dev.Entities.Player;
 using _Project._200_Dev.Managers;
 using _Project._200_Dev.Networking.IL_Weaving.Server;
 using _Project._200_Dev.Spells.Results;
 using DG.Tweening;
+using Project;
 using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;

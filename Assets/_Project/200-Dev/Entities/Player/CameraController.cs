@@ -1,10 +1,10 @@
-using _Project._000_Game.Constants;
 using _Project._200_Dev.Entities.Player.States;
 using _Project._200_Dev.Entities.StateMachine;
 using _Project._200_Dev.Managers;
 using _Project._200_Dev.Settings;
 using _Project._200_Dev.Utilities.Extensions;
 using Cinemachine;
+using Project;
 using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;

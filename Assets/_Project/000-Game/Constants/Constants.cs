@@ -1,85 +1,9 @@
-namespace _Project._000_Game.Constants
+namespace Project
 {
     public static class Constants
     {
-        public static class Scenes
-        {
-            /// <summary>
-            /// Menu
-            /// </summary>
-            public const int Menu = 0;
-            /// <summary>
-            /// Lobby
-            /// </summary>
-            public const int Lobby = 1;
-            /// <summary>
-            /// Spell
-            /// </summary>
-            public const int Spell = 2;
-            /// <summary>
-            /// Tutorial
-            /// </summary>
-            public const int Tutorial = 3;
-            /// <summary>
-            /// SpellAdditive
-            /// </summary>
-            public const int SpellAdditive = 4;
-        }
-        
-        public static class AudioMixerParams
-        {
-            /// <summary>
-            /// GameSounds
-            /// </summary>
-            public const string GameSounds = "GameSounds";
-            /// <summary>
-            /// Master
-            /// </summary>
-            public const string Master = "Master";
-            /// <summary>
-            /// Music
-            /// </summary>
-            public const string Music = "Music";
-        }
-        
         public static class AnimatorsParam
         {
-            /// <summary>
-            /// Idle : Trigger
-            /// </summary>
-            public const int Idle = 2081823275;
-            /// <summary>
-            /// Run : Trigger
-            /// </summary>
-            public const int Run = 1748754976;
-            /// <summary>
-            /// AutoAttack : Trigger
-            /// </summary>
-            public const int AutoAttack = -1936938822;
-            /// <summary>
-            /// Death : Trigger
-            /// </summary>
-            public const int Death = 646380074;
-            /// <summary>
-            /// Victory : Trigger
-            /// </summary>
-            public const int Victory = -1090111034;
-            /// <summary>
-            /// Cast1 : Trigger
-            /// </summary>
-            public const int Cast1 = 382807843;
-            /// <summary>
-            /// Cast2 : Trigger
-            /// </summary>
-            public const int Cast2 = -1881637223;
-            /// <summary>
-            /// Cast3 : Trigger
-            /// </summary>
-            public const int Cast3 = -119583217;
-            /// <summary>
-            /// Cast4 : Trigger
-            /// </summary>
-            public const int Cast4 = 1723587500;
             /// <summary>
             /// Movement : Bool
             /// </summary>
@@ -148,6 +72,66 @@ namespace _Project._000_Game.Constants
             /// DoTransitionToState2 : Trigger
             /// </summary>
             public const int DoTransitionToState2 = -961803711;
+        }
+        
+        public static class Tags
+        {
+            /// <summary>
+            /// Untagged
+            /// </summary>
+            public const string Untagged = "Untagged";
+            /// <summary>
+            /// Respawn
+            /// </summary>
+            public const string Respawn = "Respawn";
+            /// <summary>
+            /// Finish
+            /// </summary>
+            public const string Finish = "Finish";
+            /// <summary>
+            /// EditorOnly
+            /// </summary>
+            public const string EditorOnly = "EditorOnly";
+            /// <summary>
+            /// MainCamera
+            /// </summary>
+            public const string MainCamera = "MainCamera";
+            /// <summary>
+            /// Player
+            /// </summary>
+            public const string Player = "Player";
+            /// <summary>
+            /// GameController
+            /// </summary>
+            public const string GameController = "GameController";
+            /// <summary>
+            /// Border
+            /// </summary>
+            public const string Border = "Border";
+            /// <summary>
+            /// Death Camera
+            /// </summary>
+            public const string Death_Camera = "Death Camera";
+            /// <summary>
+            /// Player Camera
+            /// </summary>
+            public const string Player_Camera = "Player Camera";
+        }
+        
+        public static class AudioMixerParams
+        {
+            /// <summary>
+            /// GameSounds
+            /// </summary>
+            public const string GameSounds = "GameSounds";
+            /// <summary>
+            /// Master
+            /// </summary>
+            public const string Master = "Master";
+            /// <summary>
+            /// Music
+            /// </summary>
+            public const string Music = "Music";
         }
         
         public static class Layers
@@ -242,48 +226,28 @@ namespace _Project._000_Game.Constants
             public const string SO_References_Cache = "SO References Cache";
         }
         
-        public static class Tags
+        public static class Scenes
         {
             /// <summary>
-            /// Untagged
+            /// Menu
             /// </summary>
-            public const string Untagged = "Untagged";
+            public const int Menu = 0;
             /// <summary>
-            /// Respawn
+            /// Lobby
             /// </summary>
-            public const string Respawn = "Respawn";
+            public const int Lobby = 1;
             /// <summary>
-            /// Finish
+            /// Spell
             /// </summary>
-            public const string Finish = "Finish";
+            public const int Spell = 2;
             /// <summary>
-            /// EditorOnly
+            /// Tutorial
             /// </summary>
-            public const string EditorOnly = "EditorOnly";
+            public const int Tutorial = 3;
             /// <summary>
-            /// MainCamera
+            /// SpellAdditive
             /// </summary>
-            public const string MainCamera = "MainCamera";
-            /// <summary>
-            /// Player
-            /// </summary>
-            public const string Player = "Player";
-            /// <summary>
-            /// GameController
-            /// </summary>
-            public const string GameController = "GameController";
-            /// <summary>
-            /// Border
-            /// </summary>
-            public const string Border = "Border";
-            /// <summary>
-            /// Death Camera
-            /// </summary>
-            public const string Death_Camera = "Death Camera";
-            /// <summary>
-            /// Player Camera
-            /// </summary>
-            public const string Player_Camera = "Player Camera";
+            public const int SpellAdditive = 4;
         }
         
     }

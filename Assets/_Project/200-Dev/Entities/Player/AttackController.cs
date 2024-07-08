@@ -1,5 +1,4 @@
 using System.Collections;
-using _Project._000_Game.Constants;
 using _Project._200_Dev.Entities.Player.Effects;
 using _Project._200_Dev.Entities.Player.Interfaces;
 using _Project._200_Dev.Entities.Player.States;
@@ -10,6 +9,7 @@ using _Project._200_Dev.Game;
 using _Project._200_Dev.Managers;
 using _Project._200_Dev.Networking.IL_Weaving.Server;
 using _Project._200_Dev.Utilities.Extensions;
+using Project;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;

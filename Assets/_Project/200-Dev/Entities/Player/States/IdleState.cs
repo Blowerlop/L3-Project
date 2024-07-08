@@ -1,5 +1,5 @@
-using _Project._000_Game.Constants;
 using _Project._200_Dev.Entities.StateMachine;
+using Project;
 
 namespace _Project._200_Dev.Entities.Player.States
 {

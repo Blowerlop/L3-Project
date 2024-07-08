@@ -1,6 +1,6 @@
-using _Project._000_Game.Constants;
 using _Project._200_Dev.Entities.StateMachine;
 using _Project._200_Dev.Spells;
+using Project;
 using UnityEngine;
 
 namespace _Project._200_Dev.Entities.Player.States

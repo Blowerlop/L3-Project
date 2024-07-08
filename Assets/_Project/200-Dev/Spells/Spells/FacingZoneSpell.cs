@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using _Project._000_Game.Constants;
 using _Project._200_Dev.Entities;
 using _Project._200_Dev.Entities.Player;
 using _Project._200_Dev.Managers;
 using _Project._200_Dev.Spells.Results;
+using Project;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 

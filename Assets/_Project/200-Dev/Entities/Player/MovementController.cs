@@ -1,10 +1,10 @@
 using System;
-using _Project._000_Game.Constants;
 using _Project._200_Dev.Entities.Player.States;
 using _Project._200_Dev.Entities.Player.Stats;
 using _Project._200_Dev.Entities.StateMachine;
 using _Project._200_Dev.Networking.IL_Weaving.Server;
 using _Project._200_Dev.Utilities.Extensions;
+using Project;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;

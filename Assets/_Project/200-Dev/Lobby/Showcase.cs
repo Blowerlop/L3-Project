@@ -1,10 +1,10 @@
 using System.Globalization;
 using System.Linq;
-using _Project._000_Game.Constants;
 using _Project._200_Dev.Entities;
 using _Project._200_Dev.Entities.Player.Stats;
 using _Project._200_Dev.Spells;
 using _Project._200_Dev.Utilities.Extensions;
+using Project;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
