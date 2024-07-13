@@ -15,7 +15,8 @@
         "Plugin.QuickOutline",
         "DOTweenPro.Scripts",
         "DOTween.Modules",
-        "Unity.Collections"
+        "Unity.Collections",
+        "Eflatun.SceneReference"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
