@@ -1,4 +1,4 @@
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;

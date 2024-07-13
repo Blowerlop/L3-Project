@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using UnityEngine;
 
 namespace _Project._200_Dev.UI
@@ -16,11 +16,6 @@ namespace _Project._200_Dev.UI
         
         private Coroutine _handleRequestsCoroutine;
 
-        protected override void Awake()
-        {
-            dontDestroyOnLoad = false;
-            base.Awake();
-        }
         
         public void RequestText(int value, Transform parent, Vector3 direction)
         {

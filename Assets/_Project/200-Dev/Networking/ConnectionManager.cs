@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using _Project._200_Dev.Console;
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using Sirenix.OdinInspector;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;

@@ -1,16 +1,16 @@
 using UnityEngine;
 
-namespace _Project._200_Dev.Utilities.Monobehaviour
+namespace _Project._200_Dev.Utilities.Objects
 {
     public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        protected static bool dontDestroyOnLoad = true;
-        
-        private static T _instance = null;
+        private static T _instance;
         public static T instance {
             get
             {
+                #if UNITY_EDITOR
                 if (Application.isPlaying == false) return null;
+                #endif
                 
                 if(_instance == null) _instance = FindAnyObjectByType<T>();
                 
@@ -18,33 +18,30 @@ namespace _Project._200_Dev.Utilities.Monobehaviour
             }
         }
         
-        protected virtual void Awake(){
+        protected virtual void Awake()
+        {
             if (_instance != null && _instance != this)
             {
-                Debug.LogError($"There is more than one instance of {this}");
+                Debug.LogError($"[{nameof(MonoSingleton<T>)}] There is more than one instance of {this}");
                 Destroy(this);
                 return;
             }
-            
-            _instance = GetComponent<T>();
-            
-            if(dontDestroyOnLoad)
-            {
-                DontDestroyOnLoad(gameObject);
-            }
+
+            // We may have found the object in the instance getter.
+            if (_instance == null) _instance = GetComponent<T>();
         }
 
+        #if UNITY_EDITOR
         protected virtual void OnDestroy()
         {
             if (_instance == this) _instance = null;
         }
-
-        public static bool IsInstanceAlive() => _instance != null;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStaticVariables()
         {
             _instance = null;
         }
+        #endif
     }
 }

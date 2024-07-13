@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _Project._200_Dev.User;
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using FMOD;
 using FMOD.Studio;
 using FMODUnity;
@@ -57,12 +57,7 @@ namespace _Project._200_Dev.Managers
             UI,
             Snapshot,
         }
-
-        protected override void Awake()
-        {
-            dontDestroyOnLoad = false;
-            base.Awake();
-        }
+        
 
         void Start()
         {

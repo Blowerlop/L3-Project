@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Managers;
 using _Project._200_Dev.User;
 using Project;
@@ -75,7 +76,7 @@ namespace _Project._200_Dev.Entities.Player
             if (IsOwner)
             {
                 _camera = null;
-                if (InputManager.IsInstanceAlive()) InputManager.instance.onMouseButton1.performed -= OnMouseButton1_FireEvent;
+                if (!ApplicationManager.isQuitting) InputManager.instance.onMouseButton1.performed -= OnMouseButton1_FireEvent;
                 
                 CursorManager.Release();
             }

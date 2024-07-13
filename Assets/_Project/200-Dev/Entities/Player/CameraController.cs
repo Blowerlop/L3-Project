@@ -1,3 +1,4 @@
+using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Entities.Player.States;
 using _Project._200_Dev.Entities.StateMachine;
 using _Project._200_Dev.Managers;
@@ -62,7 +63,7 @@ namespace _Project._200_Dev.Entities.Player
 
         private void OnDisable()
         {
-            if (InputManager.IsInstanceAlive())
+            if (!ApplicationManager.isQuitting)
             {
                 InputManager.instance.onCenterCamera.performed -= onCenterCameraRequest_CenterCameraOnPlayer;
                 InputManager.instance.onLockCamera.performed -= OnCameraLockRequest_ToggleCameraLock;

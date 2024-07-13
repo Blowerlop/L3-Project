@@ -1,4 +1,5 @@
 using System.Collections;
+using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Entities.Player.Effects;
 using _Project._200_Dev.Entities.Player.Interfaces;
 using _Project._200_Dev.Entities.Player.States;
@@ -59,7 +60,7 @@ namespace _Project._200_Dev.Entities.Player
             if (IsOwner)
             {
                 _playerRefs.PlayerMouse.OnMouseClick -= OnMouseButton1_AttackRequest;
-                if (InputManager.IsInstanceAlive())
+                if (!ApplicationManager.isQuitting)
                     InputManager.instance.onCancellation.performed -= OnCancellation_StopAttack;
             }
 

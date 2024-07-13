@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Managers;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace _Project._200_Dev.UI_Framework.Runtime
         private void UnInitialized()
         {
             CursorManager.Release();
-            if (InputManager.IsInstanceAlive())
+            if (!ApplicationManager.isQuitting)
             {
                 InputManager.instance.onEscapeKey.performed -= CloseElement;
                 InputManager.instance.SwitchActionMap(InputManager.instance.previousActionMap);

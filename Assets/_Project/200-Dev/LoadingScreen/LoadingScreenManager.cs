@@ -1,6 +1,6 @@
 using System.Collections;
 using _Project._200_Dev.Utilities.Extensions;
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;

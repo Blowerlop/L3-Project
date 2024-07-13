@@ -1,4 +1,5 @@
 using System.Linq;
+using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Entities;
 using _Project._200_Dev.Entities.Player;
 using _Project._200_Dev.Managers;
@@ -53,7 +54,7 @@ namespace _Project._200_Dev.Spells
         private void OnDestroy()
         {
             if (!NetworkManager.Singleton.IsClient) return;
-            if (InputManager.IsInstanceAlive() == false) return;
+            if (ApplicationManager.isQuitting) return;
             
             InputManager.instance.OnSpellInputStarted -= StartCasting;
             InputManager.instance.OnOnSpellInputCanceled -= StopCasting;

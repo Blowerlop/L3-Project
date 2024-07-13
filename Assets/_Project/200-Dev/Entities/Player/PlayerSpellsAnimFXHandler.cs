@@ -68,8 +68,11 @@ namespace _Project._200_Dev.Entities.Player
             {
                 foreach (var wrapper in FXs)
                 {
-                    wrapper.FX?.Stop();
-                    wrapper.FX?.Clear();
+                    if (wrapper.FX != null)
+                    {
+                        wrapper.FX.Stop();
+                        wrapper.FX.Clear();
+                    }
                 }
                 
                 _nextAutoFxs.Clear();

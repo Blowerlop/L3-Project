@@ -3,7 +3,7 @@ using System.Linq;
 using _Project._200_Dev.Console;
 using _Project._200_Dev.Logs.LogFileExporter;
 using _Project._200_Dev.Utilities;
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using UnityEngine;
 
 namespace _Project._200_Dev.Logs.LogDisplayer
@@ -38,7 +38,6 @@ namespace _Project._200_Dev.Logs.LogDisplayer
 
         protected override void Awake()
         {
-            dontDestroyOnLoad = false;
             base.Awake();
             
             Application.logMessageReceived += OnLogMessageReceived_UpdateGUI; 

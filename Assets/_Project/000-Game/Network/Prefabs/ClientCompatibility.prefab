@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7153388414524928212}
   - component: {fileID: 6779566424089242450}
   - component: {fileID: 2505847726453554493}
+  - component: {fileID: -1344851900723247337}
   m_Layer: 0
   m_Name: ClientCompatibility
   m_TagString: Untagged
@@ -25,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6081436526929384584}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6779566424089242450
 MonoBehaviour:
@@ -46,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 1066411145
+  InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -65,3 +67,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c4dcebdd22463ca0a061eb4d59c87a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1344851900723247337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6081436526929384584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dad3f9bfa9ff4d22be66ccf8f7590ac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _infiniteLifeTime: 1
+  _authorizedScenes: []

@@ -62,8 +62,7 @@ namespace _Project._200_Dev.Tools.Bootstrap
                     continue;
                 }
 
-                Object ins = Object.Instantiate(obj);
-                Object.DontDestroyOnLoad(ins);
+                Object.Instantiate(obj);
             }
         }
     }

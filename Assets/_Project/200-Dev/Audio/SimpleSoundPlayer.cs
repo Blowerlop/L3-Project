@@ -1,3 +1,4 @@
+using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Managers;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace _Project._200_Dev.Audio
         {
             if (clearOnChange)
             {
-                if (SoundManager.IsInstanceAlive()) SoundManager.instance.StopStaticSound(alias);
+                if (!ApplicationManager.isQuitting) SoundManager.instance.StopStaticSound(alias);
             }
         }
     }

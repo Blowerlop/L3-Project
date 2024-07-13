@@ -1,5 +1,5 @@
 using System;
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
@@ -73,7 +73,6 @@ namespace _Project._200_Dev.Managers
         #region Updates
         protected override void Awake()
         {
-            dontDestroyOnLoad = false;
             base.Awake();
             
             InitInputAction();

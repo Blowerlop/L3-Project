@@ -4,10 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Logs.LogFileExporter;
 using _Project._200_Dev.Managers;
 using _Project._200_Dev.Utilities.Extensions;
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using TMPro;
@@ -94,7 +95,7 @@ namespace _Project._200_Dev.Console
         {
             Application.logMessageReceived -= LogConsole;
 
-            if (InputManager.IsInstanceAlive())
+            if (!ApplicationManager.isQuitting)
             {
                 InputManager.instance.onConsoleKey.started -= OnConsoleKeyStarted_ToggleConsole;
             }

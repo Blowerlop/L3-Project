@@ -1,6 +1,6 @@
 using _Project._200_Dev.Managers;
 using _Project._200_Dev.UI_Framework.Runtime;
-using _Project._200_Dev.Utilities.Monobehaviour;
+using _Project._200_Dev.Utilities.Objects;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,12 +11,6 @@ namespace _Project._200_Dev.Menu
         [SerializeField] private GameObject _menu; 
         
         
-        protected override void Awake()
-        {
-            dontDestroyOnLoad = false;
-            base.Awake();
-        }
-
         private void OnEnable()
         {
             InputManager.instance.onEscapeKey.performed += Toggle;
