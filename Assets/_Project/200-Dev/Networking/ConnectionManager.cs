@@ -199,46 +199,46 @@ namespace _Project._200_Dev.Networking
         }
 
 
-        [ConsoleCommand("start_server", "Start game as a server")]
+        [ConsoleCommand("net_server", "Start game as a server")]
         private static void StartServer()
         {
             NetworkManager.Singleton.StartServer();
         }
 
-        [ConsoleCommand("start_server_ip", "Start game as a server with a defined ip")]
+        [ConsoleCommand("net_server_data", "Start game as a server with a defined connection data")]
         private static void StartServer(string ipAddress, ushort port, string listenAddress)
         {
             UpdateConnectionData(ipAddress, port, listenAddress);
             NetworkManager.Singleton.StartServer();
         }
 
-        [ConsoleCommand("start_host", "Start a game as a host")]
+        [ConsoleCommand("net_host", "Start a game as a host")]
         private static void StartHost()
         {
             NetworkManager.Singleton.StartHost();
         }
 
-        [ConsoleCommand("start_host_ip", "Start a game as a host with a defined ip")]
+        [ConsoleCommand("net_host_data", "Start a game as a host with a defined connection data")]
         private static void StartHost(string ipAddress, ushort port, string listenAddress)
         {
             UpdateConnectionData(ipAddress, port, listenAddress);
             NetworkManager.Singleton.StartHost();
         }
 
-        [ConsoleCommand("connect", "Join a game as a client")]
+        [ConsoleCommand("net_client", "Join a game as a client")]
         private static void StartClient()
         {
             NetworkManager.Singleton.StartClient();
         }
 
-        [ConsoleCommand("connect_ip", "Join a game at the defined ip")]
+        [ConsoleCommand("net_client_data", "Join a game at the defined connection data")]
         private static void StartClient(string ipAddress, ushort port)
         {
             UpdateConnectionData(ipAddress, port, null);
             NetworkManager.Singleton.StartClient();
         }
 
-        [ConsoleCommand("disconnect", "Disconnect from the server")]
+        [ConsoleCommand("net_disconnect", "Disconnect from the server")]
         private static void Disconnect()
         {
             if (NetworkManager.Singleton.IsListening == false)
@@ -250,7 +250,7 @@ namespace _Project._200_Dev.Networking
             NetworkManager.Singleton.Shutdown();
         }
 
-        [ConsoleCommand("kick", "Kick a client from the server")]
+        [ConsoleCommand("net_kick", "Kick a client from the server")]
         private static void Kick(ulong clientId, string reason = default)
         {
             if (NetworkManager.Singleton.IsListening == false)
