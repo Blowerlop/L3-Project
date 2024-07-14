@@ -13,6 +13,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Profiling;
@@ -41,6 +42,7 @@ namespace _Project._200_Dev.Console
         private List<string> _commandHistory;
         private int _commandHistoryIndex;
         private int _currentIndex = -1;
+        private bool _navigatingThroughHistory;
         
         [TitleGroup("References")]
         [SerializeField, ChildGameObjectsOnly] private ScrollRect _logScrollRect;
@@ -82,13 +84,13 @@ namespace _Project._200_Dev.Console
         private void OnEnable()
         {
             _inputInputField.onSubmit.AddListener(ExecuteCommand);
-            _inputInputField.onValueChanged.AddListener(_commandPrediction.Predict);
+            _inputInputField.onValueChanged.AddListener(OnInputInputFieldValueChanged_Predict);
         }
 
         private void OnDisable()
         {
             _inputInputField.onSubmit.RemoveListener(ExecuteCommand);
-            _inputInputField.onValueChanged.RemoveListener(_commandPrediction.Predict);
+            _inputInputField.onValueChanged.RemoveListener(OnInputInputFieldValueChanged_Predict);
         }
 
         protected override void OnDestroy()
@@ -130,7 +132,7 @@ namespace _Project._200_Dev.Console
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                if (_commandPrediction.HasAPrediction())
+                if (!_navigatingThroughHistory && _commandPrediction.HasAPrediction())
                 {
                     _commandPrediction.WriteNextPrediction();
                     MoveCaretToTheEndOfTheText();
@@ -142,7 +144,7 @@ namespace _Project._200_Dev.Console
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                if (_commandPrediction.HasAPrediction())
+                if (!_navigatingThroughHistory && _commandPrediction.HasAPrediction())
                 {
                     _commandPrediction.WritePreviousPrediction();
                     MoveCaretToTheEndOfTheText();
@@ -308,8 +310,10 @@ namespace _Project._200_Dev.Console
             }
 
             _currentIndex++;
+            _navigatingThroughHistory = true;
             
             SetTextOfInputInputFieldSilent(_commandHistory[_currentIndex]);
+            PredictCurrentInput();
         }
         
         private void GotToTheRecentInHistory()
@@ -321,13 +325,16 @@ namespace _Project._200_Dev.Console
             if (_currentIndex <= 0)
             {
                 SetTextOfInputInputFieldSilent(string.Empty);
+                PredictCurrentInput();
                 _currentIndex = -1;
                 return;
             }
 
             _currentIndex--;
+            _navigatingThroughHistory = true;
             
             SetTextOfInputInputFieldSilent(_commandHistory[_currentIndex]);
+            PredictCurrentInput();
         }
         
         private void IncreaseOrDecreaseLogTextSize()
@@ -359,6 +366,12 @@ namespace _Project._200_Dev.Console
         #endregion
         
         #region Utilities
+
+        private void PredictCurrentInput()
+        {
+            _commandPrediction.Predict(_inputInputField.text);
+        }
+        
         public void SetTextOfInputInputField(string text)
         {
             if (string.Equals(_inputInputField.text, text)) return;
@@ -369,7 +382,7 @@ namespace _Project._200_Dev.Console
         
         public void SetTextOfInputInputFieldSilent(string text)
         {
-            if (string.Equals(_inputInputField.text, text)) return;
+            if (_inputInputField.text == text) return;
             
             _inputInputField.SetTextWithoutNotify(text);
             MoveCaretToTheEndOfTheText();
@@ -424,6 +437,13 @@ namespace _Project._200_Dev.Console
             instance.LogConsole(stringBuilder.ToString(), string.Empty, LogType.Log);
         }
         #endregion
+        
+        private void OnInputInputFieldValueChanged_Predict(string text)
+        {
+            _commandPrediction.Predict(text);
+            _navigatingThroughHistory = false;
+            _currentIndex = -1;
+        }
         
         [ButtonGroup]
         [ConsoleCommand("enable", "Enable the console")]
