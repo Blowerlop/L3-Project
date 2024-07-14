@@ -17,6 +17,7 @@ MonoBehaviour:
   <beforeSplashScreen>k__BackingField: []
   <beforeSceneLoad>k__BackingField:
   - {fileID: 1765682051150463369, guid: ce9b0904bfe516b40b3780f52281d8ae, type: 3}
+  - {fileID: 5876955778673139588, guid: 16db5aee4bb57164580f2279571396ca, type: 3}
   - {fileID: 881529722694306890, guid: ce9b0904bfe516b40b3780f52281d8ae, type: 3}
   - {fileID: 8851122995941528187, guid: 526daf2ab02b26d41abb2ebe051748cd, type: 3}
   - {fileID: 8897260045845080591, guid: 51c7b9cff5bc57c4f9b846616e6c56b8, type: 3}

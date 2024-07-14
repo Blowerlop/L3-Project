@@ -9,7 +9,14 @@ namespace _Project._200_Dev.Utilities.Objects
             get
             {
                 #if UNITY_EDITOR
-                if (Application.isPlaying == false) return null;
+                try
+                {
+                    if (Application.isPlaying == false) return null;
+                }
+                catch (UnityException e)
+                {
+                    Debug.LogError("[CATCH SO NOT CANCELING CODE] " + e);
+                }
                 #endif
                 
                 if(_instance == null) _instance = FindAnyObjectByType<T>();
