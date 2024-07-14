@@ -23,4 +23,5 @@ MonoBehaviour:
   - {fileID: 8897260045845080591, guid: 51c7b9cff5bc57c4f9b846616e6c56b8, type: 3}
   - {fileID: 6081436526929384584, guid: 42c8cba60aa1ab64195d8b451f1d948c, type: 3}
   - {fileID: 1892950470809605460, guid: 340ff278362f1804588e36042bb06555, type: 3}
+  - {fileID: 177638, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
   <afterSceneLoad>k__BackingField: []
