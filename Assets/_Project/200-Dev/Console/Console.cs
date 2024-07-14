@@ -132,7 +132,8 @@ namespace _Project._200_Dev.Console
             {
                 if (_commandPrediction.HasAPrediction())
                 {
-
+                    _commandPrediction.WriteNextPrediction();
+                    MoveCaretToTheEndOfTheText();
                 }
                 else
                 {
@@ -143,7 +144,8 @@ namespace _Project._200_Dev.Console
             {
                 if (_commandPrediction.HasAPrediction())
                 {
-                    
+                    _commandPrediction.WritePreviousPrediction();
+                    MoveCaretToTheEndOfTheText();
                 }
                 else
                 {

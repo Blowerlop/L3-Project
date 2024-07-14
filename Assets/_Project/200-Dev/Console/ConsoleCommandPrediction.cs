@@ -14,12 +14,19 @@ namespace _Project._200_Dev.Console
 {
     public class ConsoleCommandPrediction : MonoBehaviour
     {
-        [SerializeField, ChildGameObjectsOnly] private TMP_Text _inputFieldPredictionPlaceHolder;
+        private readonly List<string> _predictions = new(6);
         [CanBeNull] [ShowInInspector, ReadOnly] public string currentPrediction { get; private set; }
+        private int _currentPredictionIndex;
+        private string _input;
+        private string[] _splitInput;
+        private string _commandInput;
+        
+        [Title("UI")]
+        [SerializeField, ChildGameObjectsOnly] private TMP_Text _inputFieldPredictionPlaceHolder;
         [SerializeField, ChildGameObjectsOnly] private GameObject _gameObject;
         [SerializeField, AssetsOnly] private Button _template;
 
-            
+
         public bool HasAPrediction() => !string.IsNullOrEmpty(currentPrediction);
         
         public void Predict(string input)
@@ -28,34 +35,35 @@ namespace _Project._200_Dev.Console
 
             if (string.IsNullOrEmpty(input)) return;
             
-            string[] splitInput = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            string commandInput = splitInput[0];
-
-            HashSet<string> allCommandsName = new HashSet<string>();
+            _input = input;
+            _splitInput = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            _commandInput = _splitInput[0];
 
             Console.instance.commandsName.ForEach((commandName, index) =>
             {
-                if (commandName.StartsWith(commandInput, true, CultureInfo.InvariantCulture))
+                if (commandName.StartsWith(_commandInput, true, CultureInfo.InvariantCulture))
                 {
-                    allCommandsName.Add(Console.instance.commandsName[index]);
+                    _predictions.Add(Console.instance.commandsName[index]);
                 }
             });
 
             // allCommandsName.Debug();
 
-            if (allCommandsName.Any() == false)
+            if (!_predictions.Any())
             {
                 ClearPrediction();
                 return;
             }
             
-            ComputeFirstPrediction(input, allCommandsName.First(), commandInput, splitInput);
-            ComputeAdditionalPrediction(allCommandsName);
+            _currentPredictionIndex = 0;
+            WritePrediction(_input, _currentPredictionIndex, _commandInput, _splitInput);
+            DisplayPredictions();
         }
 
-        private void ComputeFirstPrediction(string input, string firstPredictionName, string commandInput, IReadOnlyCollection<string> splitInput)
+        private void WritePrediction(string input, int predictionIndex, string commandInput, IReadOnlyCollection<string> splitInput)
         {
-            currentPrediction = firstPredictionName;
+            currentPrediction = GetPrediction(predictionIndex);
+            
 #if UNITY_EDITOR
             // Just to make Rider happy :)
             if (currentPrediction == null)
@@ -87,27 +95,41 @@ namespace _Project._200_Dev.Console
                 ParameterInfo parameterInfo = Console.instance.commands[currentPrediction].parametersInfo[i];
                 if (parameterInfo.HasDefaultValue)
                 {
-                    // _inputFieldPredictionPlaceHolder.text += $" <{parameterType.Name}>(Optional)";
                     _inputFieldPredictionPlaceHolder.text += $" {parameterInfo.Name}(Optional)";
                 }
                 else
                 {
-                    // _inputFieldPredictionPlaceHolder.text += $" <{parameterType.Name}>";
                     _inputFieldPredictionPlaceHolder.text += $" {parameterInfo.Name}";
                 }
             }
         }
+        
+        public void WriteNextPrediction()
+        {
+            if (_currentPredictionIndex >= _predictions.Count - 1) return;
+            
+            WritePrediction(_input, ++_currentPredictionIndex, _commandInput, _splitInput);
+        }
+        
+        public void WritePreviousPrediction()
+        {
+            if (_currentPredictionIndex <= 0) return;
+            
+            WritePrediction(_input, --_currentPredictionIndex, _commandInput, _splitInput);
+        }
 
         
-        private void ComputeAdditionalPrediction(HashSet<string> allPredictionsName)
+        private void DisplayPredictions()
         {
-            foreach (string predictionsName in allPredictionsName)
+            for (var i = 0; i < _predictions.Count; i++)
             {
+                var predictionsName = _predictions[i];
                 Button instance = Instantiate(_template, _gameObject.transform);
+                var predictionIndex = i;
                 instance.onClick.AddListener(() =>
                 {
                     Console.instance.SetTextOfInputInputFieldSilent(predictionsName);
-                    ComputeFirstPrediction(predictionsName, predictionsName, predictionsName,
+                    WritePrediction(predictionsName, predictionIndex, predictionsName,
                         new[] { predictionsName });
                     Console.instance.FocusOnInputField();
                 });
@@ -120,8 +142,14 @@ namespace _Project._200_Dev.Console
             if (currentPrediction == null) return;
             
             currentPrediction = null;
+            _predictions.Clear();
             _inputFieldPredictionPlaceHolder.text = string.Empty;
             _gameObject.DestroyChildren();
+        }
+
+        private string GetPrediction(int index)
+        {
+            return _predictions[index];
         }
     }
 }
