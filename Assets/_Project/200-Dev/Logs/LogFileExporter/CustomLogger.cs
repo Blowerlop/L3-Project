@@ -16,6 +16,8 @@ namespace _Project._200_Dev.Logs.LogFileExporter
         public static readonly Color logColor = new Color(1f, 1f, 1f, 1f);
         public static readonly Color logWarningColor = new Color(1f, 0.996f, 0f, 1f);
         public static readonly Color logErrorColor = new Color(1f, 0.067f, 0f, 1f);
+        public static readonly Color logExceptionColor = new Color(92f, 39f, 81f, 1f);
+        public static readonly Color logAssertColor = new Color(138f, 155f, 104f, 1f);
         
         private const string _LOG_SAVER_DEFAULT_FILE_PATH = "/_Project/Data/Log.txt";
         private static readonly string LogSaverFilePath = $"{Application.dataPath}{_LOG_SAVER_DEFAULT_FILE_PATH}";

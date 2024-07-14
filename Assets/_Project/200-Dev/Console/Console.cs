@@ -470,22 +470,16 @@ namespace _Project._200_Dev.Console
         {
             bool setAtBottom = _logScrollRect.verticalNormalizedPosition <= 0.01f;
 
-            Color logColor;
-            switch (logType)
+            Color logColor = logType switch
             {
-                case LogType.Log:
-                    logColor = CustomLogger.logColor;
-                    break;
-                
-                case LogType.Warning:
-                    logColor = CustomLogger.logWarningColor;
-                    break;
-                
-                // All the other LogType
-                default:
-                    logColor = CustomLogger.logErrorColor;
-                    break;
-            }
+                LogType.Log => CustomLogger.logColor,
+                LogType.Warning => CustomLogger.logWarningColor,
+                LogType.Error => CustomLogger.logErrorColor,
+                LogType.Assert => CustomLogger.logAssertColor,
+                LogType.Exception => CustomLogger.logExceptionColor,
+                _ => CustomLogger.logColor
+            };
+            
             _logInputField.text += $"<color=#{ColorUtility.ToHtmlStringRGB(logColor)}>{condition}</color>\n";
 
             if (_currentNumberOfMessages >= _maxMessages)
