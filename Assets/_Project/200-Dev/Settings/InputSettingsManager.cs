@@ -1,4 +1,5 @@
 using System;
+using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Managers;
 using Sirenix.Utilities;
 using TMPro;
@@ -82,6 +83,10 @@ namespace _Project._200_Dev.Settings
 
         public static string GetBindingName(string actionName, int bindingIndex, InputBinding.DisplayStringOptions displayStringOptions = 0)
         {
+            #if UNITY_EDITOR
+            if (!Application.isPlaying || ApplicationManager.isQuitting) return "Application not playing";
+            #endif
+            
             InputAction action = InputManager.instance.inputAction.asset.FindAction(actionName);
             return action.GetBindingDisplayString(bindingIndex, displayStringOptions);
         }
