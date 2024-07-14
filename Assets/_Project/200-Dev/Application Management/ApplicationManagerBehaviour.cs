@@ -4,7 +4,7 @@ namespace _Project._200_Dev.Application_Management
 {
     public class ApplicationManagerBehaviour : MonoSingleton<ApplicationManagerBehaviour>
     {
-        public bool isQuitting { get; private set; }
+        [ClearOnReload] public static bool IsQuitting;
         public int mainThreadId { get; private set; }
 
 
@@ -17,7 +17,7 @@ namespace _Project._200_Dev.Application_Management
 
         private void OnApplicationQuit()
         {
-            isQuitting = true;
+            IsQuitting = true;
             mainThreadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
         }
 

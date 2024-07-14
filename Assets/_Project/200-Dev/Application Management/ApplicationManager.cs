@@ -5,7 +5,7 @@ namespace _Project._200_Dev.Application_Management
         private static ApplicationManagerBehaviour instance => ApplicationManagerBehaviour.instance;
         
         
-        public static bool isQuitting => instance.isQuitting;
+        public static bool isQuitting => ApplicationManagerBehaviour.IsQuitting;
         public static int mainThreadId => instance.mainThreadId;
         
         
