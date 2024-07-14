@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Logs.LogFileExporter;
 using _Project._200_Dev.Managers;
@@ -13,7 +12,6 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Profiling;
@@ -28,16 +26,16 @@ namespace _Project._200_Dev.Console
         #region Variables
 
         [Title("Console State")]
-        [ShowInInspector, ReadOnly] public static bool isConsoleEnabled { get; private set; }
+        [ShowInInspector, ReadOnly] public bool isConsoleEnabled => instance.gameObject.activeSelf;
         [ShowInInspector, ReadOnly] public bool isInputFieldFocus => _inputInputField != null && _inputInputField.isFocused;
         [ShowInInspector, ReadOnly] private int _currentNumberOfMessages;
 
         [Title("Parameters")]
-        [SerializeField] private Vector2 _fontSizeRange = new Vector2(20, 60);
+        [SerializeField] private Vector2 _fontSizeRange = new(20, 60);
         [SerializeField] private int _maxMessages = 100;
         [SerializeField] private int _maxCommandHistory = 50;
         
-        public readonly Dictionary<string, ConsoleCommand> commands = new Dictionary<string, ConsoleCommand>();
+        public readonly Dictionary<string, ConsoleCommand> commands = new();
         public string[] commandsName { get; private set; }
         private List<string> _commandHistory;
         private int _commandHistoryIndex;
@@ -57,7 +55,7 @@ namespace _Project._200_Dev.Console
 
         protected override void Awake()
         {
-            ClearConsoleLogs();
+            ClearConsole();
             Application.logMessageReceived += LogConsole;
             RetrieveCommandAttribute();
         }
@@ -287,7 +285,7 @@ namespace _Project._200_Dev.Console
             _currentIndex = -1;
         }
 
-        public static void AddCommand(ConsoleCommand consoleCommand)
+        public void AddCommand(ConsoleCommand consoleCommand)
         {
             instance.commands.Add(consoleCommand.name, consoleCommand);
         }
@@ -297,8 +295,8 @@ namespace _Project._200_Dev.Console
         #region Used by shortcut
         private void OnConsoleKeyStarted_ToggleConsole(InputAction.CallbackContext _)
         {
-            if (isConsoleEnabled) HideConsole();
-            else ShowConsole();
+            if (isConsoleEnabled) Hide();
+            else Show();
         }
         
         private void GotToTheOlderInHistory()
@@ -413,30 +411,11 @@ namespace _Project._200_Dev.Console
         
         #endregion
 
-        #region Custom Commands
-        [ConsoleCommand("clear", "Wipe all the logs in the console")]
-        private static void ClearConsoleLogs()
+        public void ClearConsole()
         {
-            Debug.Log("Console cleared");
-            instance._logInputField.text = string.Empty;
-            instance._currentNumberOfMessages = 0;
+            _logInputField.text = string.Empty;
+            _currentNumberOfMessages = 0;
         }
-
-        [ConsoleCommand(new string[] {"help", "commands"}, "Display all the commands")]
-        private static void DisplayAllCommands()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            stringBuilder.Append("Here the list of all available commands :\n");
-
-            foreach (var kvp in instance.commands)
-            {
-                stringBuilder.Append($"{kvp.Key} --- {kvp.Value.description}\n");
-            }
-            
-            instance.LogConsole(stringBuilder.ToString(), string.Empty, LogType.Log);
-        }
-        #endregion
         
         private void OnInputInputFieldValueChanged_Predict(string text)
         {
@@ -446,19 +425,16 @@ namespace _Project._200_Dev.Console
         }
         
         [ButtonGroup]
-        [ConsoleCommand("enable", "Enable the console")]
-        public static void ShowConsole()
+        public void Show()
         {
             if (isConsoleEnabled) return;
 
             ShowConsoleForced();
         }
 
-        private static void ShowConsoleForced()
+        private void ShowConsoleForced()
         {
             instance.gameObject.SetActive(true);
-            isConsoleEnabled = true;
-
             instance.OnShowConsole();
         }
 
@@ -470,18 +446,16 @@ namespace _Project._200_Dev.Console
         }
 
         [ButtonGroup]
-        [ConsoleCommand("disable", "Disable the console")]
-        public static void HideConsole()
+        public void Hide()
         {
             if (isConsoleEnabled == false) return;
             
             HideConsoleForced();
         }
 
-        private static void HideConsoleForced()
+        private void HideConsoleForced()
         {
             instance.gameObject.SetActive(false);
-            isConsoleEnabled = false;
 
             instance.OnHideConsole();
         }

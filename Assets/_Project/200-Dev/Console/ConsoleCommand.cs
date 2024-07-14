@@ -69,5 +69,10 @@ namespace _Project._200_Dev.Console
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return $"{name} --- {description}";
+        }
     }
 }
