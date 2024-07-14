@@ -32,10 +32,12 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Ashenblaze invokes a falling fireball at the target location
       dealing {0} damages to enemies and stun them for {3} seconds.
-    effects: []
+    effects:
+    - rid: 4536526872778637597
+    - rid: 4536526872778637596
   effects:
-  - rid: 4536526872778637596
   - rid: 4536526872778637597
+  - rid: 4536526872778637596
   onCasterEffects: []
   limitRadius: 15
   zoneRadius: 8.75

@@ -4,6 +4,7 @@ using System.Linq;
 using _Project._200_Dev.Entities.Player.Stats;
 using _Project._200_Dev.ParrelSync.IL_Weaving;
 using _Project._200_Dev.Tools;
+using Project;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;

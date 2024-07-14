@@ -32,10 +32,12 @@ MonoBehaviour:
   spellDescription:
     descriptionText: Ashenblaze invokes a rain of fire at the target location that
       deals ticking damages and slow them. Tick damage ({0}) - Tick Rate ({3}s)
-    effects: []
+    effects:
+    - rid: 4536526872778637602
+    - rid: 4536526872778637601
   effects:
-  - rid: 4536526872778637601
   - rid: 4536526872778637602
+  - rid: 4536526872778637601
   onCasterEffects: []
   limitRadius: 15
   zoneRadius: 4.5
