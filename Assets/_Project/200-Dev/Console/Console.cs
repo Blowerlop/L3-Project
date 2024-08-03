@@ -6,7 +6,6 @@ using System.Reflection;
 using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Logs.LogFileExporter;
 using _Project._200_Dev.Managers;
-using _Project._200_Dev.Utilities.Extensions;
 using _Project._200_Dev.Utilities.Objects;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
@@ -28,13 +27,14 @@ namespace _Project._200_Dev.Console
         [Title("Console State")]
         [ShowInInspector, ReadOnly] public bool isConsoleEnabled => instance.gameObject.activeSelf;
         [ShowInInspector, ReadOnly] public bool isInputFieldFocus => _inputInputField != null && _inputInputField.isFocused;
-        [ShowInInspector, ReadOnly] private int _currentNumberOfMessages;
 
         [Title("Parameters")]
         [SerializeField] private Vector2 _fontSizeRange = new(20, 60);
-        [SerializeField] private int _maxMessages = 100;
+        [SerializeField] private int _maxCharacters = 10000;
         [SerializeField] private int _maxCommandHistory = 50;
         
+        private const string _LOG_FORMAT = "<color=#{0}>{1}</color>\n";
+        private const int _LOG_COUNT_OFFSET = 24;
         public readonly Dictionary<string, ConsoleCommand> commands = new();
         public string[] commandsName { get; private set; }
         private List<string> _commandHistory;
@@ -414,7 +414,6 @@ namespace _Project._200_Dev.Console
         public void ClearConsole()
         {
             _logInputField.text = string.Empty;
-            _currentNumberOfMessages = 0;
         }
         
         private void OnInputInputFieldValueChanged_Predict(string text)
@@ -469,7 +468,7 @@ namespace _Project._200_Dev.Console
         private void LogConsole(string condition, string stacktrace, [EnumToggleButtons] LogType logType)
         {
             bool setAtBottom = _logScrollRect.verticalNormalizedPosition <= 0.01f;
-
+            
             Color logColor = logType switch
             {
                 LogType.Log => CustomLogger.logColor,
@@ -480,17 +479,15 @@ namespace _Project._200_Dev.Console
                 _ => CustomLogger.logColor
             };
             
-            _logInputField.text += $"<color=#{ColorUtility.ToHtmlStringRGB(logColor)}>{condition}</color>\n";
-
-            if (_currentNumberOfMessages >= _maxMessages)
-            {
-                _logInputField.text = _logInputField.text.RemoveFirstLine();
-            }
-            else
-            {
-                _currentNumberOfMessages++;
-            }
+            string currentLog = _logInputField.text;
             
+            int difference = _maxCharacters - (currentLog.Length + condition.Length + _LOG_COUNT_OFFSET);
+            if (difference < 0)
+            {
+                currentLog = currentLog.Remove(0, -difference);
+            }
+
+            _logInputField.text = currentLog + string.Format(_LOG_FORMAT, ColorUtility.ToHtmlStringRGB(logColor), condition);
 
             #if UNITY_EDITOR
             if (setAtBottom && gameObject.activeInHierarchy) // Only to disable the StartCoroutine logError in editor
