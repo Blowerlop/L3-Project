@@ -3,9 +3,9 @@ using _Project._200_Dev.Entities.Player.Stats;
 using _Project._200_Dev.Entities.StateMachine;
 using _Project._200_Dev.Spells;
 using _Project._200_Dev.Utilities.Extensions;
-using Cinemachine;
 using Project;
 using Sirenix.OdinInspector;
+using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -18,7 +18,7 @@ namespace _Project._200_Dev.Entities.Player
         private int _currentAnimationHash;
         [ShowInInspector] private NetworkVariable<int> _currentAnimation = new();
         
-        [SerializeField] private CinemachineVirtualCamera _deathCamera;
+        [SerializeField] private CinemachineCamera _deathCamera;
         
 
         public override int TeamIndex => _refs.TeamIndex;
@@ -57,7 +57,7 @@ namespace _Project._200_Dev.Entities.Player
             }
             if (IsOwner)
             {
-                _deathCamera = GameObject.FindGameObjectWithTag(Constants.Tags.Death_Camera)?.GetComponent<CinemachineVirtualCamera>();
+                _deathCamera = GameObject.FindGameObjectWithTag(Constants.Tags.Death_Camera)?.GetComponent<CinemachineCamera>();
 
                 if (IsServer)
                 {

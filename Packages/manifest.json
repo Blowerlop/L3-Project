@@ -5,7 +5,7 @@
     "com.jsteinhauer.unitydomainreloadhelper": "https://github.com/Blowerlop/unity-domain-reload-helper.git",
     "com.mewlist.mew-weaver": "https://github.com/mewlist/MewWeaver.git?path=Assets/MewWeaver",
     "com.unity.ai.navigation": "2.0.3",
-    "com.unity.cinemachine": "2.10.0",
+    "com.unity.cinemachine": "3.1.1",
     "com.unity.ide.rider": "3.0.28",
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.inputsystem": "1.8.2",

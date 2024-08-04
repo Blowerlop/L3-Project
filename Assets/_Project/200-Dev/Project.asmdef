@@ -16,7 +16,8 @@
         "DOTweenPro.Scripts",
         "DOTween.Modules",
         "Unity.Collections",
-        "Eflatun.SceneReference"
+        "Eflatun.SceneReference",
+        "Unity.Cinemachine"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

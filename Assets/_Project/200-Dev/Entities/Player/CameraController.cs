@@ -4,9 +4,9 @@ using _Project._200_Dev.Entities.StateMachine;
 using _Project._200_Dev.Managers;
 using _Project._200_Dev.Settings;
 using _Project._200_Dev.Utilities.Extensions;
-using Cinemachine;
 using Project;
 using Sirenix.OdinInspector;
+using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -31,7 +31,7 @@ namespace _Project._200_Dev.Entities.Player
         [Title("References")]
         [SerializeField] private Collider _border;
         private Transform _player;
-        private CinemachineVirtualCamera _playerCamera;
+        private CinemachineCamera _playerCamera;
         private StateMachineController _stateMachineController;
 
         private Vector3 _forward;
@@ -47,7 +47,7 @@ namespace _Project._200_Dev.Entities.Player
         {
             _cameraLock = GameplaySettingsManager.cameraLock.value;
             
-            _playerCamera = GameObject.FindGameObjectWithTag(Constants.Tags.Player_Camera)?.GetComponent<CinemachineVirtualCamera>();;
+            _playerCamera = GameObject.FindGameObjectWithTag(Constants.Tags.Player_Camera)?.GetComponent<CinemachineCamera>();;
             _player = transform;
             
             CalculateDirectionalsVectors();
