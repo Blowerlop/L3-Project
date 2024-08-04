@@ -13,16 +13,26 @@ namespace _Project._200_Dev.Logs.LogFileExporter
     {
         #region Variables
         [Title("Log Colors")] 
+        // Log
         public static readonly Color logColor = new Color(1f, 1f, 1f, 1f);
+        public static readonly string logColorHexadecimal = ColorUtility.ToHtmlStringRGB(logColor);
+        // Warning
         public static readonly Color logWarningColor = new Color(1f, 0.996f, 0f, 1f);
+        public static readonly string logWarningColorHexadecimal = ColorUtility.ToHtmlStringRGB(logWarningColor);
+        // Error
         public static readonly Color logErrorColor = new Color(1f, 0.067f, 0f, 1f);
+        public static readonly string logErrorColorHexadecimal = ColorUtility.ToHtmlStringRGB(logErrorColor);
+        // Exception
         public static readonly Color logExceptionColor = new Color(92f, 39f, 81f, 1f);
+        public static readonly string logExceptionColorHexadecimal = ColorUtility.ToHtmlStringRGB(logExceptionColor);
+        // Assert
         public static readonly Color logAssertColor = new Color(138f, 155f, 104f, 1f);
+        public static readonly string logAssertColorHexadecimal = ColorUtility.ToHtmlStringRGB(logAssertColor);
         
+        // Log Saving
         private const string _LOG_SAVER_DEFAULT_FILE_PATH = "/_Project/Data/Log.txt";
         private static readonly string LogSaverFilePath = $"{Application.dataPath}{_LOG_SAVER_DEFAULT_FILE_PATH}";
 
-        private static readonly StringBuilder _stringBuilder = new StringBuilder();
         #endregion
         
         
@@ -65,12 +75,13 @@ namespace _Project._200_Dev.Logs.LogFileExporter
             if (global::ParrelSync.ClonesManager.IsClone()) return;
             #endif
             
-            _stringBuilder.AppendLine($"[{StripMilliseconds(DateTime.Now.TimeOfDay).ToString()}] {type.ToString()}");
-            _stringBuilder.AppendLine($"{condition} \n");
-            _stringBuilder.AppendLine($"{trace}");
-            TxtFile.Write(LogSaverFilePath, _stringBuilder.ToString());
+            StringBuilder stringBuilder = new StringBuilder();
             
-            _stringBuilder.Clear();
+            stringBuilder.AppendLine($"[{StripMilliseconds(DateTime.Now.TimeOfDay).ToString()}] {type.ToString()}");
+            stringBuilder.AppendLine($"{condition} \n");
+            stringBuilder.AppendLine($"{trace}");
+            
+            TxtFile.Write(LogSaverFilePath, stringBuilder.ToString());
         }
         
         [ConsoleCommand("logs_export", "Send the current logs to the discord")]
@@ -101,22 +112,28 @@ namespace _Project._200_Dev.Logs.LogFileExporter
 
         public static Color GetLogColor(LogType logType)
         {
-            switch (logType)
+            return logType switch
             {
-                case LogType.Log:
-                    return logColor;
-
-                case LogType.Warning:
-                    return logWarningColor;
-                
-                case LogType.Error:
-                case LogType.Assert:
-                case LogType.Exception:
-                    return logErrorColor;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
-            }
+                LogType.Log => logColor,
+                LogType.Warning => logWarningColor,
+                LogType.Error => logErrorColor,
+                LogType.Assert => logAssertColor,
+                LogType.Exception => logExceptionColor,
+                _ => throw new ArgumentOutOfRangeException(nameof(logType), logType, null)
+            };
+        }
+        
+        public static string GetLogColorHexadecimal(LogType logType)
+        {
+            return logType switch
+            {
+                LogType.Log => logColorHexadecimal,
+                LogType.Warning => logWarningColorHexadecimal,
+                LogType.Error => logErrorColorHexadecimal,
+                LogType.Assert => logAssertColorHexadecimal,
+                LogType.Exception => logExceptionColorHexadecimal,
+                _ => throw new ArgumentOutOfRangeException(nameof(logType), logType, null)
+            };
         }
         #endregion
     }

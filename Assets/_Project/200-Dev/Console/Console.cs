@@ -15,7 +15,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
-using ColorUtility = UnityEngine.ColorUtility;
 
 namespace _Project._200_Dev.Console
 {
@@ -33,7 +32,6 @@ namespace _Project._200_Dev.Console
         [SerializeField] private int _maxCharacters = 10000;
         [SerializeField] private int _maxCommandHistory = 50;
         
-        private const string _LOG_FORMAT = "<color=#{0}>{1}</color>\n";
         private const int _LOG_COUNT_OFFSET = 24;
         public readonly Dictionary<string, ConsoleCommand> commands = new();
         public string[] commandsName { get; private set; }
@@ -469,25 +467,65 @@ namespace _Project._200_Dev.Console
         {
             bool setAtBottom = _logScrollRect.verticalNormalizedPosition <= 0.01f;
             
-            Color logColor = logType switch
-            {
-                LogType.Log => CustomLogger.logColor,
-                LogType.Warning => CustomLogger.logWarningColor,
-                LogType.Error => CustomLogger.logErrorColor,
-                LogType.Assert => CustomLogger.logAssertColor,
-                LogType.Exception => CustomLogger.logExceptionColor,
-                _ => CustomLogger.logColor
-            };
-            
-            string currentLog = _logInputField.text;
-            
-            int difference = _maxCharacters - (currentLog.Length + condition.Length + _LOG_COUNT_OFFSET);
-            if (difference < 0)
-            {
-                currentLog = currentLog.Remove(0, -difference);
-            }
+            int difference =  _logInputField.text.Length + condition.Length + _LOG_COUNT_OFFSET - _maxCharacters;
+            if (difference < 0) difference = 0;
 
-            _logInputField.text = currentLog + string.Format(_LOG_FORMAT, ColorUtility.ToHtmlStringRGB(logColor), condition);
+            string newText = string.Create(_logInputField.text.Length - difference  + condition.Length + _LOG_COUNT_OFFSET, condition,
+                (span, _) =>
+                {
+                    int index = 0;
+                    
+                    // 1. Reconstruct the old log with offset if necessary
+                    for (int i = difference; i < _logInputField.text.Length; i++, index++)
+                    {
+                        span[index] = _logInputField.text[i];
+                    }
+            
+                    // 2.0 Add the new log
+                    // <color=#{0}>{1}</color>\n;
+                    
+                    // 2.1 Pre format
+                    // <color=#
+                    span[index++] = '<';
+                    span[index++] = 'c';
+                    span[index++] = 'o';
+                    span[index++] = 'l';
+                    span[index++] = 'o';
+                    span[index++] = 'r';
+                    span[index++] = '=';
+                    span[index++] = '#';
+            
+                    // 2.2 Format color
+                    string logColorHexadecimal = CustomLogger.GetLogColorHexadecimal(logType);
+                    for (int i = 0; i < 6; i++, index++)
+                    {
+                        span[index] = logColorHexadecimal[i];
+                    }
+                    
+                    // 2.3 Post format
+                    // >
+                    span[index++] = '>';
+                    
+                    // 2.4 Format received log
+                    for (int i = 0; i < condition.Length; i++, index++)
+                    {
+                        span[index] = condition[i];
+                    }
+                    
+                    // 2.5 Post format
+                    // </color>\n
+                    span[index++] = '<';
+                    span[index++] = '/';
+                    span[index++] = 'c';
+                    span[index++] = 'o';
+                    span[index++] = 'l';
+                    span[index++] = 'o';
+                    span[index++] = 'r';
+                    span[index++] = '>';
+                    span[index] = '\n';
+                });
+            
+            _logInputField.text = newText;
 
             #if UNITY_EDITOR
             if (setAtBottom && gameObject.activeInHierarchy) // Only to disable the StartCoroutine logError in editor
