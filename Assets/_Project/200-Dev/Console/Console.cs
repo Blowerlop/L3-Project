@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using _Project._200_Dev.Application_Management;
 using _Project._200_Dev.Logs.LogFileExporter;
 using _Project._200_Dev.Managers;
@@ -21,6 +22,14 @@ namespace _Project._200_Dev.Console
     [DefaultExecutionOrder(-1)]
     public class Console : MonoSingleton<Console>
     {
+        private struct LogWrapper
+        {
+            public string condition;
+            // public string stacktrace;
+            public LogType logType;
+        }
+        
+        
         #region Variables
 
         [Title("Console State")]
@@ -31,12 +40,14 @@ namespace _Project._200_Dev.Console
         [SerializeField] private Vector2 _fontSizeRange = new(20, 60);
         [SerializeField] private int _maxCharacters = 10000;
         [SerializeField] private int _maxCommandHistory = 50;
+
+        [Title("Dirty")] 
+        private readonly List<LogWrapper> _dirtyList = new();
         
         private const int _LOG_COUNT_OFFSET = 24;
         public readonly Dictionary<string, ConsoleCommand> commands = new();
         public string[] commandsName { get; private set; }
-        private List<string> _commandHistory;
-        private int _commandHistoryIndex;
+        private readonly List<string> _commandHistory = new();
         private int _currentIndex = -1;
         private bool _navigatingThroughHistory;
         
@@ -54,7 +65,7 @@ namespace _Project._200_Dev.Console
         protected override void Awake()
         {
             ClearConsole();
-            Application.logMessageReceived += LogConsole;
+            Application.logMessageReceived += MakeDirty;
             RetrieveCommandAttribute();
         }
 
@@ -69,8 +80,6 @@ namespace _Project._200_Dev.Console
             }
             commandsName.Sort();
 
-            _commandHistory = new List<string>(_maxCommandHistory);
-            
             HideConsoleForced();
             ClearInputField();
             
@@ -91,7 +100,7 @@ namespace _Project._200_Dev.Console
 
         protected override void OnDestroy()
         {
-            Application.logMessageReceived -= LogConsole;
+            Application.logMessageReceived -= MakeDirty;
 
             if (!ApplicationManager.isQuitting)
             {
@@ -150,6 +159,14 @@ namespace _Project._200_Dev.Console
                     GotToTheRecentInHistory();
                 }
             }
+        }
+
+        private void LateUpdate()
+        {
+            if (!_dirtyList.Any()) return;
+            
+            LogConsole();
+            _dirtyList.Clear();
         }
 
         #endregion
@@ -272,14 +289,15 @@ namespace _Project._200_Dev.Console
         
         private void AddToCommandHistory(string input)
         {
-            if (_commandHistoryIndex >= _maxCommandHistory)
+            if (_commandHistory.Count > _maxCommandHistory)
             {
-                _commandHistory.RemoveAt(_maxCommandHistory);
+                // Remove the oldest added command
+                _commandHistory.RemoveAt(_commandHistory.Count - 1);
             }
+
+            if (_commandHistory.FirstOrDefault() == input) return;
             
             _commandHistory.Insert(0, input);
-            _commandHistoryIndex++;
-
             _currentIndex = -1;
         }
 
@@ -462,16 +480,21 @@ namespace _Project._200_Dev.Console
             InputManager.instance.SwitchActionMap(InputManager.instance.previousActionMap);
         }
         
-        [Button]
-        private void LogConsole(string condition, string stacktrace, [EnumToggleButtons] LogType logType)
+        private void LogConsole()
         {
             bool setAtBottom = _logScrollRect.verticalNormalizedPosition <= 0.01f;
+
+            int totalSize = 0;
+            foreach (LogWrapper logWrapper in _dirtyList)
+            {
+                totalSize += logWrapper.condition.Length + _LOG_COUNT_OFFSET;
+            }
             
-            int difference =  _logInputField.text.Length + condition.Length + _LOG_COUNT_OFFSET - _maxCharacters;
+            int difference =  _logInputField.text.Length + totalSize - _maxCharacters;
             if (difference < 0) difference = 0;
 
-            string newText = string.Create(_logInputField.text.Length - difference  + condition.Length + _LOG_COUNT_OFFSET, condition,
-                (span, _) =>
+            string newText = string.Create(_logInputField.text.Length - difference  + totalSize, _dirtyList,
+                (span, state) =>
                 {
                     int index = 0;
                     
@@ -480,49 +503,52 @@ namespace _Project._200_Dev.Console
                     {
                         span[index] = _logInputField.text[i];
                     }
-            
-                    // 2.0 Add the new log
-                    // <color=#{0}>{1}</color>\n;
-                    
-                    // 2.1 Pre format
-                    // <color=#
-                    span[index++] = '<';
-                    span[index++] = 'c';
-                    span[index++] = 'o';
-                    span[index++] = 'l';
-                    span[index++] = 'o';
-                    span[index++] = 'r';
-                    span[index++] = '=';
-                    span[index++] = '#';
-            
-                    // 2.2 Format color
-                    string logColorHexadecimal = CustomLogger.GetLogColorHexadecimal(logType);
-                    for (int i = 0; i < 6; i++, index++)
+
+                    foreach (var logWrapper in state)
                     {
-                        span[index] = logColorHexadecimal[i];
+                        // 2.0 Add the new log
+                        // <color=#{0}>{1}</color>\n;
+                    
+                        // 2.1 Pre format
+                        // <color=#
+                        span[index++] = '<';
+                        span[index++] = 'c';
+                        span[index++] = 'o';
+                        span[index++] = 'l';
+                        span[index++] = 'o';
+                        span[index++] = 'r';
+                        span[index++] = '=';
+                        span[index++] = '#';
+            
+                        // 2.2 Format color
+                        string logColorHexadecimal = CustomLogger.GetLogColorHexadecimal(logWrapper.logType);
+                        for (int i = 0; i < 6; i++, index++)
+                        {
+                            span[index] = logColorHexadecimal[i];
+                        }
+                    
+                        // 2.3 Post format
+                        // >
+                        span[index++] = '>';
+                    
+                        // 2.4 Format received log
+                        for (int i = 0; i < logWrapper.condition.Length; i++, index++)
+                        {
+                            span[index] = logWrapper.condition[i];
+                        }
+                    
+                        // 2.5 Post format
+                        // </color>\n
+                        span[index++] = '<';
+                        span[index++] = '/';
+                        span[index++] = 'c';
+                        span[index++] = 'o';
+                        span[index++] = 'l';
+                        span[index++] = 'o';
+                        span[index++] = 'r';
+                        span[index++] = '>';
+                        span[index++] = '\n';
                     }
-                    
-                    // 2.3 Post format
-                    // >
-                    span[index++] = '>';
-                    
-                    // 2.4 Format received log
-                    for (int i = 0; i < condition.Length; i++, index++)
-                    {
-                        span[index] = condition[i];
-                    }
-                    
-                    // 2.5 Post format
-                    // </color>\n
-                    span[index++] = '<';
-                    span[index++] = '/';
-                    span[index++] = 'c';
-                    span[index++] = 'o';
-                    span[index++] = 'l';
-                    span[index++] = 'o';
-                    span[index++] = 'r';
-                    span[index++] = '>';
-                    span[index] = '\n';
                 });
             
             _logInputField.text = newText;
@@ -544,7 +570,15 @@ namespace _Project._200_Dev.Console
             }
         }
 
-        
+        private void MakeDirty(string condition, string stacktrace, LogType logType)
+        {
+            _dirtyList.Add(new LogWrapper
+            {
+                condition = condition,
+                // stacktrace = stacktrace,
+                logType = logType
+            });
+        }
         
         
         // https://github.com/yasirkula/UnityIngameDebugConsole/blob/master/Plugins/IngameDebugConsole/Scripts/DebugLogConsole.cs
