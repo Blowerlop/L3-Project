@@ -4,6 +4,7 @@
 #include "Networking/InstanceGameSession.h"
 
 #include "Networking/BaseGameInstance.h"
+#include "Networking/InstancesManagerSubsystem.h"
 
 
 void AInstanceGameSession::HandleRegisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds,
@@ -16,14 +17,17 @@ void AInstanceGameSession::HandleUnregisterPlayerCompleted(FName EosSessionName,
 	const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful)
 {
 	Super::HandleUnregisterPlayerCompleted(EosSessionName, PlayerIds, bWasSuccessful);
-
+	
 	if (RegisteredPlayerCount == 1)
 	{
-		if (!UBaseGameInstance::IsInstanceBeingDestroyed) return;
+		if (!UInstancesManagerSubsystem::IsInstanceBeingDestroyed) return;
 
 		const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 		if (!GameInstance) return;
-
-		GameInstance->ReturnToLobby();
+		
+		const auto InstancesManager = GameInstance->GetSubsystem<UInstancesManagerSubsystem>();
+		if (!InstancesManager) return;
+		
+		InstancesManager->ReturnToLobby();
 	}
 }

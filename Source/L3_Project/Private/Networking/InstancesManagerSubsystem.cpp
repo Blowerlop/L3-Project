@@ -63,14 +63,122 @@ void UInstancesManagerSubsystem::StartListenServer(const int SessionID) const
 
 void UInstancesManagerSubsystem::StopInstance()
 {
+	UBaseGameInstance* GameInstance;
+	if (!TryGetBaseGameInstance(GameInstance))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unable to get game instance"));
+		return;
+	}
+	
+	if (!GameInstance->HasRunningSession)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No running session"));
+		return;
+	}
+
+	IsInstanceBeingDestroyed = true;
+	
+	/*const auto GameSession = GetWorld()->GetAuthGameMode()->GameSession;
+
+	if (!IsValid(GameSession))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No game session found"));
+		return;
+	}
+
+	isReturningToLobby = true;
+	
+	if (const auto controller = Cast<AInstancePlayerController>(GetFirstLocalPlayerController()))
+	{
+		controller->ReturnToLobby();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No controller found"));
+	}*/
 }
 
 void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessionSearchResult SessionData)
 {
+	UBaseGameInstance* GameInstance;
+	if (!TryGetBaseGameInstance(GameInstance))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unable to get game instance"));
+		return;
+	}
+	
+	if (!GameInstance->IsLoggedIn())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Not logged in"));
+		return;
+	}
+
+	auto OnTransition = [this, SessionName, SessionData, GameInstance]() {
+		GameInstance->JoinSession(SessionName, SessionData);
+	};
+	
+	auto OnSessionDestroyed = [this, OnTransition, GameInstance](const bool bWasSuccessful) {
+		if (!bWasSuccessful)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to destroy session. Return to main menu."));
+
+			// Go back to main menu
+			return;
+		}
+		
+		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
+	};
+	
+	GameInstance->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
 void UInstancesManagerSubsystem::ReturnToLobby()
 {
+	UBaseGameInstance* GameInstance;
+	if (!TryGetBaseGameInstance(GameInstance))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unable to get game instance"));
+		return;
+	}
+	
+	if (!GameInstance->IsLoggedIn())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Not logged in"));
+		return;
+	}
+
+	IsInstanceBeingDestroyed = false;
+	
+	auto OnSessionFound = [this, GameInstance](const bool bWasSuccessful, const FBlueprintSessionSearchResult& Search)
+	{
+		if (!bWasSuccessful)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to find session. Return to main menu."));
+
+			// Go back to main menu
+			return;
+		}
+
+		GameInstance->JoinSession("Lobby", Search);
+	};
+	
+	auto OnTransition = [this, OnSessionFound, GameInstance]() {
+		GameInstance->FindSessions("TYPE", "Lobby", OnSessionFound);
+	};
+	
+	auto OnSessionDestroyed = [this, OnTransition, GameInstance](const bool bWasSuccessful) {
+		if (!bWasSuccessful)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to destroy session. Return to main menu."));
+
+			// Go back to main menu
+			return;
+		}
+		
+		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
+	};
+	
+	GameInstance->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
 
