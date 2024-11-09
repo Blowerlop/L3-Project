@@ -4,6 +4,7 @@
 #include "Networking/InstancesManagerSubsystem.h"
 
 #include "Networking/BaseGameInstance.h"
+#include "Networking/SessionsManagerSubsystem.h"
 
 int UInstancesManagerSubsystem::InstanceSessionID{};
 bool UInstancesManagerSubsystem::IsInstanceBeingDestroyed{};
@@ -16,6 +17,9 @@ void UInstancesManagerSubsystem::StartNewInstance(int SessionID)
 		UE_LOG(LogTemp, Error, TEXT("Unable to get game instance"));
 		return;
 	}
+
+	const auto SessionManager = GameInstance->GetSubsystem<USessionsManagerSubsystem>();
+	if (!SessionManager) return;
 	
 	if (!GameInstance->IsLoggedIn())
 	{
@@ -40,12 +44,12 @@ void UInstancesManagerSubsystem::StartNewInstance(int SessionID)
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	GameInstance->DestroySessionWithCallback(OnSessionDestroyed);
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
 void UInstancesManagerSubsystem::StartListenServer(const int SessionID) const
 {
-	if (UBaseGameInstance::HasRunningSession)
+	if (USessionsManagerSubsystem::HasRunningSession)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Already in a session"));
 		return;
@@ -63,14 +67,14 @@ void UInstancesManagerSubsystem::StartListenServer(const int SessionID) const
 
 void UInstancesManagerSubsystem::StopInstance()
 {
-	UBaseGameInstance* GameInstance;
-	if (!TryGetBaseGameInstance(GameInstance))
+	USessionsManagerSubsystem* SessionManager;
+	if (!TryGetSessionsManager(SessionManager))
 	{
-		UE_LOG(LogTemp, Error, TEXT("Unable to get game instance"));
+		UE_LOG(LogTemp, Error, TEXT("Unable to get session manager"));
 		return;
 	}
 	
-	if (!GameInstance->HasRunningSession)
+	if (!SessionManager->HasRunningSession)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No running session"));
 		return;
@@ -106,6 +110,9 @@ void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessi
 		UE_LOG(LogTemp, Error, TEXT("Unable to get game instance"));
 		return;
 	}
+
+	auto SessionManager = GameInstance->GetSubsystem<USessionsManagerSubsystem>();
+	if (!SessionManager) return;
 	
 	if (!GameInstance->IsLoggedIn())
 	{
@@ -113,8 +120,8 @@ void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessi
 		return;
 	}
 
-	auto OnTransition = [this, SessionName, SessionData, GameInstance]() {
-		GameInstance->JoinSession(SessionName, SessionData);
+	auto OnTransition = [this, SessionName, SessionData, SessionManager]() {
+		SessionManager->JoinSession(SessionName, SessionData);
 	};
 	
 	auto OnSessionDestroyed = [this, OnTransition, GameInstance](const bool bWasSuccessful) {
@@ -129,7 +136,7 @@ void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessi
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	GameInstance->DestroySessionWithCallback(OnSessionDestroyed);
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
 void UInstancesManagerSubsystem::ReturnToLobby()
@@ -140,6 +147,9 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 		UE_LOG(LogTemp, Error, TEXT("Unable to get game instance"));
 		return;
 	}
+
+	auto SessionManager = GameInstance->GetSubsystem<USessionsManagerSubsystem>();
+	if (!SessionManager) return;
 	
 	if (!GameInstance->IsLoggedIn())
 	{
@@ -149,7 +159,7 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 
 	IsInstanceBeingDestroyed = false;
 	
-	auto OnSessionFound = [this, GameInstance](const bool bWasSuccessful, const FBlueprintSessionSearchResult& Search)
+	auto OnSessionFound = [this, SessionManager](const bool bWasSuccessful, const FBlueprintSessionSearchResult& Search)
 	{
 		if (!bWasSuccessful)
 		{
@@ -159,11 +169,11 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 			return;
 		}
 
-		GameInstance->JoinSession("Lobby", Search);
+		SessionManager->JoinSession("Lobby", Search);
 	};
 	
-	auto OnTransition = [this, OnSessionFound, GameInstance]() {
-		GameInstance->FindSessions("TYPE", "Lobby", OnSessionFound);
+	auto OnTransition = [this, OnSessionFound, SessionManager]() {
+		SessionManager->FindSessions("TYPE", "Lobby", OnSessionFound);
 	};
 	
 	auto OnSessionDestroyed = [this, OnTransition, GameInstance](const bool bWasSuccessful) {
@@ -178,7 +188,7 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	GameInstance->DestroySessionWithCallback(OnSessionDestroyed);
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
 

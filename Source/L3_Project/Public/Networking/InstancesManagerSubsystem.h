@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseGameInstance.h"
+#include "SessionsManagerSubsystem.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "InstancesManagerSubsystem.generated.h"
 
@@ -38,6 +39,12 @@ private:
 	bool TryGetBaseGameInstance(UBaseGameInstance*& Out) const
 	{
 		Out = Cast<UBaseGameInstance>(GetGameInstance());
+		return IsValid(Out);
+	}
+
+	bool TryGetSessionsManager(USessionsManagerSubsystem*& Out) const
+	{
+		Out = GetGameInstance()->GetSubsystem<USessionsManagerSubsystem>();
 		return IsValid(Out);
 	}
 };

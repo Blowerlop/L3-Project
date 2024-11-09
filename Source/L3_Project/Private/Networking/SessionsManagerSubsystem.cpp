@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "OnlineSubsystemUtils.h"
 #include "Networking/SessionsManagerSubsystem.h"
+#include "OnlineSubsystemUtils.h"
 
 bool USessionsManagerSubsystem::IsSessionHost{};
 bool USessionsManagerSubsystem::HasRunningSession{};
