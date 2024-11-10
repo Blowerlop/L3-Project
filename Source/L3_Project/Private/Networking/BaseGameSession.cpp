@@ -79,13 +79,13 @@ void ABaseGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 
-	if(!Session.IsValid())
+	if (!Session.IsValid())
 	{
 		UE_LOG(LogTemp, Error, TEXT("Can't unregister player! Session interface is not valid!"));
 		return;
 	}
 		
-	if (ExitingPlayer->PlayerState)
+	if (!ExitingPlayer->PlayerState)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Can't unregister player! ExitingPlayer PlayerState is not valid!"));
 		return;

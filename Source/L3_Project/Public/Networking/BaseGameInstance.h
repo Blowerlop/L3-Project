@@ -54,8 +54,13 @@ public:
 private:
 	FTransitionDelegate TransitionDelegate;
 
+	IConsoleCommand* LoginWithDevAuthToolCommand;
+	
 	virtual void Init() override;
 	virtual void Shutdown() override;
 	
 	void OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type Arg, const FString& String);
+
+	UFUNCTION(Exec)
+	void DebugLoginWithDevAuthTool(const FString& Args) const;
 };

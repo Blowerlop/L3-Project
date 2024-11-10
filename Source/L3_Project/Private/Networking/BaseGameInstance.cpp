@@ -133,3 +133,12 @@ void UBaseGameInstance::OnTransitionEntered()
 }
 
 #pragma endregion
+
+#pragma region Debug
+
+void UBaseGameInstance::DebugLoginWithDevAuthTool(const FString& Args) const
+{
+	Login(true, Args);
+}
+
+#pragma endregion 

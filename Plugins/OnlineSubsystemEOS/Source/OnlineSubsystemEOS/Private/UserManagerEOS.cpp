@@ -459,7 +459,7 @@ void FUserManagerEOS::CreateDeviceID()
 
 void FUserManagerEOS::DeleteDeviceID() const
 {
-	UE_LOG(LogTemp, Log, TEXT("Deleting device ID..."));
+	UE_LOG(LogTemp, Warning, TEXT("Deleting device ID..."));
 	EOS_Connect_DeleteDeviceIdOptions Options;
 	Options.ApiVersion = EOS_CONNECT_DELETEDEVICEID_API_LATEST;
 	EOS_Connect_OnDeleteDeviceIdCallback Callback = [](const EOS_Connect_DeleteDeviceIdCallbackInfo* Data)
