@@ -319,3 +319,6 @@ RELEASE_MSG
 # Linux project files
 /Makefile
 /.ignore
+
+/[Bb]uild/
+/[Bb]uilds/
