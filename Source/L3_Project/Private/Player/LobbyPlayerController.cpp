@@ -3,6 +3,7 @@
 
 #include "Player/LobbyPlayerController.h"
 
+#include "L3_Project/L3_ProjectCharacter.h"
 #include "Net/UnrealNetwork.h"
 #include "Networking/BaseGameInstance.h"
 #include "Networking/InstancesManagerSubsystem.h"
@@ -25,6 +26,25 @@ void ALobbyPlayerController::RemoveInvite(const int32 InviteId)
 
 	ServerPendingInvites.Remove(InviteId);
 	ReplicatedPendingInvites.RemoveAll([InviteId](const FInviteData& Invite) { return Invite.InviteId == InviteId; });
+}
+
+void ALobbyPlayerController::InviteToGroup(AL3_ProjectCharacter* Invited)
+{
+	InviteToGroupServerRpc(Invited);
+}
+
+void ALobbyPlayerController::InviteToGroupServerRpc_Implementation(AL3_ProjectCharacter* Invited)
+{
+	const auto InviterController = Cast<ALobbyPlayerController>(this);
+	const auto InvitedController = Cast<ALobbyPlayerController>(Invited->GetController());
+
+	if (!IsValid(InviterController) || !IsValid(InvitedController))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Can't invite to group invalid controller!"));
+		return;
+	}
+	
+	FGroupManager::InviteToGroup(InviterController, InvitedController);
 }
 
 void ALobbyPlayerController::AcceptGroupInvite(int32 InviteId)

@@ -5,14 +5,17 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "GroupManagement/GroupManager.h"
+#include "L3_Project/L3_ProjectPlayerController.h"
 #include "LobbyPlayerController.generated.h"
 
 /**
  * 
  */
 
+class AL3_ProjectCharacter;
+
 UCLASS()
-class L3_PROJECT_API ALobbyPlayerController : public APlayerController
+class L3_PROJECT_API ALobbyPlayerController : public AL3_ProjectPlayerController
 {
 	GENERATED_BODY()
 	
@@ -26,6 +29,12 @@ public:
 	void AddInvite(const FInviteData& Invite);
 	void RemoveInvite(const int32 InviteId);
 
+	UFUNCTION(BlueprintCallable, Category = "Groups")
+	void InviteToGroup(AL3_ProjectCharacter* Invited);
+    
+    UFUNCTION(Server, Reliable)
+	void InviteToGroupServerRpc(AL3_ProjectCharacter* Invited);
+	
 	UFUNCTION(BlueprintImplementableEvent, Category = "Groups")
 	void OnGroupChanged(FReplicatedGroupData Group);
 	
