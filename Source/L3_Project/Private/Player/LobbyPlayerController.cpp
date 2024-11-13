@@ -3,7 +3,7 @@
 
 #include "Player/LobbyPlayerController.h"
 
-#include "L3_Project/L3_ProjectCharacter.h"
+#include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 #include "Networking/BaseGameInstance.h"
 #include "Networking/InstancesManagerSubsystem.h"
@@ -28,12 +28,12 @@ void ALobbyPlayerController::RemoveInvite(const int32 InviteId)
 	ReplicatedPendingInvites.RemoveAll([InviteId](const FInviteData& Invite) { return Invite.InviteId == InviteId; });
 }
 
-void ALobbyPlayerController::InviteToGroup(AL3_ProjectCharacter* Invited)
+void ALobbyPlayerController::InviteToGroup(ACharacter* Invited)
 {
 	InviteToGroupServerRpc(Invited);
 }
 
-void ALobbyPlayerController::InviteToGroupServerRpc_Implementation(AL3_ProjectCharacter* Invited)
+void ALobbyPlayerController::InviteToGroupServerRpc_Implementation(ACharacter* Invited)
 {
 	const auto InviterController = Cast<ALobbyPlayerController>(this);
 	const auto InvitedController = Cast<ALobbyPlayerController>(Invited->GetController());

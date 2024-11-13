@@ -12,8 +12,6 @@
  * 
  */
 
-class AL3_ProjectCharacter;
-
 UCLASS()
 class L3_PROJECT_API ALobbyPlayerController : public AL3_ProjectPlayerController
 {
@@ -30,10 +28,10 @@ public:
 	void RemoveInvite(const int32 InviteId);
 
 	UFUNCTION(BlueprintCallable, Category = "Groups")
-	void InviteToGroup(AL3_ProjectCharacter* Invited);
+	void InviteToGroup(ACharacter* Invited);
     
     UFUNCTION(Server, Reliable)
-	void InviteToGroupServerRpc(AL3_ProjectCharacter* Invited);
+	void InviteToGroupServerRpc(ACharacter* Invited);
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "Groups")
 	void OnGroupChanged(FReplicatedGroupData Group);
