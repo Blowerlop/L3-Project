@@ -12,6 +12,11 @@
  * 
  */
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGroupChangedDelegate, FReplicatedGroupData, GroupData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInvitesChangedDelegate, const TArray<FInviteData>&, Invites);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstanceStartedDelegate, int32, InstanceId);
+
 UCLASS()
 class L3_PROJECT_API ALobbyPlayerController : public AL3_ProjectPlayerController
 {
@@ -32,16 +37,16 @@ public:
     
     UFUNCTION(Server, Reliable)
 	void InviteToGroupServerRpc(ACharacter* Invited);
-	
-	UFUNCTION(BlueprintImplementableEvent, Category = "Groups")
-	void OnGroupChanged(FReplicatedGroupData Group);
-	
-	UFUNCTION(BlueprintImplementableEvent, Category = "Groups")
-	void OnInvitesChanged(const TArray<FInviteData>& Invites);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Online Sessions")
-	void OnInstanceStarted(int32 InstanceID);
-	
+	UPROPERTY(BlueprintAssignable)
+	FOnGroupChangedDelegate OnGroupChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnInvitesChangedDelegate OnInvitesChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnInstanceStartedDelegate OnInstanceStartedDelegate;
+
 private:
 	UPROPERTY(ReplicatedUsing=OnRep_PendingInvites)
 	TArray<FInviteData> ReplicatedPendingInvites{};
@@ -71,13 +76,13 @@ private:
 	void OnInstanceValidatedClientRPC(int32 InstanceID);
 	
 	UFUNCTION(Client, Reliable)
-	void OnInstanceStartedClientRPC(int32 InstanceID);
+	void OnInstanceStartedClientRPC(const int32 InstanceID);
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Sessions")
 	void StartInstance();
 	
 	UFUNCTION()
-	void OnRep_ReplicatedGroupData();
+	void OnRep_ReplicatedGroupData() const;
 	UFUNCTION()
-	void OnRep_PendingInvites();
+	void OnRep_PendingInvites() const;
 };

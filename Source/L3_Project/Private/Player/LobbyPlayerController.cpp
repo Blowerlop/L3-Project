@@ -105,9 +105,9 @@ void ALobbyPlayerController::StartInstanceServerRPC_Implementation()
 	}
 }
 
-void ALobbyPlayerController::OnInstanceStartedClientRPC_Implementation(int32 InstanceID)
+void ALobbyPlayerController::OnInstanceStartedClientRPC_Implementation(const int32 InstanceID)
 {
-	OnInstanceStarted(InstanceID);
+	OnInstanceStartedDelegate.Broadcast(InstanceID);
 }
 
 void ALobbyPlayerController::StartInstance()
@@ -115,14 +115,14 @@ void ALobbyPlayerController::StartInstance()
 	StartInstanceServerRPC();
 }
 
-void ALobbyPlayerController::OnRep_ReplicatedGroupData()
+void ALobbyPlayerController::OnRep_ReplicatedGroupData() const
 {
-	OnGroupChanged(ReplicatedGroupData);
+	OnGroupChangedDelegate.Broadcast(ReplicatedGroupData);
 }
 
-void ALobbyPlayerController::OnRep_PendingInvites()
+void ALobbyPlayerController::OnRep_PendingInvites() const
 {
-	OnInvitesChanged(ReplicatedPendingInvites);
+	OnInvitesChangedDelegate.Broadcast(ReplicatedPendingInvites);
 }
 
 void ALobbyPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
