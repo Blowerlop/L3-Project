@@ -16,4 +16,9 @@ UCLASS()
 class L3_PROJECT_API AInstancePlayerController : public AL3_ProjectPlayerController
 {
 	GENERATED_BODY()
+	
+public:
+
+	UFUNCTION(Client, Reliable)
+	void ReturnToLobbyClientRPC();
 };

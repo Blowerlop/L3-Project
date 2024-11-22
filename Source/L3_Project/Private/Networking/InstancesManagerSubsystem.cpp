@@ -5,6 +5,7 @@
 
 #include "Networking/BaseGameInstance.h"
 #include "Networking/SessionsManagerSubsystem.h"
+#include "Player/InstancePlayerController.h"
 
 int UInstancesManagerSubsystem::InstanceIDCounter{};
 int UInstancesManagerSubsystem::InstanceSessionID{};
@@ -82,26 +83,25 @@ void UInstancesManagerSubsystem::StopInstance()
 		return;
 	}
 
-	IsInstanceBeingDestroyed = true;
-	
-	/*const auto GameSession = GetWorld()->GetAuthGameMode()->GameSession;
-
-	if (!IsValid(GameSession))
+	if (!SessionManager->IsSessionHost)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("No game session found"));
+		UE_LOG(LogTemp, Error, TEXT("Can't stop instance. Not a host"));
 		return;
 	}
 
-	isReturningToLobby = true;
-	
-	if (const auto controller = Cast<AInstancePlayerController>(GetFirstLocalPlayerController()))
+	IsInstanceBeingDestroyed = true;
+
+	for(FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
 	{
-		controller->ReturnToLobby();
+		APlayerController* Controller = Iterator->Get();
+
+		// "IsLocalPlayerController" = do not send to host. Host will disconnect automatically after everyone has left
+		if (Controller && !Controller->IsLocalPlayerController() && Controller->IsPrimaryPlayer())
+		{
+			const auto InstanceController = Cast<AInstancePlayerController>(Controller);
+			InstanceController->ReturnToLobbyClientRPC();
+		}
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No controller found"));
-	}*/
 }
 
 void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessionSearchResult SessionData)
