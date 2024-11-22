@@ -6,6 +6,7 @@
 #include "Networking/BaseGameInstance.h"
 #include "Networking/SessionsManagerSubsystem.h"
 
+int UInstancesManagerSubsystem::InstanceIDCounter{};
 int UInstancesManagerSubsystem::InstanceSessionID{};
 bool UInstancesManagerSubsystem::IsInstanceBeingDestroyed{};
 
@@ -59,7 +60,8 @@ void UInstancesManagerSubsystem::StartListenServer(const int SessionID) const
 	{
 		InstanceSessionID = SessionID;
 
-		const FString MapName = "/Game/ThirdPerson/Maps/ThirdPersonMap_Instance";
+		// TODO: Find map based on instance we want to start
+		const FString MapName = "/Game/_Project/000-Game/Maps/InstanceMap";
 		const FURL ListenURL(nullptr, *(MapName + "?listen"), TRAVEL_Absolute);
 		World->ServerTravel(ListenURL.ToString());
 	}

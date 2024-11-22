@@ -108,7 +108,7 @@ void UBaseGameInstance::StartTransition(ENetTransitionType TransitionType)
 	{
 		case ENetTransitionType::InstanceToLobby:
 		case ENetTransitionType::LobbyToInstance:
-			Map = TEXT("/_Project/000-Game/Maps/TransitionMap");
+			Map = TEXT("/Game/_Project/000-Game/Maps/TransitionMap");
 			break;
 		default:
 			break;

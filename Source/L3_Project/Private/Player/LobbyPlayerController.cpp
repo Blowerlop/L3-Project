@@ -90,7 +90,7 @@ void ALobbyPlayerController::StartInstanceServerRPC_Implementation()
 {
 	if (!FGroupManager::IsGroupLeader(this)) return;
 
-	const auto NewInstanceId = 0;/*InstancesManager::GetInstanceID()*/;
+	const auto NewInstanceId = UInstancesManagerSubsystem::GetNextInstanceID();
 	const auto Group = FGroupManager::GetGroup(ReplicatedGroupData.GroupId);
 
 	OnInstanceValidatedClientRPC(NewInstanceId);

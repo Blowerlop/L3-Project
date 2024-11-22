@@ -2,6 +2,8 @@
 
 #include "Networking/SessionsManagerSubsystem.h"
 #include "OnlineSubsystemUtils.h"
+#include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameSession.h"
 
 bool USessionsManagerSubsystem::IsSessionHost{};
 bool USessionsManagerSubsystem::HasRunningSession{};
@@ -209,6 +211,20 @@ void USessionsManagerSubsystem::JoinSession(FName SessionName, FBlueprintSession
 	{
 		UE_LOG(LogTemp, Error, TEXT("Join session failed"));
 	} 
+}
+
+void USessionsManagerSubsystem::RegisterSelf()
+{
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineIdentityPtr IdentityInterface = Subsystem->GetIdentityInterface();
+
+	if(APlayerController* PlayerController = GetWorld()->GetFirstPlayerController(); PlayerController != nullptr)
+	{
+		if(const auto ID = IdentityInterface->GetUniquePlayerId(0); ID.IsValid())
+		{
+			GetWorld()->GetAuthGameMode()->GameSession->RegisterPlayer(PlayerController, FUniqueNetIdRepl(ID), false);
+		}
+	}
 }
 
 void USessionsManagerSubsystem::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)

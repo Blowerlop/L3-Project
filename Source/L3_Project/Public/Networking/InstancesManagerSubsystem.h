@@ -19,6 +19,7 @@ class L3_PROJECT_API UInstancesManagerSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+	static int InstanceIDCounter;
 	static int InstanceSessionID;
 	static bool IsInstanceBeingDestroyed;
 	
@@ -32,6 +33,17 @@ public:
 	void JoinInstance(FName SessionName, FBlueprintSessionSearchResult SessionData);
 
 	void ReturnToLobby();
+
+	static int GetNextInstanceID()
+	{
+		return InstanceIDCounter++;
+	}
+	
+	UFUNCTION(BlueprintCallable, Category = "Online Session")
+	static int GetCurrentInstanceID()
+	{
+		return InstanceSessionID;
+	}
 
 private:
 	void StartListenServer(const int SessionID) const;

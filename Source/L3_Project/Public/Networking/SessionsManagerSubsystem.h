@@ -66,6 +66,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
 	void JoinSession(FName SessionName, FBlueprintSessionSearchResult SessionData);
 
+	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
+	void RegisterSelf();
+	
 private:
 	FDelegateHandle CreateSessionDelegateHandle;
 	FCreateSessionDelegate BP_CreateSessionDelegate;
