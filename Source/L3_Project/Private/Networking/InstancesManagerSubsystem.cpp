@@ -89,6 +89,18 @@ void UInstancesManagerSubsystem::StopInstance()
 		return;
 	}
 
+	if (GetWorld()->GetNumPlayerControllers() == 1)
+	{
+		const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+		if (!GameInstance) return;
+		
+		const auto InstancesManager = GameInstance->GetSubsystem<UInstancesManagerSubsystem>();
+		if (!InstancesManager) return;
+		
+		InstancesManager->ReturnToLobby();
+		return;
+	}
+
 	IsInstanceBeingDestroyed = true;
 
 	for(FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
@@ -165,7 +177,7 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 	{
 		if (!bWasSuccessful)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Failed to find session. Return to main menu."));
+			UE_LOG(LogTemp, Log, TEXT("No session found."));
 
 			// Go back to main menu
 			return;

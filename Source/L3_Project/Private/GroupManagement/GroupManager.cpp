@@ -1,4 +1,5 @@
 #include "GroupManagement/GroupManager.h"
+#include "GameFramework/PlayerState.h"
 #include "Player/LobbyPlayerController.h"
 
 TMap<int32, FServerGroupData> FGroupManager::Groups = TMap<int, FServerGroupData>();
@@ -11,7 +12,7 @@ TArray<FString> FServerGroupData::GetMembersAsString() const
 
 	for (const auto GroupMember : GroupMembers)
 	{
-		Members.Add(GroupMember->GetName());
+		Members.Add(GroupMember->GetPlayerState<APlayerState>()->GetPlayerName());
 	}
 		
 	return Members;
