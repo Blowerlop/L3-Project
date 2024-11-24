@@ -14,7 +14,7 @@ class L3_PROJECT_API ALobbyGameSession : public ABaseGameSession
 {
 	GENERATED_BODY()
 	
-	
-	
+private:
+	virtual void UnregisterPlayer(const APlayerController* ExitingPlayer) override;
 	
 };

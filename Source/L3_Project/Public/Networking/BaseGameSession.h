@@ -18,8 +18,6 @@ public:
 	virtual void RegisterPlayer(APlayerController* NewPlayer, const FUniqueNetIdRepl& UniqueId, bool bWasFromInvite) override;
 	
 private:
-	virtual void UnregisterPlayer(const APlayerController* ExitingPlayer) override;
-	
 	virtual void NotifyLogout(const APlayerController* PC) override;
 	
 	void StartSession();
@@ -36,6 +34,8 @@ private:
 
 protected:
 	int RegisteredPlayerCount;
+
+	virtual void UnregisterPlayer(const APlayerController* ExitingPlayer) override;
 	
 	virtual void HandleRegisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful);
 	virtual void HandleUnregisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful);
