@@ -36,6 +36,11 @@ public:
 		GroupMembers.Remove(Player);
 	}
 
+	void RemoveMember(const ALobbyPlayerController* Player)
+	{
+		GroupMembers.Remove(const_cast<ALobbyPlayerController*>(Player));
+	}
+
 	TArray<FString> GetMembersAsString() const;
 };
 
@@ -62,6 +67,13 @@ public:
 	static int CreateGroup(ALobbyPlayerController* Owner);
 	static void AddToGroup(ALobbyPlayerController* Player, int32 GroupId);
 	static void RemoveFromGroup(ALobbyPlayerController* Player, int32 GroupId);
+
+	/// <summary>
+	/// Will remove the player from the group without modifying player data.
+	/// Modifying player replicated data when he is disconnecting could cause issues I guess.
+	/// </summary>
+	static void RemoveFromGroup(const ALobbyPlayerController* Player, int32 GroupId);
+	
 	static void DestroyGroup(int32 GroupId);
 	
 	static void InviteToGroup(ALobbyPlayerController* Inviter, ALobbyPlayerController* Invited);

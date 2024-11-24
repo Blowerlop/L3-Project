@@ -10,13 +10,7 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 {
 	Super::UnregisterPlayer(ExitingPlayer);
 
-	const auto ConstLobbyPlayer = Cast<ALobbyPlayerController>(ExitingPlayer);
-	if (!IsValid(ConstLobbyPlayer))
-	{
-		return;
-	}
-
-	const auto LobbyPlayer = const_cast<ALobbyPlayerController*>(ConstLobbyPlayer);
+	const auto LobbyPlayer = Cast<ALobbyPlayerController>(ExitingPlayer);
 	if (!IsValid(LobbyPlayer))
 	{
 		return;
