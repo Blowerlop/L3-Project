@@ -39,18 +39,6 @@ int32 FGroupManager::CreateGroup(ALobbyPlayerController* Owner)
 	return GroupIdCounter;
 }
 
-void RefreshGroupForMembers(FServerGroupData* Group)
-{
-	const auto Members = Group->GetMembersAsString();
-	
-	for (ALobbyPlayerController* GroupMember : Group->GroupMembers)
-	{
-		if (!IsValid(GroupMember)) continue;
-		
-		GroupMember->ReplicatedGroupData = FReplicatedGroupData { true, Group->GroupId, Members };
-	}
-}
-
 void FGroupManager::AddToGroup(ALobbyPlayerController* Player, const int32 GroupId)
 {
 	if (!IsValid(Player)) return;
@@ -65,7 +53,7 @@ void FGroupManager::AddToGroup(ALobbyPlayerController* Player, const int32 Group
 	if (!Group) return;
 
 	Group->AddMember(Player);
-	RefreshGroupForMembers(Group);
+	RefreshGroup(Group);
 }
 
 void FGroupManager::RemoveFromGroup(ALobbyPlayerController* Player, const int32 GroupId)
@@ -78,7 +66,7 @@ void FGroupManager::RemoveFromGroup(ALobbyPlayerController* Player, const int32 
 	Group->RemoveMember(Player);
 	Player->ReplicatedGroupData = FReplicatedGroupData { false, -1, {} };
 	
-	RefreshGroupForMembers(Group);
+	RefreshGroup(Group);
 }
 
 void FGroupManager::RemoveFromGroup(const ALobbyPlayerController* Player, const int32 GroupId)
@@ -90,10 +78,28 @@ void FGroupManager::RemoveFromGroup(const ALobbyPlayerController* Player, const 
 
 	Group->RemoveMember(Player);
 
-	RefreshGroupForMembers(Group);
+	RefreshGroup(Group);
 }
 
-void FGroupManager::DestroyGroup(int32 GroupId)
+void FGroupManager::RefreshGroup(FServerGroupData* Group)
+{
+	if(Group->GroupMembers.Num() == 0)
+	{
+		DestroyGroup(Group->GroupId);
+		return;
+	}
+	
+	const auto Members = Group->GetMembersAsString();
+	
+	for (ALobbyPlayerController* GroupMember : Group->GroupMembers)
+	{
+		if (!IsValid(GroupMember)) continue;
+		
+		GroupMember->ReplicatedGroupData = FReplicatedGroupData { true, Group->GroupId, Members };
+	}
+}
+
+void FGroupManager::DestroyGroup(const int32 GroupId)
 {
 	const auto Group = Groups.Find(GroupId);
 	if (!Group) return;

@@ -84,5 +84,7 @@ public:
 
 private:
 	static int32 GroupIdCounter;
+
+	static void RefreshGroup(FServerGroupData* Group);
 };
 
