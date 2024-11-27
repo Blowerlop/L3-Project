@@ -8,6 +8,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "InstancesManagerSubsystem.generated.h"
 
+class UInstanceDataAsset;
 struct FBlueprintSessionSearchResult;
 
 /**
@@ -24,7 +25,7 @@ public:
 	static bool IsInstanceBeingDestroyed;
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Session")
-	void StartNewInstance(int SessionID/*, ??? instanceData*/);
+	void StartNewInstance(int SessionID, UInstanceDataAsset* Data);
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Session")
 	void StopInstance();
@@ -46,7 +47,7 @@ public:
 	}
 
 private:
-	void StartListenServer(const int SessionID) const;
+	void StartListenServer(const int SessionID, const FString& InstanceMapPath) const;
 
 	bool TryGetBaseGameInstance(UBaseGameInstance*& Out) const
 	{

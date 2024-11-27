@@ -3,6 +3,7 @@
 
 #include "Networking/InstancesManagerSubsystem.h"
 
+#include "Instances/InstanceDataAsset.h"
 #include "Networking/BaseGameInstance.h"
 #include "Networking/SessionsManagerSubsystem.h"
 #include "Player/InstancePlayerController.h"
@@ -11,7 +12,7 @@ int UInstancesManagerSubsystem::InstanceIDCounter{};
 int UInstancesManagerSubsystem::InstanceSessionID{};
 bool UInstancesManagerSubsystem::IsInstanceBeingDestroyed{};
 
-void UInstancesManagerSubsystem::StartNewInstance(int SessionID)
+void UInstancesManagerSubsystem::StartNewInstance(int SessionID, UInstanceDataAsset* Data)
 {
 	UBaseGameInstance* GameInstance;
 	if (!TryGetBaseGameInstance(GameInstance))
@@ -29,9 +30,9 @@ void UInstancesManagerSubsystem::StartNewInstance(int SessionID)
 		return;
 	}
 
-	auto OnTransition = [this, SessionID]() {
+	auto OnTransition = [this, SessionID, Data]() {
 		UE_LOG(LogTemp, Log, TEXT("Transition completed. Starting new instance."));
-		StartListenServer(SessionID);
+		StartListenServer(SessionID, Data->MapPath);
 	};
 	
 	auto OnSessionDestroyed = [this, GameInstance, OnTransition](const bool bWasSuccessful) {
@@ -49,7 +50,7 @@ void UInstancesManagerSubsystem::StartNewInstance(int SessionID)
 	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
-void UInstancesManagerSubsystem::StartListenServer(const int SessionID) const
+void UInstancesManagerSubsystem::StartListenServer(const int SessionID, const FString& InstanceMapPath) const
 {
 	if (USessionsManagerSubsystem::HasRunningSession)
 	{
@@ -60,10 +61,8 @@ void UInstancesManagerSubsystem::StartListenServer(const int SessionID) const
 	if (UWorld* World = GetWorld(); World != nullptr)
 	{
 		InstanceSessionID = SessionID;
-
-		// TODO: Find map based on instance we want to start
-		const FString MapName = "/Game/_Project/000-Game/Maps/InstanceMap";
-		const FURL ListenURL(nullptr, *(MapName + "?listen"), TRAVEL_Absolute);
+		
+		const FURL ListenURL(nullptr, *(InstanceMapPath + "?listen"), TRAVEL_Absolute);
 		World->ServerTravel(ListenURL.ToString());
 	}
 }

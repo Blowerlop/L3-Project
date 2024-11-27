@@ -4,5 +4,9 @@
 #include "Instances/InstanceDataAsset.h"
 
 
+void UInstanceDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
 
-
+	AssetID = GetTypeHash(this->GetPathName());
+}

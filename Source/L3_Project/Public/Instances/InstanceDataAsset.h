@@ -16,6 +16,9 @@ class L3_PROJECT_API UInstanceDataAsset : public UPrimaryDataAsset
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 AssetID;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString InstanceName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -23,4 +26,8 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* InstanceImage;
+
+protected:
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+
 };

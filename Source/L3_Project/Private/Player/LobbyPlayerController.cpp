@@ -83,7 +83,7 @@ void ALobbyPlayerController::OnInstanceValidatedClientRPC_Implementation(int32 I
 	const auto InstancesManager = GameInstance->GetSubsystem<UInstancesManagerSubsystem>();
 	if (!IsValid(InstancesManager)) return;
 	
-	InstancesManager->StartNewInstance(InstanceID);
+	//InstancesManager->StartNewInstance(InstanceID);
 }
 
 void ALobbyPlayerController::StartInstanceServerRPC_Implementation()
