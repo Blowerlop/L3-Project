@@ -4,9 +4,13 @@
 #include "Player/LobbyPlayerController.h"
 
 #include "GameFramework/Character.h"
+#include "Instances/InstanceDataAsset.h"
+#include "Instances/InstanceDatabase.h"
 #include "Net/UnrealNetwork.h"
 #include "Networking/BaseGameInstance.h"
 #include "Networking/InstancesManagerSubsystem.h"
+
+class UInstanceDatabase;
 
 void ALobbyPlayerController::AcceptGroupInviteServerRPC_Implementation(const int32 InviteId)
 {
@@ -75,25 +79,35 @@ void ALobbyPlayerController::LeaveCurrentGroup()
 	LeaveCurrentGroupServerRPC();
 }
 
-void ALobbyPlayerController::OnInstanceValidatedClientRPC_Implementation(int32 InstanceID)
+void ALobbyPlayerController::OnInstanceValidatedClientRPC_Implementation(int32 InstanceID, int32 InstanceDataID)
 {
 	const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 	if (!IsValid(GameInstance)) return;
 
 	const auto InstancesManager = GameInstance->GetSubsystem<UInstancesManagerSubsystem>();
 	if (!IsValid(InstancesManager)) return;
+
+	const auto InstanceDatabase = GameInstance->GetSubsystem<UInstanceDatabase>();
+	if (!IsValid(InstanceDatabase)) return;
+
+	const auto Data = InstanceDatabase->GetInstanceDataAsset(InstanceDataID);
+	if (!Data)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Can't find InstanceDataAsset with id %d!"), InstanceDataID);
+		return;
+	}
 	
-	//InstancesManager->StartNewInstance(InstanceID);
+	InstancesManager->StartNewInstance(InstanceID, Data);
 }
 
-void ALobbyPlayerController::StartInstanceServerRPC_Implementation()
+void ALobbyPlayerController::StartInstanceServerRPC_Implementation(int32 InstanceDataID)
 {
 	if (!FGroupManager::IsGroupLeader(this)) return;
 
 	const auto NewInstanceId = UInstancesManagerSubsystem::GetNextInstanceID();
 	const auto Group = FGroupManager::GetGroup(ReplicatedGroupData.GroupId);
 
-	OnInstanceValidatedClientRPC(NewInstanceId);
+	OnInstanceValidatedClientRPC(NewInstanceId, InstanceDataID);
 	
 	// Do not send this callback to the leader
 	for (int32 i = 1; i < Group->GroupMembers.Num(); ++i)
@@ -101,18 +115,31 @@ void ALobbyPlayerController::StartInstanceServerRPC_Implementation()
 		const auto Member = Group->GroupMembers[i];
 		if (!IsValid(Member)) continue;
 		
-		Member->OnInstanceStartedClientRPC(NewInstanceId);
+		Member->OnInstanceStartedClientRPC(NewInstanceId, InstanceDataID);
 	}
 }
 
-void ALobbyPlayerController::OnInstanceStartedClientRPC_Implementation(const int32 InstanceID)
+void ALobbyPlayerController::OnInstanceStartedClientRPC_Implementation(const int32 InstanceID, const int32 InstanceDataID)
 {
-	OnInstanceStartedDelegate.Broadcast(InstanceID);
+	const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	if (!IsValid(GameInstance)) return;
+	
+	const auto InstanceDatabase = GameInstance->GetSubsystem<UInstanceDatabase>();
+	if (!IsValid(InstanceDatabase)) return;
+
+	const auto Data = InstanceDatabase->GetInstanceDataAsset(InstanceDataID);
+	if (!Data)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Can't find InstanceDataAsset with id %d!"), InstanceDataID);
+		return;
+	}
+	
+	OnInstanceStartedDelegate.Broadcast(InstanceID, Data);
 }
 
-void ALobbyPlayerController::StartInstance()
+void ALobbyPlayerController::StartInstance(UInstanceDataAsset* Asset)
 {
-	StartInstanceServerRPC();
+	StartInstanceServerRPC(Asset->AssetID);
 }
 
 void ALobbyPlayerController::OnRep_ReplicatedGroupData() const

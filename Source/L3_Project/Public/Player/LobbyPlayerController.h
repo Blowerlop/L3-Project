@@ -12,10 +12,11 @@
  * 
  */
 
+class UInstanceDataAsset;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGroupChangedDelegate, FReplicatedGroupData, GroupData);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInvitesChangedDelegate, const TArray<FInviteData>&, Invites);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstanceStartedDelegate, int32, InstanceId);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInstanceStartedDelegate, int32, InstanceId, UInstanceDataAsset*, InstanceDataAsset);
 
 UCLASS()
 class L3_PROJECT_API ALobbyPlayerController : public AL3_ProjectPlayerController
@@ -70,16 +71,16 @@ private:
 	void LeaveCurrentGroup();
 
 	UFUNCTION(Server, Reliable)
-	void StartInstanceServerRPC();
+	void StartInstanceServerRPC(int32 InstanceDataID);
 
 	UFUNCTION(Client, Reliable)
-	void OnInstanceValidatedClientRPC(int32 InstanceID);
+	void OnInstanceValidatedClientRPC(int32 InstanceID, int32 InstanceDataID);
 	
 	UFUNCTION(Client, Reliable)
-	void OnInstanceStartedClientRPC(const int32 InstanceID);
+	void OnInstanceStartedClientRPC(const int32 InstanceID, const int32 InstanceDataID);
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Sessions")
-	void StartInstance();
+	void StartInstance(UInstanceDataAsset* Asset);
 	
 	UFUNCTION()
 	void OnRep_ReplicatedGroupData() const;

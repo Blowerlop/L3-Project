@@ -8,6 +8,7 @@
 #include "Engine/GameInstance.h"
 #include "BaseGameInstance.generated.h"
 
+class UInstanceDataAsset;
 class UInstancesManagerSubsystem;
 
 UENUM(BlueprintType)
@@ -35,6 +36,9 @@ class L3_PROJECT_API UBaseGameInstance : public UGameInstance
 	DECLARE_DELEGATE(FTransitionDelegate);
 	
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Database")
+	TArray<UInstanceDataAsset*> ItemDatabase;
+	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
 	void Login(bool bUseDevTool, FString AuthToolId = "") const;
 
