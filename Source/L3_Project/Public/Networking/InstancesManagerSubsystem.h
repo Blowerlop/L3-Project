@@ -32,7 +32,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Session")
 	void JoinInstance(FName SessionName, FBlueprintSessionSearchResult SessionData);
-
+	
+	UFUNCTION(BlueprintCallable, Category = "Online Session")
 	void ReturnToLobby();
 
 	static int GetNextInstanceID()
