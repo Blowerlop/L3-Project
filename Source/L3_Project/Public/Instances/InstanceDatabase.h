@@ -17,10 +17,10 @@ class L3_PROJECT_API UInstanceDatabase : public UGameInstanceSubsystem
 	
 private:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-
-	UPROPERTY()
-	TMap<int32, UInstanceDataAsset*> DataAssetMap;
 	
 public:
 	UInstanceDataAsset* GetInstanceDataAsset(int32 AssetID) const;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Instance Database")
+	TMap<int32, UInstanceDataAsset*> DataAssetMap;
 };
