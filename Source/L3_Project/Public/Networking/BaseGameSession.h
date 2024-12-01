@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "OnlineSubsystemUtils.h"
 #include "GameFramework/GameSession.h"
 #include "BaseGameSession.generated.h"
 
+class IOnlineSubsystem;
 /**
  * 
  */
@@ -14,9 +16,6 @@ class L3_PROJECT_API ABaseGameSession : public AGameSession
 {
 	GENERATED_BODY()
 
-public:
-	virtual void RegisterPlayer(APlayerController* NewPlayer, const FUniqueNetIdRepl& UniqueId, bool bWasFromInvite) override;
-	
 private:
 	virtual void NotifyLogout(const APlayerController* PC) override;
 	
@@ -31,6 +30,9 @@ private:
 
 	FDelegateHandle StartSessionDelegateHandle;
 	FDelegateHandle EndSessionDelegateHandle;
+	
+public:
+	virtual void RegisterPlayer(APlayerController* NewPlayer, const FUniqueNetIdRepl& UniqueId, bool bWasFromInvite) override;
 
 protected:
 	int RegisteredPlayerCount;
@@ -39,4 +41,11 @@ protected:
 	
 	virtual void HandleRegisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful);
 	virtual void HandleUnregisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful);
+
+	virtual FName GetOnlineSubsystemName() const;
+	
+	IOnlineSubsystem* GetOnlineSubsystem() const
+	{
+		return Online::GetSubsystem(GetWorld(), GetOnlineSubsystemName());
+	}
 };

@@ -11,6 +11,14 @@
 class UInstanceDataAsset;
 struct FBlueprintSessionSearchResult;
 
+UENUM(BlueprintType)
+enum class EHostingType : uint8
+{
+	EOS,
+	LANBroadcast,
+	IP
+};
+
 /**
  * 
  */
@@ -23,6 +31,8 @@ public:
 	static int InstanceIDCounter;
 	static int InstanceSessionID;
 	static bool IsInstanceBeingDestroyed;
+
+	static EHostingType HostingType;
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Session")
 	void StartNewInstance(int SessionID, UInstanceDataAsset* Data);
@@ -47,7 +57,15 @@ public:
 		return InstanceSessionID;
 	}
 
+	UFUNCTION(BlueprintCallable, Category = "Networking")
+	static FName GetOnlineSubsystemName()
+	{
+		return FName(HostingType == EHostingType::EOS ? "EOS" : "NULL");
+	}
+
 private:
+	const FName LobbyOnlineSubsystem = "EOS";
+	
 	void StartListenServer(const int SessionID, const FString& InstanceMapPath) const;
 
 	bool TryGetBaseGameInstance(UBaseGameInstance*& Out) const
@@ -61,4 +79,7 @@ private:
 		Out = GetGameInstance()->GetSubsystem<USessionsManagerSubsystem>();
 		return IsValid(Out);
 	}
+
+public:
+	static void SetHostingType(const FString& Args);
 };

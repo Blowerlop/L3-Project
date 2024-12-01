@@ -47,29 +47,31 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session", meta = (AutoCreateRefTerm = "Delegate"))
 	void CreateSession(FName SessionName, FCreateSessionDelegate Delegate, FName KeyName = "KeyName",
-		FString KeyValue = "KeyValue", bool bDedicatedServer = true);
+	                   FString KeyValue = "KeyValue", bool bDedicatedServer = true, FName OSSName = "EOS");
 
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void DestroySession();
+	void DestroySession(FName OSSName = "EOS");
 
 	typedef std::function<void(const bool)> DSWCFunc;
-	void DestroySessionWithCallback(const DSWCFunc& Func);
+	void DestroySessionWithCallback(const DSWCFunc& Func, FName OSSName = "EOS");
 	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session", meta = (AutoCreateRefTerm = "Delegate"))
-	void FindSessions(FName SearchKey, FString SearchValue, FFindSessionsDelegate Delegate);
+	void FindSessions(FName SearchKey, FString SearchValue, FFindSessionsDelegate Delegate, FName OSSName = "EOS");
 
 	typedef std::function<void(bool bWasSuccessful, const FBlueprintSessionSearchResult& Search)> FindSessionFunc;
-	void FindSessions(FName SearchKey, FString SearchValue, const FindSessionFunc& Func);
+	void FindSessions(FName SearchKey, FString SearchValue, const FindSessionFunc& Func, FName OSSName = "EOS");
 
-	void FindSessions(FName SearchKey, FString SearchValue);
+	void FindSessions(FName SearchKey, FString SearchValue, FName OSSName = "EOS");
 	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void JoinSession(FName SessionName, FBlueprintSessionSearchResult SessionData);
+	void JoinSession(FName SessionName, FBlueprintSessionSearchResult SessionData, FName OSSName = "EOS");
 
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void RegisterSelf();
+	void RegisterSelf(FName OSSName = "EOS");
 	
 private:
+	FName LastUsedOSSName;
+	
 	FDelegateHandle CreateSessionDelegateHandle;
 	FCreateSessionDelegate BP_CreateSessionDelegate;
 	
@@ -91,6 +93,9 @@ private:
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
 	void HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
+	IOnlineSubsystem* UseOnlineSubsystem(FName OSSName);
+	IOnlineSubsystem* UseLastOnlineSubsystem() const;
+	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 };

@@ -36,9 +36,6 @@ class L3_PROJECT_API UBaseGameInstance : public UGameInstance
 	DECLARE_DELEGATE(FTransitionDelegate);
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Database")
-	TArray<UInstanceDataAsset*> ItemDatabase;
-	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
 	void Login(bool bUseDevTool, FString AuthToolId = "") const;
 
@@ -67,4 +64,7 @@ private:
 
 	UFUNCTION(Exec)
 	void DebugLoginWithDevAuthTool(const FString& Args) const;
+
+	UFUNCTION(Exec)
+	static void SetHostingType(const FString& Args);
 };

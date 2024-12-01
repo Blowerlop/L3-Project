@@ -3,6 +3,7 @@
 
 #include "Networking/InstancesManagerSubsystem.h"
 
+#include "OnlineSubsystemUtils.h"
 #include "Instances/InstanceDataAsset.h"
 #include "Networking/BaseGameInstance.h"
 #include "Networking/SessionsManagerSubsystem.h"
@@ -11,6 +12,7 @@
 int UInstancesManagerSubsystem::InstanceIDCounter{};
 int UInstancesManagerSubsystem::InstanceSessionID{};
 bool UInstancesManagerSubsystem::IsInstanceBeingDestroyed{};
+EHostingType UInstancesManagerSubsystem::HostingType = EHostingType::EOS;
 
 void UInstancesManagerSubsystem::StartNewInstance(int SessionID, UInstanceDataAsset* Data)
 {
@@ -47,7 +49,7 @@ void UInstancesManagerSubsystem::StartNewInstance(int SessionID, UInstanceDataAs
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed, LobbyOnlineSubsystem);
 }
 
 void UInstancesManagerSubsystem::StartListenServer(const int SessionID, const FString& InstanceMapPath) const
@@ -64,6 +66,26 @@ void UInstancesManagerSubsystem::StartListenServer(const int SessionID, const FS
 		
 		const FURL ListenURL(nullptr, *(InstanceMapPath + "?listen"), TRAVEL_Absolute);
 		World->ServerTravel(ListenURL.ToString());
+	}
+}
+
+void UInstancesManagerSubsystem::SetHostingType(const FString& Args)
+{
+	if (Args == "EOS")
+	{
+		HostingType = EHostingType::EOS;
+	}
+	else if (Args == "LAN")
+	{
+		HostingType = EHostingType::LANBroadcast;
+	}
+	else if (Args == "IP")
+	{
+		HostingType = EHostingType::IP;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid hosting type"));
 	}
 }
 
@@ -134,7 +156,7 @@ void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessi
 	}
 
 	auto OnTransition = [this, SessionName, SessionData, SessionManager]() {
-		SessionManager->JoinSession(SessionName, SessionData);
+		SessionManager->JoinSession(SessionName, SessionData, GetOnlineSubsystemName());
 	};
 	
 	auto OnSessionDestroyed = [this, OnTransition, GameInstance](const bool bWasSuccessful) {
@@ -149,7 +171,7 @@ void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessi
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed, LobbyOnlineSubsystem);
 }
 
 void UInstancesManagerSubsystem::ReturnToLobby()
@@ -182,11 +204,11 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 			return;
 		}
 
-		SessionManager->JoinSession("Lobby", Search);
+		SessionManager->JoinSession("Lobby", Search, LobbyOnlineSubsystem);
 	};
 	
 	auto OnTransition = [this, OnSessionFound, SessionManager]() {
-		SessionManager->FindSessions("TYPE", "Lobby", OnSessionFound);
+		SessionManager->FindSessions("TYPE", "Lobby", OnSessionFound, LobbyOnlineSubsystem);
 	};
 	
 	auto OnSessionDestroyed = [this, OnTransition, GameInstance](const bool bWasSuccessful) {
@@ -201,7 +223,7 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed, GetOnlineSubsystemName());
 }
 
 
