@@ -18,3 +18,8 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 	
 	FGroupManager::RemoveFromGroup(LobbyPlayer, LobbyPlayer->ReplicatedGroupData.GroupId);
 }
+
+FName ALobbyGameSession::GetOnlineSubsystemName() const
+{
+	return "EOS";
+}

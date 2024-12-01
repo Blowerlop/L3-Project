@@ -5,6 +5,7 @@
 
 #include "OnlineSubsystemUtils.h"
 #include "Interfaces/OnlineIdentityInterface.h"
+#include "Networking/InstancesManagerSubsystem.h"
 #include "Networking/SessionsManagerSubsystem.h"
 
 #pragma region Login/out
@@ -139,6 +140,11 @@ void UBaseGameInstance::OnTransitionEntered()
 void UBaseGameInstance::DebugLoginWithDevAuthTool(const FString& Args) const
 {
 	Login(true, Args);
+}
+
+void UBaseGameInstance::SetHostingType(const FString& Args)
+{
+	UInstancesManagerSubsystem::SetHostingType(Args);
 }
 
 #pragma endregion 

@@ -29,7 +29,7 @@ void ABaseGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniqu
 		return;
 	}
 	
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = GetOnlineSubsystem();
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
         
 	RegisterPlayerDelegateHandle =
@@ -48,7 +48,7 @@ void ABaseGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniqu
 void ABaseGameSession::HandleRegisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds,
                                                      const bool bWasSuccessful)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = GetOnlineSubsystem();
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
  
 	if (bWasSuccessful)
@@ -76,7 +76,7 @@ void ABaseGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 
 	UE_LOG(LogTemp, Log, TEXT("Unregistering player..."));
 	
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = GetOnlineSubsystem();
 	const IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 
 	if (!Session.IsValid())
@@ -114,21 +114,12 @@ void ABaseGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 void ABaseGameSession::HandleUnregisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds,
                                                        const bool bWasSuccessful)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = GetOnlineSubsystem();
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 
 	if (bWasSuccessful)
 	{
 		RegisteredPlayerCount--;
-
-		/*if (RegisteredPlayerCount == 1)
-		{
-			auto instance = Cast<UEOS_OSS_GameInstance>(GetGameInstance());
-			if (instance)
-			{
-				instance->OnOnePlayerLeft();
-			}
-		}*/
         
 		UE_LOG(LogTemp, Log, TEXT("Player unregistered in EOS Session!"));
 	}
@@ -148,7 +139,7 @@ void ABaseGameSession::NotifyLogout(const APlayerController* PC)
 
 void ABaseGameSession::StartSession()
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = GetOnlineSubsystem();
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
  
 	StartSessionDelegateHandle =
@@ -166,7 +157,7 @@ void ABaseGameSession::StartSession()
 
 void ABaseGameSession::HandleStartSessionCompleted(FName EosSessionName, const bool bWasSuccessful)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = GetOnlineSubsystem();
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
     
 	if (bWasSuccessful)
@@ -184,7 +175,7 @@ void ABaseGameSession::HandleStartSessionCompleted(FName EosSessionName, const b
 
 void ABaseGameSession::EndSession()
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = GetOnlineSubsystem();
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 
 	EndSessionDelegateHandle =
@@ -202,7 +193,7 @@ void ABaseGameSession::EndSession()
 
 void ABaseGameSession::HandleEndSessionCompleted(FName EosSessionName, const bool bWasSuccessful)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = GetOnlineSubsystem();
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 
 	if (bWasSuccessful)
@@ -216,4 +207,10 @@ void ABaseGameSession::HandleEndSessionCompleted(FName EosSessionName, const boo
 
 	SessionInterface->ClearOnEndSessionCompleteDelegate_Handle(EndSessionDelegateHandle);
 	EndSessionDelegateHandle.Reset();
+}
+
+// Can't make this pure virtual. Not allowed in UCLASS
+FName ABaseGameSession::GetOnlineSubsystemName() const
+{
+	return "";
 }
