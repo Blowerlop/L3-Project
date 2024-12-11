@@ -51,6 +51,8 @@ public:
 	static FName GetOnlineSubsystemName()
 	{
 		return "EOS";
+
+		// Regular Unreal doesn't have UWorld::HostingType
 		//return FName(UWorld::HostingType == EHostingType::EOS ? "EOS" : "NULL");
 	}
 

@@ -32,9 +32,6 @@ void UInstancesManagerSubsystem::StartNewInstance(int SessionID, UInstanceDataAs
 	}
 
 	auto OnTransition = [this, SessionID, Data]() {
-
-		
-		
 		UE_LOG(LogTemp, Log, TEXT("Transition completed. Starting new instance."));
 		StartListenServer(SessionID, Data->MapPath);
 	};
@@ -73,6 +70,9 @@ void UInstancesManagerSubsystem::StartListenServer(const int SessionID, const FS
 
 void UInstancesManagerSubsystem::SetHostingType(const FString& Args)
 {
+	// Those are commented because UWorld::HostingType doesn't exist in regular Unreal Engine code base.
+	// It was added for the project only chez moi
+	
 	if (Args == "EOS")
 	{
 		//UWorld::HostingType = EHostingType::EOS;
