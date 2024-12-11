@@ -147,4 +147,52 @@ void UBaseGameInstance::SetHostingType(const FString& Args)
 	UInstancesManagerSubsystem::SetHostingType(Args);
 }
 
+void UBaseGameInstance::PrintServerInfos()
+{
+	if (GEngine)
+	{
+		// Get the first world context (e.g., for single-player games)
+		const FWorldContext* WorldContext = Algo::FindByPredicate(GEngine->GetWorldContexts(), [](const FWorldContext& Context) {
+			return Context.World() != nullptr;
+		});
+		
+		if (WorldContext)
+		{
+			for(auto a : WorldContext->ActiveNetDrivers)
+			{
+				UE_LOG(LogTemp, Error, TEXT("ActiveNetDrivers: %s %s"), *a.NetDriver.GetClass()->GetName(), *FName(NAME_GameNetDriver).ToString());
+				UE_LOG(LogTemp, Error, TEXT("aeffafaef: %s"), *FName(NAME_PendingNetDriver).ToString());
+			}
+			
+			if (const auto World = WorldContext->World())
+			{
+				auto URL = World->URL;
+				auto Address = URL.Host;
+				auto Port = URL.Port;
+
+				UE_LOG(LogTemp, Error, TEXT("Server infos: %s:%d"), *Address, Port);
+
+				if (auto NetDriver = World->GetNetDriver())
+				{
+					auto NetMode = NetDriver->GetNetMode();
+					auto Role = NetDriver->RoleProperty->GetFullName();
+					auto RemoteRole = NetDriver->RemoteRoleProperty->GetFullName();
+
+					uint32 addr = 0;
+					int32 port = 0;
+					NetDriver->GetLocalAddr()->GetIp(addr);
+					NetDriver->GetLocalAddr()->GetPort(port);
+					
+					UE_LOG(LogTemp, Error, TEXT("NetDriver: %s NetMode: %d, Role: %s, RemoteRole: %s"), *NetDriver->GetClass()->GetName(), NetMode, *Role, *RemoteRole);
+					UE_LOG(LogTemp, Error, TEXT("LocalAddr: %d:%d"), addr, port);
+				}
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to find a valid world context"));
+		}
+	}
+}
+
 #pragma endregion 

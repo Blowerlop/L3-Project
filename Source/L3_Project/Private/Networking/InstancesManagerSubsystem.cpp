@@ -12,7 +12,6 @@
 int UInstancesManagerSubsystem::InstanceIDCounter{};
 int UInstancesManagerSubsystem::InstanceSessionID{};
 bool UInstancesManagerSubsystem::IsInstanceBeingDestroyed{};
-EHostingType UInstancesManagerSubsystem::HostingType = EHostingType::EOS;
 
 void UInstancesManagerSubsystem::StartNewInstance(int SessionID, UInstanceDataAsset* Data)
 {
@@ -33,6 +32,9 @@ void UInstancesManagerSubsystem::StartNewInstance(int SessionID, UInstanceDataAs
 	}
 
 	auto OnTransition = [this, SessionID, Data]() {
+
+		
+		
 		UE_LOG(LogTemp, Log, TEXT("Transition completed. Starting new instance."));
 		StartListenServer(SessionID, Data->MapPath);
 	};
@@ -73,15 +75,15 @@ void UInstancesManagerSubsystem::SetHostingType(const FString& Args)
 {
 	if (Args == "EOS")
 	{
-		HostingType = EHostingType::EOS;
+		//UWorld::HostingType = EHostingType::EOS;
 	}
 	else if (Args == "LAN")
 	{
-		HostingType = EHostingType::LANBroadcast;
+		//UWorld::HostingType = EHostingType::LANBroadcast;
 	}
 	else if (Args == "IP")
 	{
-		HostingType = EHostingType::IP;
+		//UWorld::HostingType = EHostingType::IP;
 	}
 	else
 	{

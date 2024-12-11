@@ -67,4 +67,7 @@ private:
 
 	UFUNCTION(Exec)
 	static void SetHostingType(const FString& Args);
+	
+	UFUNCTION(Exec)
+	static void PrintServerInfos();
 };
