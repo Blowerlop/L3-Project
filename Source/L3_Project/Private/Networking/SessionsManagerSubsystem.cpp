@@ -176,7 +176,7 @@ void USessionsManagerSubsystem::HandleFindSessionsCompleted(bool bWasSuccessful,
 			(void)CPP_FindSessionsDelegate.ExecuteIfBound(false, {});
 		}
 		
-		for (const auto SessionInSearchResult : Search->SearchResults)
+		for (const auto& SessionInSearchResult : Search->SearchResults)
 		{
 			// Just get the first session found. There should not be more than one session corresponding to given search key/value.
 			UE_LOG(LogTemp, Log, TEXT("Found one session."));
