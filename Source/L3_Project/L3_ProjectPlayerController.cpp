@@ -10,6 +10,7 @@
 #include "InputActionValue.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
+#include "GameFramework/PlayerState.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -122,3 +123,58 @@ void AL3_ProjectPlayerController::OnTouchReleased()
 	bIsTouch = false;
 	OnSetDestinationReleased();
 }
+
+#if WITH_EDITOR || UE_BUILD_DEVELOPMENT
+
+bool AL3_ProjectPlayerController::bShowNetworkInfos = false;
+float AL3_ProjectPlayerController::NetworkInfosTimer = 0.0f;
+
+void AL3_ProjectPlayerController::Tick(const float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (bShowNetworkInfos)
+	{
+		NetworkInfosTimer += DeltaSeconds;
+
+		if(NetworkInfosTimer > 0.5f)
+		{
+			if (GEngine)
+			{
+				auto Ping = 0.0f;
+
+				if (GetNetMode() != NM_ListenServer && PlayerState)
+				{
+					Ping = PlayerState->GetPingInMilliseconds();
+				}
+				
+				GEngine->AddOnScreenDebugMessage(1001, 0.5f, FColor::Green,
+					FString::Printf(TEXT("Ping: %f"), Ping));
+
+				if(const auto Connection = GetNetConnection())
+				{
+					if (Connection->GetDriver() && Connection->GetDriver()->GetClass())
+					{
+						GEngine->AddOnScreenDebugMessage(1002, 0.5f, FColor::Green, FString::Printf(TEXT("NetDriver: %s"),
+							*Connection->GetDriver()->GetClass()->GetName()));
+					}
+
+					GEngine->AddOnScreenDebugMessage(1003, 0.5f, FColor::Green, FString::Printf(TEXT("In Loss Percentage: %f"),
+						Connection->GetInLossPercentage().GetLossPercentage()));
+
+					GEngine->AddOnScreenDebugMessage(1004, 0.5f, FColor::Green, FString::Printf(TEXT("Out Loss Percentage: %f"),
+						Connection->GetOutLossPercentage().GetLossPercentage()));
+				}
+			}
+			
+			NetworkInfosTimer = 0.0f;
+		}
+	}
+}
+
+void AL3_ProjectPlayerController::ShowNetworkInfos()
+{
+	bShowNetworkInfos = !bShowNetworkInfos;
+}
+
+#endif

@@ -12,7 +12,7 @@
 
 void UBaseGameInstance::Login(const bool bUseDevTool, FString AuthToolId) const
 {
-	if (const IOnlineSubsystem* OnlineSubsystem = Online::GetSubsystem(GetWorld()))
+	if (const IOnlineSubsystem* OnlineSubsystem = Online::GetSubsystem(GetWorld(), "EOS"))
 	{
 		if (const IOnlineIdentityPtr IdentityInterface = OnlineSubsystem->GetIdentityInterface(); IdentityInterface.IsValid())
 		{
@@ -38,7 +38,7 @@ void UBaseGameInstance::Login(const bool bUseDevTool, FString AuthToolId) const
 
 void UBaseGameInstance::Logout() const
 {
-	if (const IOnlineSubsystem* OnlineSubsystem = Online::GetSubsystem(GetWorld()))
+	if (const IOnlineSubsystem* OnlineSubsystem = Online::GetSubsystem(GetWorld(), "EOS"))
 	{
 		if (const IOnlineIdentityPtr IdentityInterface = OnlineSubsystem->GetIdentityInterface(); IdentityInterface.IsValid())
 		{
@@ -49,7 +49,7 @@ void UBaseGameInstance::Logout() const
 
 bool UBaseGameInstance::IsLoggedIn() const
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), "EOS");
 	const IOnlineIdentityPtr IdentityInterface = Subsystem->GetIdentityInterface();
 
 	return IdentityInterface->GetLoginStatus(0) == ELoginStatus::LoggedIn;
@@ -151,7 +151,6 @@ void UBaseGameInstance::PrintServerInfos()
 {
 	if (GEngine)
 	{
-		// Get the first world context (e.g., for single-player games)
 		const FWorldContext* WorldContext = Algo::FindByPredicate(GEngine->GetWorldContexts(), [](const FWorldContext& Context) {
 			return Context.World() != nullptr;
 		});
@@ -167,7 +166,7 @@ void UBaseGameInstance::PrintServerInfos()
 			if (const auto World = WorldContext->World())
 			{
 				auto URL = World->URL;
-				auto Address = URL.Host;
+				auto Address = URL.ToString();
 				auto Port = URL.Port;
 
 				UE_LOG(LogTemp, Error, TEXT("Server infos: %s:%d"), *Address, Port);

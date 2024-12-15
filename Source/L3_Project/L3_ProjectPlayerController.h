@@ -63,6 +63,18 @@ private:
 
 	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
+
+	virtual void Tick(float DeltaSeconds) override;
+
+#if WITH_EDITOR || UE_BUILD_DEVELOPMENT
+	
+	static bool bShowNetworkInfos;
+	static float NetworkInfosTimer;
+	
+	UFUNCTION(Exec)
+	static void ShowNetworkInfos();
+	
+#endif
 };
 
 
