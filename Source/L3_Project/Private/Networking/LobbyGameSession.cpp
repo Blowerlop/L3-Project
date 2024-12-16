@@ -21,5 +21,5 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 
 FName ALobbyGameSession::GetOnlineSubsystemName() const
 {
-	return "EOS";
+	return "NULL";
 }
