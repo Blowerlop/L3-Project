@@ -50,14 +50,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Networking")
 	static FName GetOnlineSubsystemName()
 	{
-		return "EOS";
+		return "NULL";
 
 		// Regular Unreal doesn't have UWorld::HostingType
-		//return FName(UWorld::HostingType == EHostingType::EOS ? "EOS" : "NULL");
+		// return FName(UWorld::HostingType == EHostingType::EOS ? "EOS" : "NULL");
 	}
 
 private:
-	const FName LobbyOnlineSubsystem = "EOS";
+	const FName LobbyOnlineSubsystem = "NULL";
 	
 	void StartListenServer(const int SessionID, const FString& InstanceMapPath) const;
 
