@@ -72,6 +72,9 @@ void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAi
 
 	FActorSpawnParameters SpawnParams{};
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Owner = Caster;
+	// Is a pawn or nullptr
+	SpawnParams.Instigator = Cast<APawn>(Caster);
 
 	const auto SpellInstance = GetWorld()->SpawnActor<ASpell>(SpellClass, Location, FRotator::ZeroRotator, SpawnParams);
 	SpellInstance->Init(SpellData, Caster, Result);
