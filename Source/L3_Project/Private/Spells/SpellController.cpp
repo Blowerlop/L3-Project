@@ -188,7 +188,14 @@ void USpellController::OnSpellInputStopped(int Index)
 
 	Aimer->Stop();
 
-	TryCastSpellGenericResultToServer(Index, GetOwner(), Aimer->GetAimResult());
+	const auto Result = Aimer->GetAimResult();
+	if (!Result)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Aimer at index %d of class %s gave no result. Spell will not be casted."), Index, *Aimer->GetClass()->GetName());
+		return;
+	}
+	
+	TryCastSpellGenericResultToServer(Index, GetOwner(), Result);
 }
 
 void USpellController::StartGlobalCooldown()
