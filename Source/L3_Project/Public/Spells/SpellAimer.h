@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "SpellAimer.generated.h"
 
+class USpellAimerParams;
 class UAimResultHolder;
 
 UCLASS()
@@ -19,7 +20,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION(BlueprintCallable)
-	void Init(USceneComponent* Socket);
+	void Init(USpellAimerParams* Params, USceneComponent* Socket);
 	
 	UFUNCTION(BlueprintCallable)
 	void Start();
@@ -33,9 +34,15 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	bool bIsAiming;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TSubclassOf<USpellAimerParams> AimerParamsClass;
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	USceneComponent* OwnerSocket;
+
+	UPROPERTY(BlueprintReadOnly)
+	USpellAimerParams* AimerParams;
 	
 	UFUNCTION(BlueprintCallable)
 	void MoveToOwner();

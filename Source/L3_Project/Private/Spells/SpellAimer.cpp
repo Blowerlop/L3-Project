@@ -19,8 +19,9 @@ void ASpellAimer::Tick(float DeltaTime)
 	Update_Internal();
 }
 
-void ASpellAimer::Init(USceneComponent* Socket)
+void ASpellAimer::Init(USpellAimerParams* Params, USceneComponent* Socket)
 {
+	AimerParams = Params;
 	OwnerSocket = Socket;
 
 	Init_Internal();

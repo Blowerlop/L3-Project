@@ -131,7 +131,9 @@ void USpellController::UpdateSpellAimers()
 			continue;
 		}
 
-		if (SpellAimers[i] && SpellAimers[i]->GetClass() != SpellDatas[i]->Aimer)
+		const auto Data = SpellDatas[i];
+		
+		if (SpellAimers[i] && SpellAimers[i]->GetClass() != Data->Aimer)
 		{
 			SpellAimers[i]->Destroy();
 			SpellAimers[i] = nullptr;
@@ -139,10 +141,10 @@ void USpellController::UpdateSpellAimers()
 
 		if (!SpellAimers[i])
 		{
-			SpellAimers[i] = GetWorld()->SpawnActor<ASpellAimer>(SpellDatas[i]->Aimer);
+			SpellAimers[i] = GetWorld()->SpawnActor<ASpellAimer>(Data->Aimer);
 		}
 		
-		SpellAimers[i]->Init(AttachSocket);
+		SpellAimers[i]->Init(Data->AimerParams, AttachSocket);
 	}
 }
 

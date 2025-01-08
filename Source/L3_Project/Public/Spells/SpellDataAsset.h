@@ -2,6 +2,7 @@
 
 #include "SpellDataAsset.generated.h"
 
+class USpellAimerParams;
 class ASpellAimer;
 class ASpell;
 
@@ -14,6 +15,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<ASpellAimer> Aimer;
 	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced)
+	USpellAimerParams* AimerParams;
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<ASpell> Spell;
 
@@ -25,4 +29,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float Cooldown;
+
+#if WITH_EDITOR
+protected:
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
 };
