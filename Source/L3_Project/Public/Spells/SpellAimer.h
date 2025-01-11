@@ -41,8 +41,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	USceneComponent* OwnerSocket;
 
-	UPROPERTY(BlueprintReadOnly)
-	USpellAimerParams* AimerParams;
+	UFUNCTION(BlueprintCallable)
+	bool TryGetAimerParams(USpellAimerParams*& OutParams) const;
 	
 	UFUNCTION(BlueprintCallable)
 	void MoveToOwner();
@@ -58,4 +58,8 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Update_Internal();
+
+private:
+	UPROPERTY()
+	USpellAimerParams* AimerParams;
 };

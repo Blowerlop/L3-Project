@@ -12,7 +12,10 @@ void USpellDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChan
 	if (const auto DefaultObject = Aimer.GetDefaultObject())
 	{
 		if (!DefaultObject->AimerParamsClass)
+		{
+			AimerParams = nullptr;
 			return;
+		}
 		
 		if (AimerParams && AimerParams->GetClass() == DefaultObject->AimerParamsClass.Get())
 			return;

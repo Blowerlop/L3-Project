@@ -48,6 +48,20 @@ UAimResultHolder* ASpellAimer::GetAimResult_Implementation() const
 	return{};
 }
 
+bool ASpellAimer::TryGetAimerParams(USpellAimerParams*& OutParams) const
+{
+	if (AimerParams)
+	{
+		OutParams = AimerParams;
+		return true;
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("Trying to get AimerParams but is nullptr for aimer %s. Check aimer or spell configuration."), *this->GetName());
+	
+	OutParams = nullptr;
+	return false;
+}
+
 void ASpellAimer::MoveToOwner()
 {
 	if (!OwnerSocket)
