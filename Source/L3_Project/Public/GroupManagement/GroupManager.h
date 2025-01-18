@@ -2,7 +2,7 @@
 #include "CoreMinimal.h"
 #include "GroupManager.generated.h"
 
-class ALobbyPlayerController;
+class UGroupableComponent;
 
 USTRUCT(BlueprintType)
 struct FInviteData
@@ -24,21 +24,21 @@ class FServerGroupData
 public:
 	int32 GroupId{};
 	
-	TArray<ALobbyPlayerController*> GroupMembers{};
+	TArray<UGroupableComponent*> GroupMembers{};
 
-	void AddMember(ALobbyPlayerController* Player)
+	void AddMember(UGroupableComponent* Player)
 	{
 		GroupMembers.Add(Player);
 	}
 
-	void RemoveMember(ALobbyPlayerController* Player)
+	void RemoveMember(UGroupableComponent* Player)
 	{
 		GroupMembers.Remove(Player);
 	}
 
-	void RemoveMember(const ALobbyPlayerController* Player)
+	void RemoveMember(const UGroupableComponent* Player)
 	{
-		GroupMembers.Remove(const_cast<ALobbyPlayerController*>(Player));
+		GroupMembers.Remove(const_cast<UGroupableComponent*>(Player));
 	}
 
 	TArray<FString> GetMembersAsString() const;
@@ -64,21 +64,21 @@ class FGroupManager
 public:
 	static TMap<int32, FServerGroupData> Groups;
 
-	static int CreateGroup(ALobbyPlayerController* Owner);
-	static void AddToGroup(ALobbyPlayerController* Player, int32 GroupId);
-	static void RemoveFromGroup(ALobbyPlayerController* Player, int32 GroupId);
+	static int CreateGroup(UGroupableComponent* Owner);
+	static void AddToGroup(UGroupableComponent* Player, int32 GroupId);
+	static void RemoveFromGroup(UGroupableComponent* Player, int32 GroupId);
 
 	/// <summary>
 	/// Will remove the player from the group without modifying player data.
 	/// Modifying player replicated data when he is disconnecting could cause issues I guess.
 	/// </summary>
-	static void RemoveFromGroup(const ALobbyPlayerController* Player, int32 GroupId);
+	static void RemoveFromGroup(const UGroupableComponent* Player, int32 GroupId);
 	
 	static void DestroyGroup(int32 GroupId);
 	
-	static void InviteToGroup(ALobbyPlayerController* Inviter, ALobbyPlayerController* Invited);
-	static void AcceptGroupInvite(ALobbyPlayerController* Invited, int32 InviteId);
-	static bool IsGroupLeader(ALobbyPlayerController* Player);
+	static void InviteToGroup(UGroupableComponent* Inviter, UGroupableComponent* Invited);
+	static void AcceptGroupInvite(UGroupableComponent* Invited, int32 InviteId);
+	static bool IsGroupLeader(UGroupableComponent* Player);
 
 	static FServerGroupData* GetGroup(int32 GroupId);
 

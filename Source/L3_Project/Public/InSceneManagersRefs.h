@@ -6,8 +6,6 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "InSceneManagersRefs.generated.h"
 
-class UASpellManager;
-
 /**
  * 
  */
@@ -28,4 +26,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	AActor* GetManager(UClass* ManagerClass) const;
+
+	template<typename T>
+	T* GetManager() const
+	{
+		return Cast<T>(GetManager(T::StaticClass()));
+	}
 };

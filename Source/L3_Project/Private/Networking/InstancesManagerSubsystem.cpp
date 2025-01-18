@@ -4,10 +4,10 @@
 #include "Networking/InstancesManagerSubsystem.h"
 
 #include "OnlineSubsystemUtils.h"
+#include "GroupManagement/InstancesUserComponent.h"
 #include "Instances/InstanceDataAsset.h"
 #include "Networking/BaseGameInstance.h"
 #include "Networking/SessionsManagerSubsystem.h"
-#include "Player/InstancePlayerController.h"
 
 int UInstancesManagerSubsystem::InstanceIDCounter{};
 int UInstancesManagerSubsystem::InstanceSessionID{};
@@ -133,8 +133,15 @@ void UInstancesManagerSubsystem::StopInstance()
 		// "IsLocalPlayerController" = do not send to host. Host will disconnect automatically after everyone has left
 		if (Controller && !Controller->IsLocalPlayerController() && Controller->IsPrimaryPlayer())
 		{
-			const auto InstanceController = Cast<AInstancePlayerController>(Controller);
-			InstanceController->ReturnToLobbyClientRPC();
+			const auto InstancesUser = Controller->GetPawn()->GetComponentByClass<UInstancesUserComponent>();
+
+			if (!IsValid(InstancesUser))
+			{
+				UE_LOG(LogTemp, Error, TEXT("No InstancesUserComponent found on player controller pawn! Can't disconnect it ??????"));
+				continue;
+			}
+			
+			InstancesUser->ReturnToLobbyClientRPC();
 		}
 	}
 }
