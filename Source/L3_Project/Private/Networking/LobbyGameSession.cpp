@@ -3,20 +3,20 @@
 
 #include "Networking/LobbyGameSession.h"
 
+#include "GroupManagement/GroupableComponent.h"
 #include "GroupManagement/GroupManager.h"
-#include "Player/LobbyPlayerController.h"
 
 void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 {
 	Super::UnregisterPlayer(ExitingPlayer);
 
-	const auto LobbyPlayer = Cast<ALobbyPlayerController>(ExitingPlayer);
-	if (!IsValid(LobbyPlayer))
+	const auto GroupMember = ExitingPlayer->GetComponentByClass<UGroupableComponent>();
+	if (!IsValid(GroupMember))
 	{
 		return;
 	}
 	
-	FGroupManager::RemoveFromGroup(LobbyPlayer, LobbyPlayer->ReplicatedGroupData.GroupId);
+	FGroupManager::RemoveFromGroup(GroupMember, GroupMember->ReplicatedGroupData.GroupId);
 }
 
 FName ALobbyGameSession::GetOnlineSubsystemName() const
