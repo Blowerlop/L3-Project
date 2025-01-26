@@ -4,6 +4,9 @@
 #include "Player/AutoAttackController.h"
 
 #include "InSceneManagersRefs.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Net/UnrealNetwork.h"
+#include "Spells/SpellDataAsset.h"
 #include "Spells/SpellManager.h"
 #include "Spells/Results/VectorAimResultHolder.h"
 
@@ -35,6 +38,45 @@ void UAutoAttackController::TriggerAutoAttackServerRpc_Vector_Implementation(con
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
 	
-	SpellManager->TryCastSpell(AutoAttackSpell, GetOwner(), Holder);
+	SpellManager->RequestAttack(AutoAttackSpell, this, Holder);
 }
+
+void UAutoAttackController::OnAttackAnimEnded()
+{
+	if (!UKismetSystemLibrary::IsServer(this)) return;
+
+	if (!IsAttacking) return;
+	
+	StopAttack();
+}
+
+void UAutoAttackController::StartAttack(USpellDataAsset* Spell)
+{
+	if (!UKismetSystemLibrary::IsServer(this)) return;
+
+	CurrentAttackSpell = Spell;
+	OnCurrentAttackSpellChanged();
+}
+
+void UAutoAttackController::StopAttack()
+{
+	if (!UKismetSystemLibrary::IsServer(this)) return;
+
+	CurrentAttackSpell = nullptr;
+	OnCurrentAttackSpellChanged();
+}
+
+void UAutoAttackController::OnCurrentAttackSpellChanged()
+{
+	IsAttacking = IsValid(CurrentAttackSpell);
+	OnAttackStateChanged.Broadcast(CurrentAttackSpell, IsAttacking);
+}
+
+void UAutoAttackController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(UAutoAttackController, CurrentAttackSpell);
+}
+
 

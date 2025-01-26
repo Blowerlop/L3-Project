@@ -6,8 +6,12 @@
 #include "GameFramework/Actor.h"
 #include "SpellManager.generated.h"
 
+class USpellController;
+class UAutoAttackController;
 class UAimResultHolder;
 class USpellDataAsset;
+
+
 
 UCLASS()
 class L3_PROJECT_API ASpellManager : public AActor
@@ -22,8 +26,11 @@ public:
 	virtual void Destroyed() override;
 	
 	UFUNCTION(BlueprintCallable)
-	void TryCastSpellFromController(int SpellIndex, AActor* Caster, UAimResultHolder* Result) const;
+	void RequestSpellCastFromController(int SpellIndex, USpellController* SpellController, UAimResultHolder* Result) const;
 
+	UFUNCTION(BlueprintCallable)
+	void RequestAttack(USpellDataAsset* AttackSpell, UAutoAttackController* AttackController, UAimResultHolder* Result) const;
+	
 	UFUNCTION(BlueprintCallable)
 	void TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result) const;
 };

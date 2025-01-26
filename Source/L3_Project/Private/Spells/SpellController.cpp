@@ -20,6 +20,59 @@ USpellController::USpellController()
 	SetIsReplicatedByDefault(true);
 }
 
+void USpellController::SendSpellCastResponse(const int SpellIndex, UAimResultHolder* Result)
+{
+	if (!UKismetSystemLibrary::IsServer(this)) return;
+	
+	CastState->AimResult = Result;
+
+	SpellCastResponseMultiCastRpc(SpellIndex);
+}
+
+void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int SpellIndex)
+{
+	CastState->SpellIndex = SpellIndex;
+	CastState->IsCasting = true;
+	CastState->Spell = GetSpellData(SpellIndex);
+
+	OnCastStart.Broadcast(CastState->Spell, CastState->SpellIndex);
+}
+
+void USpellController::SrvOnAnimationCastSpellNotify()
+{
+	if (!UKismetSystemLibrary::IsServer(this)) return;
+	
+	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
+	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
+	
+	SpellManager->TryCastSpell(CastState->Spell, GetOwner(), CastState->AimResult);
+	
+	StartCooldown(CastState->SpellIndex);
+}
+
+void USpellController::OnAnimationEndedNotify()
+{
+	CastState->SpellIndex = -1;
+	CastState->IsCasting = false;
+	CastState->Spell = nullptr;
+	CastState->AnimationCompletion = 0.0f;
+}
+
+void USpellController::UpdateAnimationCompletion(const float Value)
+{
+	CastState->AnimationCompletion = Value;
+}
+
+bool USpellController::IsCasting() const
+{
+if(!IsValid(CastState))
+{
+UE_LOG(LogTemp, Error, TEXT("CastState is not valid"));
+	return true;
+}
+	return CastState->IsCasting;
+}
+
 USpellDataAsset* USpellController::GetSpellData(const int Index) const
 {
 	if (Index < 0 || Index >= SpellDatas.Num()) return nullptr;
@@ -42,6 +95,9 @@ void USpellController::BeginPlay()
 		SetupInputs();
 	}
 
+	CastState = NewObject<USpellControllerCastState>();
+	CastState->SpellIndex = -1;
+	
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
 	Cooldowns.SetNum(Max_Spells);
@@ -197,7 +253,7 @@ void USpellController::OnSpellInputStopped(int Index)
 		return;
 	}
 	
-	TryCastSpellGenericResultToServer(Index, GetOwner(), Result);
+	RequestSpellCastGenericResultToServer(Index, Result);
 }
 
 void USpellController::StartGlobalCooldown()
@@ -263,6 +319,8 @@ bool USpellController::IsInCooldown(const int Index) const
 
 bool USpellController::CanStartAiming() const
 {
+	if (IsCasting()) return false;
+	
 	return !SpellAimers.ContainsByPredicate([](const ASpellAimer* Aimer) { return Aimer && Aimer->bIsAiming; });
 }
 
@@ -315,7 +373,7 @@ void USpellController::TrySelectSpellRpc_Implementation(const int Index, USpellD
 	ReplicateSpellDatas(SpellDatas);
 }
 
-void USpellController::TryCastSpellGenericResultToServer(const int SpellIndex, AActor* Caster, UAimResultHolder* Result) const
+void USpellController::RequestSpellCastGenericResultToServer(const int SpellIndex, UAimResultHolder* Result)
 {
 	const auto ResultClass = Result->GetClass();
 	
@@ -323,11 +381,11 @@ void USpellController::TryCastSpellGenericResultToServer(const int SpellIndex, A
 	if (ResultClass == UVectorAimResultHolder::StaticClass())
 	{
 		const auto VectorResult = Cast<UVectorAimResultHolder>(Result);
-		TryCastSpellFromControllerRpc_Vector(SpellIndex, Caster, VectorResult->Vector);
+		RequestSpellCastFromControllerRpc_Vector(SpellIndex, this, VectorResult->Vector);
 	}
 }
 
-void USpellController::TryCastSpellFromControllerRpc_Vector_Implementation(const int SpellIndex, AActor* Caster, const FVector Result) const
+void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(const int SpellIndex, USpellController* Caster, const FVector Result)
 {
 	const auto Holder = NewObject<UVectorAimResultHolder>();
 	Holder->Vector = Result;
@@ -335,7 +393,7 @@ void USpellController::TryCastSpellFromControllerRpc_Vector_Implementation(const
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
 	
-	SpellManager->TryCastSpellFromController(SpellIndex, Caster, Holder);
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder);
 }
 
 void USpellController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

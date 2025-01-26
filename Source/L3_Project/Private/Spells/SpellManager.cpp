@@ -5,6 +5,7 @@
 
 #include "InSceneManagersRefs.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Player/AutoAttackController.h"
 #include "Spells/Spell.h"
 #include "Spells/SpellController.h"
 #include "Spells/SpellDataAsset.h"
@@ -36,27 +37,37 @@ void ASpellManager::Destroyed()
 	InSceneManagers->UnregisterManager(StaticClass());
 }
 
-void ASpellManager::TryCastSpellFromController(const int SpellIndex, AActor* Caster, UAimResultHolder* Result) const
+void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellController* SpellController, UAimResultHolder* Result) const
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
 		UE_LOG(LogTemp, Error, TEXT("TryCastSpellFromController can only be called on the server!"));
 		return;
 	}
-	
-	const auto SpellController = Caster->GetComponentByClass<USpellController>();
 
-	if (!SpellController)
+	if (SpellController->IsCasting())
 	{
-		UE_LOG(LogTemp, Error, TEXT("Caster %s has no SpellController component"), *Caster->GetName());
+		UE_LOG(LogTemp, Error, TEXT("Can't cast spell while casting!"));
+		return;
+	}
+	
+	SpellController->SendSpellCastResponse(SpellIndex, Result);
+	
+	/*TryCastSpell(SpellData, SpellController->GetOwner(), Result);
+
+	SpellController->StartCooldown(SpellIndex);*/
+	SpellController->StartGlobalCooldown();
+}
+
+void ASpellManager::RequestAttack(USpellDataAsset* AttackSpell, UAutoAttackController* AttackController,UAimResultHolder* Result) const
+{
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		UE_LOG(LogTemp, Error, TEXT("TryCastAttackSpell can only be called on the server!"));
 		return;
 	}
 
-	const auto SpellData = SpellController->GetSpellData(SpellIndex);
-	TryCastSpell(SpellData, Caster, Result);
-
-	SpellController->StartCooldown(SpellIndex);
-	SpellController->StartGlobalCooldown();
+	AttackController->StartAttack(AttackSpell);
 }
 
 void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result) const

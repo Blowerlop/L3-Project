@@ -30,6 +30,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float Cooldown;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UAnimSequence* Animation;
+
 #if WITH_EDITOR
 protected:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
