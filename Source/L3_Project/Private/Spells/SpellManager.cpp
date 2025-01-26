@@ -67,7 +67,7 @@ void ASpellManager::RequestAttack(USpellDataAsset* AttackSpell, UAutoAttackContr
 		return;
 	}
 
-	AttackController->StartAttack(AttackSpell);
+	AttackController->SendAttackResponse(Result);
 }
 
 void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result) const
@@ -75,6 +75,12 @@ void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAi
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
 		UE_LOG(LogTemp, Error, TEXT("TryCastSpell can only be called on the server!"));
+		return;
+	}
+
+	if (!IsValid(SpellData))
+	{
+		UE_LOG(LogTemp, Error, TEXT("SpellData is not valid!"));
 		return;
 	}
 	

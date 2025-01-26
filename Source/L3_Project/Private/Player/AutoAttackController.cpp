@@ -18,7 +18,51 @@ UAutoAttackController::UAutoAttackController()
 	SetIsReplicatedByDefault(true);
 }
 
-void UAutoAttackController::TriggerAutoAttack(UAimResultHolder* AimResultHolder)
+void UAutoAttackController::SendAttackResponse(UAimResultHolder* Result)
+{
+	if (!UKismetSystemLibrary::IsServer(this)) return;
+	
+	AttackState->AimResult = Result;
+
+	AttackResponseMultiCastRpc();
+}
+
+void UAutoAttackController::SrvOnAnimationAttackSpellNotify()
+{
+	if (!UKismetSystemLibrary::IsServer(this)) return;
+	
+	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
+	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
+	
+	SpellManager->TryCastSpell(AttackState->AttackSpell, GetOwner(), AttackState->AimResult);
+}
+
+void UAutoAttackController::OnAnimationEndedNotify()
+{
+	AttackState->IsAttacking = false;
+	AttackState->AttackSpell = nullptr;
+	AttackState->AnimationCompletion = 0.0f;
+}
+
+void UAutoAttackController::UpdateAnimationCompletion(float Value)
+{
+	AttackState->AnimationCompletion = Value;
+}
+
+bool UAutoAttackController::IsAttacking() const
+{
+	return AttackState->IsAttacking;
+}
+
+void UAutoAttackController::AttackResponseMultiCastRpc_Implementation()
+{
+	AttackState->IsAttacking = true;
+	AttackState->AttackSpell = AutoAttackSpell;
+
+	OnAttackStart.Broadcast(AttackState->AttackSpell);
+}
+
+void UAutoAttackController::RequestAutoAttack(UAimResultHolder* AimResultHolder)
 {
 	const auto ResultClass = AimResultHolder->GetClass();
 	
@@ -26,11 +70,18 @@ void UAutoAttackController::TriggerAutoAttack(UAimResultHolder* AimResultHolder)
 	if (ResultClass == UVectorAimResultHolder::StaticClass())
 	{
 		const auto VectorResult = Cast<UVectorAimResultHolder>(AimResultHolder);
-		TriggerAutoAttackServerRpc_Vector(VectorResult->Vector);
+		RequestAutoAttackServerRpc_Vector(VectorResult->Vector);
 	}
 }
 
-void UAutoAttackController::TriggerAutoAttackServerRpc_Vector_Implementation(const FVector Result)
+void UAutoAttackController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	AttackState = NewObject<UControllerAttackState>();
+}
+
+void UAutoAttackController::RequestAutoAttackServerRpc_Vector_Implementation(const FVector Result)
 {
 	const auto Holder = NewObject<UVectorAimResultHolder>();
 	Holder->Vector = Result;
@@ -39,44 +90,6 @@ void UAutoAttackController::TriggerAutoAttackServerRpc_Vector_Implementation(con
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
 	
 	SpellManager->RequestAttack(AutoAttackSpell, this, Holder);
-}
-
-void UAutoAttackController::OnAttackAnimEnded()
-{
-	if (!UKismetSystemLibrary::IsServer(this)) return;
-
-	if (!IsAttacking) return;
-	
-	StopAttack();
-}
-
-void UAutoAttackController::StartAttack(USpellDataAsset* Spell)
-{
-	if (!UKismetSystemLibrary::IsServer(this)) return;
-
-	CurrentAttackSpell = Spell;
-	OnCurrentAttackSpellChanged();
-}
-
-void UAutoAttackController::StopAttack()
-{
-	if (!UKismetSystemLibrary::IsServer(this)) return;
-
-	CurrentAttackSpell = nullptr;
-	OnCurrentAttackSpellChanged();
-}
-
-void UAutoAttackController::OnCurrentAttackSpellChanged()
-{
-	IsAttacking = IsValid(CurrentAttackSpell);
-	OnAttackStateChanged.Broadcast(CurrentAttackSpell, IsAttacking);
-}
-
-void UAutoAttackController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
-	DOREPLIFETIME(UAutoAttackController, CurrentAttackSpell);
 }
 
 
