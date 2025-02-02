@@ -67,6 +67,12 @@ void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAi
 		return;
 	}
 	
+	if (!IsValid(Caster))
+	{
+	    UE_LOG(LogTemp, Error, TEXT("Caster is not valid"));
+        return;
+	}
+	
 	const auto SpellClass = SpellData->Spell;
 	const auto Location = Caster->GetActorLocation();
 
