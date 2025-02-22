@@ -4,6 +4,8 @@
 #include "Player/AutoAttackController.h"
 
 #include "InSceneManagersRefs.h"
+#include "GameFramework/GameStateBase.h"
+#include "GameFramework/PlayerState.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "Spells/SpellDataAsset.h"
@@ -18,13 +20,18 @@ UAutoAttackController::UAutoAttackController()
 	SetIsReplicatedByDefault(true);
 }
 
-void UAutoAttackController::SendAttackResponse(UAimResultHolder* Result)
+void UAutoAttackController::SendAttackResponse(UAimResultHolder* Result, USpellDataAsset* Spell)
 {
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
 	AttackState->AimResult = Result;
 
-	AttackResponseMultiCastRpc();
+	AttackResponseMultiCastRpc(Spell);
+}
+
+void UAutoAttackController::SendAttackResponse(UAimResultHolder* Result)
+{
+	SendAttackResponse(Result, AutoAttackSpell);
 }
 
 void UAutoAttackController::SrvOnAnimationAttackSpellNotify()
@@ -40,13 +47,6 @@ void UAutoAttackController::SrvOnAnimationAttackSpellNotify()
 void UAutoAttackController::OnAnimationEndedNotify()
 {
 	AttackState->IsAttacking = false;
-	AttackState->AttackSpell = nullptr;
-	AttackState->AnimationCompletion = 0.0f;
-}
-
-void UAutoAttackController::UpdateAnimationCompletion(float Value)
-{
-	AttackState->AnimationCompletion = Value;
 }
 
 bool UAutoAttackController::IsAttacking() const
@@ -54,11 +54,16 @@ bool UAutoAttackController::IsAttacking() const
 	return AttackState->IsAttacking;
 }
 
-void UAutoAttackController::AttackResponseMultiCastRpc_Implementation()
+void UAutoAttackController::AttackResponseMultiCastRpc_Implementation(USpellDataAsset* Spell)
 {
 	AttackState->IsAttacking = true;
-	AttackState->AttackSpell = AutoAttackSpell;
+	AttackState->AttackSpell = Spell;
 
+	const auto StartTime = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+	
+	AttackState->AnimationStartTime = StartTime;
+	AttackState->AnimationEndTime = StartTime + AttackState->AttackSpell->AnimationMontage->GetSectionLength(AttackState->AttackSpell->ComboIndex);
+	
 	OnAttackStart.Broadcast(AttackState->AttackSpell);
 }
 
@@ -70,7 +75,9 @@ void UAutoAttackController::RequestAutoAttack(UAimResultHolder* AimResultHolder)
 	if (ResultClass == UVectorAimResultHolder::StaticClass())
 	{
 		const auto VectorResult = Cast<UVectorAimResultHolder>(AimResultHolder);
-		RequestAutoAttackServerRpc_Vector(VectorResult->Vector);
+
+		const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+		RequestAutoAttackServerRpc_Vector(VectorResult->Vector, Time);
 	}
 }
 
@@ -81,7 +88,7 @@ void UAutoAttackController::BeginPlay()
 	AttackState = NewObject<UControllerAttackState>();
 }
 
-void UAutoAttackController::RequestAutoAttackServerRpc_Vector_Implementation(const FVector Result)
+void UAutoAttackController::RequestAutoAttackServerRpc_Vector_Implementation(const FVector Result, double ClientTime)
 {
 	const auto Holder = NewObject<UVectorAimResultHolder>();
 	Holder->Vector = Result;
@@ -89,7 +96,7 @@ void UAutoAttackController::RequestAutoAttackServerRpc_Vector_Implementation(con
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
 	
-	SpellManager->RequestAttack(AutoAttackSpell, this, Holder);
+	SpellManager->RequestAttack(this, Holder, ClientTime);
 }
 
 

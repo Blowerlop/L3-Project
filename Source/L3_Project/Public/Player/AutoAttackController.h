@@ -29,7 +29,13 @@ public:
 	UAimResultHolder* AimResult{};
 
 	UPROPERTY(BlueprintReadOnly)
-	float AnimationCompletion{};
+	double AnimationStartTime{};
+
+	UPROPERTY(BlueprintReadOnly)
+	double AnimationEndTime{};
+
+	UPROPERTY(BlueprintReadOnly)
+	int ComboIndex{};
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable, Abstract )
@@ -47,19 +53,17 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnAttackStartDelegate OnAttackStart;
 	
+	void SendAttackResponse(UAimResultHolder* Result, USpellDataAsset* Spell);
 	void SendAttackResponse(UAimResultHolder* Result);
 	
 	UFUNCTION(NetMulticast, Reliable)
-	void AttackResponseMultiCastRpc();
+	void AttackResponseMultiCastRpc(USpellDataAsset* Spell);
 	
 	UFUNCTION(BlueprintCallable)
 	void SrvOnAnimationAttackSpellNotify();
 	
 	UFUNCTION(BlueprintCallable)
 	void OnAnimationEndedNotify();
-
-	UFUNCTION(BlueprintCallable)
-	void UpdateAnimationCompletion(float Value);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsAttacking() const;
@@ -77,5 +81,5 @@ private:
 	virtual void BeginPlay() override;
 	
 	UFUNCTION(Server, Reliable)
-	void RequestAutoAttackServerRpc_Vector(FVector Result);
+	void RequestAutoAttackServerRpc_Vector(FVector Result, double ClientTime);
 };

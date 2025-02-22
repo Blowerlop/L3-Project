@@ -29,8 +29,10 @@ public:
 	void RequestSpellCastFromController(int SpellIndex, USpellController* SpellController, UAimResultHolder* Result) const;
 
 	UFUNCTION(BlueprintCallable)
-	void RequestAttack(USpellDataAsset* AttackSpell, UAutoAttackController* AttackController, UAimResultHolder* Result) const;
+	void RequestAttack(UAutoAttackController* AttackController, UAimResultHolder* Result, double ClientTime) const;
 	
 	UFUNCTION(BlueprintCallable)
 	void TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result) const;
+
+	static bool IsInComboWindow(const USpellDataAsset* Spell, double ClientTime, double StartTime, double EndTime);
 };

@@ -4,6 +4,7 @@
 #include "Spells/SpellManager.h"
 
 #include "InSceneManagersRefs.h"
+#include "GameFramework/GameStateBase.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Player/AutoAttackController.h"
 #include "Spells/Spell.h"
@@ -59,7 +60,7 @@ void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellC
 	SpellController->StartGlobalCooldown();
 }
 
-void ASpellManager::RequestAttack(USpellDataAsset* AttackSpell, UAutoAttackController* AttackController,UAimResultHolder* Result) const
+void ASpellManager::RequestAttack(UAutoAttackController* AttackController, UAimResultHolder* Result, const double ClientTime) const
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -67,7 +68,22 @@ void ASpellManager::RequestAttack(USpellDataAsset* AttackSpell, UAutoAttackContr
 		return;
 	}
 
-	AttackController->SendAttackResponse(Result);
+	const auto AttackState = AttackController->AttackState;
+	const auto AttackSpell = AttackState->AttackSpell;
+	
+	if (IsInComboWindow(AttackSpell, ClientTime, AttackState->AnimationStartTime, AttackState->AnimationEndTime))
+	{
+		UE_LOG(LogTemp, Error, TEXT("In combo window %f %f"), ClientTime, GetWorld()->GetGameState()->GetServerWorldTimeSeconds());
+		
+		AttackController->SendAttackResponse(AttackState->AimResult, AttackSpell->NextComboSpell);
+	}
+	else
+	{
+		if (AttackController->IsAttacking()) return;
+
+		// No combo
+		AttackController->SendAttackResponse(Result);
+	}
 }
 
 void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result) const
@@ -95,5 +111,22 @@ void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAi
 
 	const auto SpellInstance = GetWorld()->SpawnActor<ASpell>(SpellClass, Location, FRotator::ZeroRotator, SpawnParams);
 	SpellInstance->Init(SpellData, Caster, Result);
+}
+
+bool ASpellManager::IsInComboWindow(const USpellDataAsset* Spell, const double ClientTime, const double StartTime, const double EndTime)
+{
+	if (!IsValid(Spell) || !Spell->bHasCombo) return false;
+	if (ClientTime >= EndTime || ClientTime <= StartTime) return false;
+	
+	const auto AnimationLength = Spell->AnimationMontage->GetSectionLength(Spell->ComboIndex);
+
+	const auto DiffWithClient = ClientTime - StartTime;
+
+	const auto Completion = DiffWithClient / AnimationLength;
+
+	if (Completion < Spell->ComboWindow.X || Completion > Spell->ComboWindow.Y)
+		return false;
+
+	return true;
 }
 
