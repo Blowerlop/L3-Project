@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{5215FE16-3319-4176-B87F-09B41F18E92E}" SchemaVersion="119">
 	<AudioObjects>
-		<WorkUnit Name="Default Work Unit" ID="{5215FE16-3319-4176-B87F-09B41F18E92E}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{5215FE16-3319-4176-B87F-09B41F18E92E}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Iprojectile" ID="{E9213F6D-4293-44CA-A653-B46BA2C7F4FA}" ShortID="548204257">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{C6A84F8A-4F01-4F8A-8144-D058BD32C776}"/>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="auto_attack_dist_temp" ID="{970510E9-5F20-4006-AA59-AF95296B7A99}">
+							<Language>SFX</Language>
+							<AudioFile>auto_attack_dist_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="434028665"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="auto_attack_dist_temp" ID="{970510E9-5F20-4006-AA59-AF95296B7A99}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
 	</AudioObjects>
 </WwiseDocument>

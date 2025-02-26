@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	3987506369	AttackDistTest			\Default Work Unit\AttackDistTest	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	434028665	Iprojectile	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Windows\SFX\auto_attack_dist_temp_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Iprojectile		42976
+

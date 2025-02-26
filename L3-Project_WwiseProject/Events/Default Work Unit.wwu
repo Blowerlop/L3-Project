@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" SchemaVersion="119">
 	<Events>
-		<WorkUnit Name="Default Work Unit" ID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="AttackDistTest" ID="{CD759F51-5E65-482F-8D8E-5541A2C00105}">
+					<ChildrenList>
+						<Action Name="" ID="{A0862622-2EA8-4CB9-B99E-E3015A4BC663}" ShortID="762225604">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Iprojectile" ID="{E9213F6D-4293-44CA-A653-B46BA2C7F4FA}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
 	</Events>
 </WwiseDocument>

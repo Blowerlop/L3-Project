@@ -1,0 +1,47 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Mac",
+  "BasePlatform": "Mac",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "150",
+  "SoundBanks": [
+   {
+    "Id": "3161908922",
+    "Type": "User",
+    "GUID": "{629FAB7B-C345-4463-854D-D8C6F1A181C2}",
+    "Language": "SFX",
+    "Hash": "{BE6B8E7E-2F83-8DCC-4A63-F2B73895496B}",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main",
+    "ShortName": "Main",
+    "Path": "Main.bnk",
+    "Media": [
+     {
+      "Id": "434028665",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "auto_attack_dist_temp.wav",
+      "CachePath": "SFX/auto_attack_dist_temp_818F3B66.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "3987506369",
+      "Name": "AttackDistTest",
+      "ObjectPath": "\\Events\\Default Work Unit\\AttackDistTest",
+      "GUID": "{CD759F51-5E65-482F-8D8E-5541A2C00105}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.48898414",
+      "DurationMax": "0.48898414",
+      "MediaRefs": [
+       {
+        "Id": "434028665"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{52FD4D45-CAF9-8464-9BFA-C678D6DD124C}"
+ }
+}
