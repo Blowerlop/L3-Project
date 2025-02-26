@@ -31,6 +31,12 @@ public:
 	float Cooldown;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool CanMove;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool CanRotate;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UAnimSequence* Animation;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
