@@ -35,9 +35,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool CanRotate;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UAnimSequence* Animation;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UAnimMontage* AnimationMontage;

@@ -52,8 +52,6 @@ void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellC
 	
 	if (SpellIndex == CastState->SpellIndex && IsInComboWindow(Spell, ClientTime, CastState->AnimationStartTime, CastState->AnimationEndTime))
 	{
-		UE_LOG(LogTemp, Error, TEXT("In combo window %f %f"), ClientTime, GetWorld()->GetGameState()->GetServerWorldTimeSeconds());
-		
 		SpellController->SendSpellCastResponse(SpellIndex, CastState->AimResult, Spell->NextComboSpell);
 	}
 	else
@@ -80,8 +78,6 @@ void ASpellManager::RequestAttack(UAutoAttackController* AttackController, UAimR
 	
 	if (IsInComboWindow(AttackSpell, ClientTime, AttackState->AnimationStartTime, AttackState->AnimationEndTime))
 	{
-		UE_LOG(LogTemp, Error, TEXT("In combo window %f %f"), ClientTime, GetWorld()->GetGameState()->GetServerWorldTimeSeconds());
-		
 		AttackController->SendAttackResponse(AttackState->AimResult, AttackSpell->NextComboSpell);
 	}
 	else
