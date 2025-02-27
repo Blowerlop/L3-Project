@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InSceneManagersRefs.h"
 #include "Components/ArrowComponent.h"
+#include "GameFramework/GameStateBase.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "Spells/SpellAimer.h"
@@ -20,21 +21,44 @@ USpellController::USpellController()
 	SetIsReplicatedByDefault(true);
 }
 
-void USpellController::SendSpellCastResponse(const int SpellIndex, UAimResultHolder* Result)
+void USpellController::SendSpellCastResponse(const int SpellIndex, UAimResultHolder* Result, USpellDataAsset* NextSpell)
 {
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
 	CastState->AimResult = Result;
 
-	SpellCastResponseMultiCastRpc(SpellIndex);
+	if (!NextSpell->bHasCombo)
+	{
+		StartCooldown(SpellIndex);
+	}
+
+	SpellCastResponseMultiCastRpc(SpellIndex, NextSpell);
 }
 
-void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int SpellIndex)
+void USpellController::SendSpellCastResponse(int SpellIndex, UAimResultHolder* Result)
+{
+	const auto Spell = GetSpellData(SpellIndex);
+	if (!IsValid(Spell))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Spell at index %d is not valid"), SpellIndex);
+		return;
+	}
+	
+	SendSpellCastResponse(SpellIndex, Result, Spell);
+}
+
+void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int SpellIndex, USpellDataAsset* Spell)
 {
 	CastState->SpellIndex = SpellIndex;
 	CastState->IsCasting = true;
-	CastState->Spell = GetSpellData(SpellIndex);
-
+	
+    CastState->Spell = Spell;
+    
+    const auto StartTime = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+    	
+    CastState->AnimationStartTime = StartTime;
+    CastState->AnimationEndTime = StartTime + CastState->Spell->AnimationMontage->GetSectionLength(CastState->Spell->ComboIndex);
+    
 	OnCastStart.Broadcast(CastState->Spell, CastState->SpellIndex);
 }
 
@@ -46,31 +70,40 @@ void USpellController::SrvOnAnimationCastSpellNotify()
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
 	
 	SpellManager->TryCastSpell(CastState->Spell, GetOwner(), CastState->AimResult);
-	
-	StartCooldown(CastState->SpellIndex);
 }
 
 void USpellController::OnAnimationEndedNotify()
 {
-	CastState->SpellIndex = -1;
-	CastState->IsCasting = false;
-	CastState->Spell = nullptr;
-	CastState->AnimationCompletion = 0.0f;
-}
+	if (!UKismetSystemLibrary::IsServer(this)) return;
 
-void USpellController::UpdateAnimationCompletion(const float Value)
-{
-	CastState->AnimationCompletion = Value;
+	if (CastState->Spell->bHasCombo)
+	{
+		StartCooldown(CastState->SpellIndex);
+	}
+	
+	CastState->IsCasting = false;
 }
 
 bool USpellController::IsCasting() const
 {
-if(!IsValid(CastState))
-{
-UE_LOG(LogTemp, Error, TEXT("CastState is not valid"));
-	return true;
-}
+	if (!IsValid(CastState))
+	{
+		UE_LOG(LogTemp, Error, TEXT("CastState is not valid"));
+			return true;
+	}
+	
 	return CastState->IsCasting;
+}
+
+bool USpellController::CanCombo(const int SpellIndex) const
+{
+	if (!IsValid(CastState))
+	{
+		UE_LOG(LogTemp, Error, TEXT("CastState is not valid"));
+		return false;
+	}
+
+	return CastState->Spell->bHasCombo && SpellIndex == CastState->SpellIndex;
 }
 
 USpellDataAsset* USpellController::GetSpellData(const int Index) const
@@ -232,7 +265,7 @@ void USpellController::OnSpellInputStarted(const int Index)
 	ASpellAimer* Aimer = nullptr;
 	if (!TryGetSpellAimer(Index, Aimer)) return;
 	
-	if (!CanStartAiming()) return;
+	if (!CanStartAiming(Index)) return;
 
 	Aimer->Start();
 }
@@ -317,9 +350,12 @@ bool USpellController::IsInCooldown(const int Index) const
 	return RepCooldowns[Index] > 0;
 }
 
-bool USpellController::CanStartAiming() const
+bool USpellController::CanStartAiming(const int SpellIndex) const
 {
-	if (IsCasting()) return false;
+	if (IsCasting())
+	{
+		if (!CanCombo(SpellIndex)) return false;
+	}
 	
 	return !SpellAimers.ContainsByPredicate([](const ASpellAimer* Aimer) { return Aimer && Aimer->bIsAiming; });
 }
@@ -392,8 +428,9 @@ void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(c
 
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
-	
-	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder);
+
+	const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, Time);
 }
 
 void USpellController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

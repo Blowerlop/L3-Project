@@ -35,7 +35,13 @@ public:
 	UAimResultHolder* AimResult{};
 
 	UPROPERTY(BlueprintReadOnly)
-	float AnimationCompletion{};
+	double AnimationStartTime{};
+
+	UPROPERTY(BlueprintReadOnly)
+	double AnimationEndTime{};
+
+	UPROPERTY(BlueprintReadOnly)
+	int ComboIndex{};
 };
 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
@@ -81,10 +87,11 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
+	void SendSpellCastResponse(int SpellIndex, UAimResultHolder* Result, USpellDataAsset* NextSpell);
 	void SendSpellCastResponse(int SpellIndex, UAimResultHolder* Result);
 	
 	UFUNCTION(NetMulticast, Reliable)
-	void SpellCastResponseMultiCastRpc(int SpellIndex);
+	void SpellCastResponseMultiCastRpc(int SpellIndex, USpellDataAsset* Spell);
 	
 	UFUNCTION(BlueprintCallable)
 	void SrvOnAnimationCastSpellNotify();
@@ -92,11 +99,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnAnimationEndedNotify();
 
-	UFUNCTION(BlueprintCallable)
-	void UpdateAnimationCompletion(float Value);
-	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsCasting() const;
+
+	bool CanCombo(const int SpellIndex) const;
 
 protected:
 	UPROPERTY(Blueprintable, EditAnywhere)
@@ -167,7 +173,7 @@ private:
 	bool IsInCooldown(int Index) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	bool CanStartAiming() const;
+	bool CanStartAiming(int SpellIndex) const;
 
 	bool TryGetSpellAimer(int Index, ASpellAimer*& OutAimer) const;
 

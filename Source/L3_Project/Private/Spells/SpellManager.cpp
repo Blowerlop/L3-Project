@@ -38,7 +38,8 @@ void ASpellManager::Destroyed()
 	InSceneManagers->UnregisterManager(StaticClass());
 }
 
-void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellController* SpellController, UAimResultHolder* Result) const
+void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellController* SpellController,
+	UAimResultHolder* Result, double ClientTime) const
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -46,17 +47,23 @@ void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellC
 		return;
 	}
 
-	if (SpellController->IsCasting())
+	const auto CastState = SpellController->CastState;
+	const auto Spell = CastState->Spell;
+	
+	if (SpellIndex == CastState->SpellIndex && IsInComboWindow(Spell, ClientTime, CastState->AnimationStartTime, CastState->AnimationEndTime))
 	{
-		UE_LOG(LogTemp, Error, TEXT("Can't cast spell while casting!"));
-		return;
+		UE_LOG(LogTemp, Error, TEXT("In combo window %f %f"), ClientTime, GetWorld()->GetGameState()->GetServerWorldTimeSeconds());
+		
+		SpellController->SendSpellCastResponse(SpellIndex, CastState->AimResult, Spell->NextComboSpell);
+	}
+	else
+	{
+		if (SpellController->IsCasting()) return;
+
+		// No combo
+		SpellController->SendSpellCastResponse(SpellIndex, Result);
 	}
 	
-	SpellController->SendSpellCastResponse(SpellIndex, Result);
-	
-	/*TryCastSpell(SpellData, SpellController->GetOwner(), Result);
-
-	SpellController->StartCooldown(SpellIndex);*/
 	SpellController->StartGlobalCooldown();
 }
 

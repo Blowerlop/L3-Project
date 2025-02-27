@@ -26,7 +26,7 @@ public:
 	virtual void Destroyed() override;
 	
 	UFUNCTION(BlueprintCallable)
-	void RequestSpellCastFromController(int SpellIndex, USpellController* SpellController, UAimResultHolder* Result) const;
+	void RequestSpellCastFromController(int SpellIndex, USpellController* SpellController, UAimResultHolder* Result, double ClientTime) const;
 
 	UFUNCTION(BlueprintCallable)
 	void RequestAttack(UAutoAttackController* AttackController, UAimResultHolder* Result, double ClientTime) const;
