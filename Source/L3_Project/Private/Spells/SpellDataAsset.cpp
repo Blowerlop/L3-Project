@@ -3,6 +3,11 @@
 #include "Spells/SpellAimer.h"
 #include "Spells/SpellAimerParams.h"
 
+FName USpellDataAsset::GetMontageSectionName() const
+{
+	return FName(*FString::Printf(TEXT("Combo_%d"), ComboIndex));
+}
+
 void USpellDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);

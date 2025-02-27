@@ -6,12 +6,43 @@
 #include "Components/ActorComponent.h"
 #include "SpellController.generated.h"
 
+class UAimResultHolder;
 struct FInputActionValue;
 class UInputAction;
 class ASpellAimer;
 class USpellDataAsset;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpellsChanged, USpellController*, SpellController);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCastStartDelegate, USpellDataAsset*, Spell, int, SpellIndex);
+
+UCLASS(Blueprintable)
+class USpellControllerCastState : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadOnly)
+	bool IsCasting{};
+
+	UPROPERTY(BlueprintReadOnly)
+	int SpellIndex{};
+
+	UPROPERTY(BlueprintReadOnly)
+	USpellDataAsset* Spell{};
+
+	// Valid only on server side
+	UPROPERTY(BlueprintReadOnly)
+	UAimResultHolder* AimResult{};
+
+	UPROPERTY(BlueprintReadOnly)
+	double AnimationStartTime{};
+
+	UPROPERTY(BlueprintReadOnly)
+	double AnimationEndTime{};
+
+	UPROPERTY(BlueprintReadOnly)
+	int ComboIndex{};
+};
 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class L3_PROJECT_API USpellController : public UActorComponent
@@ -22,6 +53,10 @@ public:
 	static constexpr int Max_Spells = 4;
 	
 	USpellController();
+	
+
+	UPROPERTY(BlueprintReadOnly)
+	USpellControllerCastState* CastState;
 	
 	UPROPERTY(EditAnywhere)
 	TArray<UInputAction*> SpellInputs;
@@ -34,6 +69,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnSpellsChanged OnSpellDatasChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnCastStartDelegate OnCastStart;
 	
 	UFUNCTION(BlueprintCallable)
 	USpellDataAsset* GetSpellData(int Index) const;
@@ -49,6 +87,23 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
+	void SendSpellCastResponse(int SpellIndex, UAimResultHolder* Result, USpellDataAsset* NextSpell);
+	void SendSpellCastResponse(int SpellIndex, UAimResultHolder* Result);
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void SpellCastResponseMultiCastRpc(int SpellIndex, USpellDataAsset* Spell);
+	
+	UFUNCTION(BlueprintCallable)
+	void SrvOnAnimationCastSpellNotify();
+	
+	UFUNCTION(BlueprintCallable)
+	void OnAnimationEndedNotify();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool IsCasting() const;
+
+	bool CanCombo(const int SpellIndex) const;
+
 protected:
 	UPROPERTY(Blueprintable, EditAnywhere)
 	float GlobalCooldownValue = 0.5f;
@@ -118,7 +173,7 @@ private:
 	bool IsInCooldown(int Index) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	bool CanStartAiming() const;
+	bool CanStartAiming(int SpellIndex) const;
 
 	bool TryGetSpellAimer(int Index, ASpellAimer*& OutAimer) const;
 
@@ -127,9 +182,10 @@ private:
 #pragma region RPCs
 
 	UFUNCTION(BlueprintCallable)
-	void TryCastSpellGenericResultToServer(int SpellIndex, AActor* Caster, UAimResultHolder* Result) const;
+	void RequestSpellCastGenericResultToServer(int SpellIndex, UAimResultHolder* Result);
 	
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void TryCastSpellFromControllerRpc_Vector(int SpellIndex, AActor* Caster, FVector Result) const;
+	void RequestSpellCastFromControllerRpc_Vector(int SpellIndex, USpellController* Caster, FVector Result);
+
 #pragma endregion 
 };

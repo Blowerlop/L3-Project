@@ -30,6 +30,31 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float Cooldown;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool CanMove;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool CanRotate;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UAnimMontage* AnimationMontage;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int ComboIndex;
+	
+	// Combo
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bHasCombo;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector2f ComboWindow;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	USpellDataAsset* NextComboSpell;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FName GetMontageSectionName() const;
+	
 #if WITH_EDITOR
 protected:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
