@@ -1,4 +1,5 @@
 #pragma once
+#include "EffectInstance.generated.h"
 
 class UEffectable;
 class UEffectDataAsset;

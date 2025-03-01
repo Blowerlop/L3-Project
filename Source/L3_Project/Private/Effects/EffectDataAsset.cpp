@@ -22,7 +22,21 @@ bool NeedDuration(const EEffectType EffectType)
 
 bool NeedValue(const EEffectType EffectType)
 {
-	return true;
+	switch (EffectType)
+	{
+	case EEffectType::DamageResistance:
+	case EEffectType::DamageWeakness:
+	case EEffectType::HealBonus:
+	case EEffectType::Slow:
+	case EEffectType::DamageOverTime:
+	case EEffectType::HealOverTime:
+		return true;
+	case EEffectType::Stun:
+	case EEffectType::Root:
+		return false;
+	}
+
+	return false;
 }
 
 bool NeedRate(const EEffectType EffectType)
@@ -40,7 +54,7 @@ bool NeedRate(const EEffectType EffectType)
 	case EEffectType::HealOverTime:
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -65,10 +79,10 @@ void UEffectDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyCha
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
 	auto Types = GetValueTypes(Type, bUseDuration);
-	
+
 	TArray<EEffectValueType> Keys{};
 	Values.GetKeys(Keys);
-	
+
 	for (auto& ValueType : Keys)
 	{
 		if (!Types.Contains(ValueType))
@@ -85,6 +99,3 @@ void UEffectDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyCha
 		Values.Add(ValueType, 0.f);
 	}
 }
-
-
-
