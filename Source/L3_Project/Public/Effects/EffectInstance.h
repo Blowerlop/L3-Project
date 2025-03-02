@@ -4,7 +4,7 @@
 class UEffectable;
 class UEffectDataAsset;
 
-UCLASS(Blueprintable)
+UCLASS(BlueprintType)
 class UEffectInstance : public UObject
 {
 	GENERATED_BODY()
@@ -12,11 +12,8 @@ class UEffectInstance : public UObject
 public:
 	void Init(UEffectDataAsset* EffectAsset, AActor* EffectApplier, UEffectable* EffectParent);
 
-	void Stop();
-
 	virtual void BeginDestroy() override;
 	
-protected:
 	UPROPERTY(BlueprintReadOnly)
 	UEffectDataAsset* Data;
 
@@ -25,12 +22,6 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly)
 	AActor* Applier;
-	
-	UFUNCTION(BlueprintImplementableEvent)
-	void Init_Internal();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void Stop_Internal();
 	
 private:
 	FTimerHandle LifetimeTimerHandle{};

@@ -1,7 +1,7 @@
 #pragma once
 #include "EffectResolverParams.generated.h"
 
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, Abstract)
 class UEffectResolverParams : public UObject
 {
 	GENERATED_BODY()

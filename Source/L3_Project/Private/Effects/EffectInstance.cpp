@@ -11,19 +11,12 @@ void UEffectInstance::Init(UEffectDataAsset* EffectAsset, AActor* EffectApplier,
 	Data = EffectAsset;
 	Applier = EffectApplier;
 	Parent = EffectParent;
-
-	Init_Internal();
-
+	
 	if (Data->bUseDuration)
 	{
 		GetWorld()->GetTimerManager().SetTimer(LifetimeTimerHandle, this, &UEffectInstance::OnTimerEnded,
 			Data->GetValue(EEffectValueType::Duration));
 	}
-}
-
-void UEffectInstance::Stop()
-{
-	Stop_Internal();
 }
 
 void UEffectInstance::BeginDestroy()
