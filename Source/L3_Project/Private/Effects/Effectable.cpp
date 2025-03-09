@@ -2,6 +2,7 @@
 
 #include "Effects/EffectDataAsset.h"
 #include "Effects/EffectInstance.h"
+#include "Effects/EffectStackingBehaviour.h"
 #include "Effects/EffectSystemConfiguration.h"
 
 void UEffectable::AddEffect(UEffectDataAsset* EffectData, AActor* Applier)
@@ -34,43 +35,47 @@ UEffectInstanceContainer* UEffectable::GetEffectContainer(const EEffectType Type
 	return EffectsByType[Type];
 }
 
+void CountEffects(TMap<UEffectDataAsset*, int>& EffectCounts, UEffectInstanceContainer* Container)
+{
+	const auto Num = Container->GetNumInstances();
+
+	for(int i = 0 ; i < Num; i++)
+	{
+		const auto Instance = Container->GetInstanceUnsafe(i);
+
+		if (!EffectCounts.Contains(Instance->Data))
+		{
+			EffectCounts.Add(Instance->Data, 1);
+		}
+		else
+		{
+			EffectCounts[Instance->Data]++;
+		}
+	}
+}
+
+
 void UEffectable::Refresh()
 {
 	TMap<UEffectDataAsset*, int> EffectCounts{};
+	TMap<UEffectDataAsset*, float> Values{};
 	
 	auto Types = TArray<EEffectType>();
 	EffectsByType.GetKeys(Types);
 
 	for(const auto& Type : Types)
 	{
-		EffectCounts.Empty();
+		Values.Empty();
 
-		const auto Container = EffectsByType[Type];
-		const auto Num = Container->GetNumInstances();
-
-		for(int i = 0 ; i < Num; i++)
+		// Effects like stun or root don't have value. Don't need to do all this
+		if (UEffectSystemConfiguration::NeedValue(Type))
 		{
-			const auto Instance = Container->GetInstanceUnsafe(i);
+			EffectCounts.Empty();
 
-			if (!EffectCounts.Contains(Instance->Data))
-			{
-				EffectCounts.Add(Instance->Data, 1);
-			}
-			else
-			{
-				EffectCounts[Instance->Data]++;
-			}
-		}
-
-		TMap<UEffectDataAsset*, float> Values{};
-		
-		for(const auto& Pair : EffectCounts)
-		{
-			auto Effect = Pair.Key;
-			const auto Count = Pair.Value;
-
-			auto Value = HandleStacking(Effect, Count);
-			Values.Add(Effect, Value);
+			const auto Container = EffectsByType[Type];
+			CountEffects(EffectCounts, Container);
+			
+			GetValuesForEffect(Values, EffectCounts);
 		}
 
 		const auto Resolver = GetResolver(Type);
@@ -78,11 +83,16 @@ void UEffectable::Refresh()
 	}
 }
 
-float UEffectable::HandleStacking(UEffectDataAsset* Effect, int Count)
+void UEffectable::GetValuesForEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts)
 {
-	// Do somtehing
-	
-	return 0.0f;
+	for(const auto& Pair : EffectCounts)
+	{
+		auto Effect = Pair.Key;
+		const auto Count = Pair.Value;
+
+		auto Value = Effect->StackingBehaviour->Stack(Effect, Count);
+		ValuesBuffer.Add(Effect, Value);
+	}
 }
 
 UEffectResolver* UEffectable::GetResolver(const EEffectType Type)

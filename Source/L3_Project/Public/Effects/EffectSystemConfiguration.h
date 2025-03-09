@@ -28,6 +28,10 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<TSubclassOf<UEffectResolver>, TSubclassOf<UEffectResolverParams>> ParamsByResolver;
+
+	static bool NeedDuration(EEffectType Type);
+	static bool NeedValue(EEffectType Type);
+	static bool NeedRate(EEffectType Type);
 	
 #if WITH_EDITOR
 protected:

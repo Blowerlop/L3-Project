@@ -1,6 +1,8 @@
 #pragma once
 #include "EffectDataAsset.generated.h"
 
+class UEffectStackingBehaviour;
+enum class EEffectStackingType : uint8;
 enum class EEffectValueType : uint8;
 enum class EEffectType : uint8;
 
@@ -10,17 +12,26 @@ class L3_PROJECT_API UEffectDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	EEffectType Type;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	bool bUseDuration;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, Instanced, EditAnywhere, meta = (EditCondition = "bNeedStacking", EditConditionHides))
+	UEffectStackingBehaviour* StackingBehaviour;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EEffectValueType, float> Values;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetValue(EEffectValueType ValueType) const;
+
+#if WITH_EDITORONLY_DATA
+private:
+	UPROPERTY()
+	bool bNeedStacking;
+#endif
 	
 #if WITH_EDITOR
 protected:

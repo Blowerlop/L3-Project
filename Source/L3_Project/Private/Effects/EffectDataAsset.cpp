@@ -1,70 +1,16 @@
 #include "Effects/EffectDataAsset.h"
 
+#include "Effects/EffectStackingBehaviour.h"
+#include "Effects/EffectSystemConfiguration.h"
 #include "Effects/EffectType.h"
-
-bool NeedDuration(const EEffectType EffectType)
-{
-	switch (EffectType)
-	{
-	case EEffectType::DamageResistance:
-	case EEffectType::DamageWeakness:
-	case EEffectType::HealBonus:
-	case EEffectType::Stun:
-	case EEffectType::Slow:
-	case EEffectType::Root:
-	case EEffectType::DamageOverTime:
-	case EEffectType::HealOverTime:
-		return true;
-	}
-
-	return false;
-}
-
-bool NeedValue(const EEffectType EffectType)
-{
-	switch (EffectType)
-	{
-	case EEffectType::DamageResistance:
-	case EEffectType::DamageWeakness:
-	case EEffectType::HealBonus:
-	case EEffectType::Slow:
-	case EEffectType::DamageOverTime:
-	case EEffectType::HealOverTime:
-		return true;
-	case EEffectType::Stun:
-	case EEffectType::Root:
-		return false;
-	}
-
-	return false;
-}
-
-bool NeedRate(const EEffectType EffectType)
-{
-	switch (EffectType)
-	{
-	case EEffectType::DamageResistance:
-	case EEffectType::DamageWeakness:
-	case EEffectType::HealBonus:
-	case EEffectType::Stun:
-	case EEffectType::Slow:
-	case EEffectType::Root:
-		return false;
-	case EEffectType::DamageOverTime:
-	case EEffectType::HealOverTime:
-		return true;
-	}
-
-	return false;
-}
 
 TArray<EEffectValueType> GetValueTypes(const EEffectType EffectType, const bool bUseDuration)
 {
 	TArray<EEffectValueType> Array = {};
 
-	if (NeedValue(EffectType)) Array.Add(EEffectValueType::Value);
-	if (NeedRate(EffectType)) Array.Add(EEffectValueType::Rate);
-	if (NeedDuration(EffectType) && bUseDuration) Array.Add(EEffectValueType::Duration);
+	if (UEffectSystemConfiguration::NeedValue(EffectType)) Array.Add(EEffectValueType::Value);
+	if (UEffectSystemConfiguration::NeedRate(EffectType)) Array.Add(EEffectValueType::Rate);
+	if (UEffectSystemConfiguration::NeedDuration(EffectType) && bUseDuration) Array.Add(EEffectValueType::Duration);
 
 	return Array;
 }
@@ -97,5 +43,12 @@ void UEffectDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyCha
 	for (auto& ValueType : Types)
 	{
 		Values.Add(ValueType, 0.f);
+	}
+
+	bNeedStacking = UEffectSystemConfiguration::NeedValue(Type);
+
+	if (!bNeedStacking && StackingBehaviour) 
+	{
+		StackingBehaviour = nullptr;
 	}
 }

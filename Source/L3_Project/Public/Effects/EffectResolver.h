@@ -14,5 +14,5 @@ public:
 	void Init(UEffectResolverParams* Params);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void Resolve(TMap<UEffectDataAsset*, float> Input);
+	void Resolve(TMap<UEffectDataAsset*, float>& Input);
 };

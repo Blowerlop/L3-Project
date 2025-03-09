@@ -74,7 +74,7 @@ private:
 
 	void Refresh();
 
-	float HandleStacking(UEffectDataAsset* Effect, int Count);
+	void GetValuesForEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts);
 
 	UEffectResolver* GetResolver(EEffectType Type);
 };
