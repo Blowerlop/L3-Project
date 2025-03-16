@@ -13,6 +13,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Init(UEffectResolverParams* Params);
 
+	// Need UPARAM(ref) to make sure Input is an input.
 	UFUNCTION(BlueprintImplementableEvent)
-	void Resolve(TMap<UEffectDataAsset*, float>& Input);
+	void Resolve(UPARAM(ref) TArray<float>& Input);
 };

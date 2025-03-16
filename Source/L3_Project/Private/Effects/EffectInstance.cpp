@@ -14,7 +14,7 @@ void UEffectInstance::Init(UEffectDataAsset* EffectAsset, AActor* EffectApplier,
 	
 	if (Data->bUseDuration)
 	{
-		GetWorld()->GetTimerManager().SetTimer(LifetimeTimerHandle, this, &UEffectInstance::OnTimerEnded,
+		Parent->GetWorld()->GetTimerManager().SetTimer(LifetimeTimerHandle, this, &UEffectInstance::OnTimerEnded,
 			Data->GetValue(EEffectValueType::Duration));
 	}
 }

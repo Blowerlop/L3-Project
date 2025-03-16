@@ -74,7 +74,7 @@ private:
 
 	void Refresh();
 
-	void GetValuesForEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts);
+	void GetValuesForEffect(TArray<float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts);
 
 	UEffectResolver* GetResolver(EEffectType Type);
 };
