@@ -54,7 +54,6 @@ void CountEffects(TMap<UEffectDataAsset*, int>& EffectCounts, UEffectInstanceCon
 	}
 }
 
-
 void UEffectable::Refresh()
 {
 	TMap<UEffectDataAsset*, int> EffectCounts{};
@@ -90,7 +89,7 @@ void UEffectable::GetValuesForEffect(TArray<float>& ValuesBuffer, TMap<UEffectDa
 {
 	for(const auto& Pair : EffectCounts)
 	{
-		auto Effect = Pair.Key;
+		const auto Effect = Pair.Key;
 		const auto Count = Pair.Value;
 
 		auto Value = Effect->StackingBehaviour->Stack(Effect, Count);
@@ -111,7 +110,7 @@ UEffectResolver* UEffectable::GetResolver(const EEffectType Type)
 		const auto [ResolverClass, Params] = Configuration->ResolversByType[Type];
 		
 		const auto Resolver = NewObject<UEffectResolver>(this, *ResolverClass);
-		Resolver->Init(Params);
+		Resolver->Init(this, Params);
 		
 		Resolvers.Add(Type, Resolver);
 		return Resolver;

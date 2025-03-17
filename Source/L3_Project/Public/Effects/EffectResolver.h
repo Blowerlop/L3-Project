@@ -11,7 +11,7 @@ class UEffectResolver : public UObject
 	
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-	void Init(UEffectResolverParams* Params);
+	void Init(UEffectable* Parent, UEffectResolverParams* Params);
 
 	// Need UPARAM(ref) to make sure Input is an input.
 	UFUNCTION(BlueprintImplementableEvent)
