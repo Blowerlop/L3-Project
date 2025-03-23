@@ -1,33 +1,41 @@
 #pragma once
+#include "StatsContainer.generated.h"
 
 USTRUCT(BlueprintType)
 struct FStat
 {
 	GENERATED_BODY()
 	
-	FStat() : Value(0.0f), MaxValue(1.0f), BaseValue(0.0f) {}
-	FStat(const float InValue, const float MaxValue) : Value(InValue), MaxValue(MaxValue), BaseValue(InValue) {}
-	
-	UPROPERTY(BlueprintReadOnly)
+	FStat() : Value(0.0f), MaxValue(1.0f), BaseValue(0.0f), ModFlat(0), ModCoef(1) {}
+
+	FStat(const float InValue, const float MaxValue)
+	: Value(InValue), MaxValue(MaxValue), BaseValue(InValue), ModFlat(0), ModCoef(1) {}
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float Value;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float MaxValue;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float BaseValue;
+
+	UPROPERTY(BlueprintReadOnly)
+	float ModFlat;
+
+	UPROPERTY(BlueprintReadOnly)
+	float ModCoef;
 };
 
 UENUM(BlueprintType)
 enum class EGameStatType : uint8
 {
-	Health,
 	Attack,
 	Defense,
 	MoveSpeed,
 };
 
-UCLASS(Blueprintable)
+UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class UStatsContainer : public UActorComponent
 {
 	GENERATED_BODY()
@@ -35,65 +43,36 @@ class UStatsContainer : public UActorComponent
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EGameStatType, FStat> Stats;
+	
+	UFUNCTION(BlueprintPure, BlueprintCallable)
+	float GetValue(const EGameStatType Type) const;
 
 	UFUNCTION(BlueprintPure, BlueprintCallable)
-	float GetValue(const EGameStatType Type) const
-	{
-		if (const FStat* Stat = Stats.Find(Type))
-		{
-			return Stat->Value;
-		}
-		
-		return 1.0f;
-	}
-	
-	UFUNCTION(BlueprintPure, BlueprintCallable)
-	float GetMaxValue(const EGameStatType Type)
-	{
-		if (const FStat* Stat = Stats.Find(Type))
-		{
-			return Stat->MaxValue;
-		}
-		
-		return 1.0f;
-	}
-	
-	UFUNCTION(BlueprintPure, BlueprintCallable)
-	float GetBaseValue(const EGameStatType Type)
-	{
-		if (const FStat* Stat = Stats.Find(Type))
-		{
-			return Stat->BaseValue;
-		}
-		
-		return 1.0f;
-	}
-	
-	UFUNCTION(BlueprintPure, BlueprintCallable)
-	float Add(const EGameStatType Type, const float Value)
-	{
-		if (FStat* Stat = Stats.Find(Type))
-		{
-			const auto CurrentValue = Stat->Value;
-			Stat->Value += Value;
-			
-			return Stat->Value - CurrentValue;
-		}
-		
-		return 0.0f;
-	}
+	float GetMaxValue(const EGameStatType Type);
 
 	UFUNCTION(BlueprintPure, BlueprintCallable)
-	float Subtract(const EGameStatType Type, const float Value)
-	{
-		if (FStat* Stat = Stats.Find(Type))
-		{
-			const auto CurrentValue = Stat->Value;
-			Stat->Value -= Value;
-			
-			return CurrentValue - Stat->Value;
-		}
-		
-		return 0.0f;
-	}
+	float GetBaseValue(const EGameStatType Type);
+	
+	UFUNCTION(BlueprintCallable)
+	void AddModFlat(const EGameStatType Type, const float ModFlat);
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveModFlat(const EGameStatType Type, const float ModFlat);
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveModFlatSilent(EGameStatType Type, float ModFlat);
+
+	UFUNCTION(BlueprintCallable)
+	void AddModCoef(const EGameStatType Type, const float ModCoef);
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveModCoef(const EGameStatType Type, const float ModCoef);
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveModCoefSilent(const EGameStatType Type, const float ModCoef);
+	
+private:
+	static void UpdateCurrentValue(const EGameStatType Type, FStat* Stat);
+
+	void UpdateCurrentValue(const EGameStatType Type);
 };

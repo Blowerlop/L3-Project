@@ -7,11 +7,11 @@ bool UEffectSystemConfiguration::NeedDuration(const EEffectType Type)
 {
 	switch (Type)
 	{
-	case EEffectType::DamageResistance:
-	case EEffectType::DamageWeakness:
+	case EEffectType::Attack:
+	case EEffectType::Defense:
+	case EEffectType::MoveSpeed:
 	case EEffectType::HealBonus:
 	case EEffectType::Stun:
-	case EEffectType::Slow:
 	case EEffectType::Root:
 	case EEffectType::DamageOverTime:
 	case EEffectType::HealOverTime:
@@ -25,10 +25,10 @@ bool UEffectSystemConfiguration::NeedValue(const EEffectType Type)
 {
 	switch (Type)
 	{
-	case EEffectType::DamageResistance:
-	case EEffectType::DamageWeakness:
+	case EEffectType::Attack:
+	case EEffectType::Defense:
+	case EEffectType::MoveSpeed:
 	case EEffectType::HealBonus:
-	case EEffectType::Slow:
 	case EEffectType::DamageOverTime:
 	case EEffectType::HealOverTime:
 		return true;
@@ -44,11 +44,11 @@ bool UEffectSystemConfiguration::NeedRate(const EEffectType Type)
 {
 	switch (Type)
 	{
-	case EEffectType::DamageResistance:
-	case EEffectType::DamageWeakness:
+	case EEffectType::Attack:
+	case EEffectType::Defense:
+	case EEffectType::MoveSpeed:
 	case EEffectType::HealBonus:
 	case EEffectType::Stun:
-	case EEffectType::Slow:
 	case EEffectType::Root:
 		return false;
 	case EEffectType::DamageOverTime:

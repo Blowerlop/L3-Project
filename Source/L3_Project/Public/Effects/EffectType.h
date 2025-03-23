@@ -3,11 +3,11 @@
 UENUM(Blueprintable)
 enum class EEffectType : uint8
 {
-	DamageResistance,
-	DamageWeakness,
+	Attack,
+	Defense,
+	MoveSpeed,
 	HealBonus,
 	Stun,
-	Slow,
 	Root,
 	DamageOverTime,
 	HealOverTime
