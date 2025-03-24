@@ -67,14 +67,17 @@ public:
 	TMap<EEffectType, UEffectInstanceContainer*> EffectsByType;
 
 	UPROPERTY(BlueprintReadOnly)
-	TMap<EEffectType, UEffectResolver*> Resolvers;
+	TMap<EEffectType, UEffectResolver*> ResolversCache;
+
+	UPROPERTY(BlueprintReadOnly)
+	TArray<EEffectType> ActiveResolvers;
 
 private:
 	UEffectInstanceContainer* GetEffectContainer(EEffectType Type);
 
 	void Refresh();
 
-	static void GetValuesForEffect(TArray<float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts);
+	static void GetValueForEachEffect(TArray<float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts);
 
 	UEffectResolver* GetResolver(EEffectType Type);
 };

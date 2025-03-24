@@ -35,7 +35,8 @@ UEffectInstanceContainer* UEffectable::GetEffectContainer(const EEffectType Type
 	return EffectsByType[Type];
 }
 
-void CountEffects(TMap<UEffectDataAsset*, int>& EffectCounts, UEffectInstanceContainer* Container)
+// This will count appearances of each effect data asset in the container
+void CountEffects(TMap<UEffectDataAsset*, int>& EffectCounts, const UEffectInstanceContainer* Container)
 {
 	const auto Num = Container->GetNumInstances();
 
@@ -67,25 +68,41 @@ void UEffectable::Refresh()
 
 	for(const auto& Type : Types)
 	{
+		const auto Container = EffectsByType[Type];
+		
+		if (Container->GetNumInstances() == 0)
+		{
+			if (ActiveResolvers.Contains(Type))
+			{
+				ResolversCache[Type]->UnResolve();
+				
+				ActiveResolvers.Remove(Type);
+			}
+			
+			continue;
+		}
+	
 		Values.Empty();
 
 		// Effects like stun or root don't have value. Don't need to do all this
 		if (UEffectSystemConfiguration::NeedValue(Type))
 		{
 			EffectCounts.Empty();
-
-			const auto Container = EffectsByType[Type];
+			
 			CountEffects(EffectCounts, Container);
 			
-			GetValuesForEffect(Values, EffectCounts);
+			GetValueForEachEffect(Values, EffectCounts);
 		}
 
 		const auto Resolver = GetResolver(Type);
 		Resolver->Resolve(Values);
+
+		if (!ActiveResolvers.Contains(Type))
+			ActiveResolvers.Add(Type);
 	}
 }
 
-void UEffectable::GetValuesForEffect(TArray<float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts)
+void UEffectable::GetValueForEachEffect(TArray<float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts)
 {
 	for(const auto& Pair : EffectCounts)
 	{
@@ -99,7 +116,7 @@ void UEffectable::GetValuesForEffect(TArray<float>& ValuesBuffer, TMap<UEffectDa
 
 UEffectResolver* UEffectable::GetResolver(const EEffectType Type)
 {
-	if (!Resolvers.Contains(Type))
+	if (!ResolversCache.Contains(Type))
 	{
 		if (!Configuration->ResolversByType.Contains(Type))
 		{
@@ -112,9 +129,9 @@ UEffectResolver* UEffectable::GetResolver(const EEffectType Type)
 		const auto Resolver = NewObject<UEffectResolver>(this, *ResolverClass);
 		Resolver->Init(this, Params);
 		
-		Resolvers.Add(Type, Resolver);
+		ResolversCache.Add(Type, Resolver);
 		return Resolver;
 	}
 
-	return Resolvers[Type];
+	return ResolversCache[Type];
 }
