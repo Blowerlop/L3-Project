@@ -58,10 +58,8 @@ void CountEffects(TMap<UEffectDataAsset*, int>& EffectCounts, const UEffectInsta
 void UEffectable::Refresh()
 {
 	TMap<UEffectDataAsset*, int> EffectCounts{};
-
-	// This was originally a map <Effect, float> but I think it is not necessary rgiht now.
-	// Maybe it could be useful for debugging
-	TArray<float> Values{};
+	
+	TMap<UEffectDataAsset*, float> Values{};
 	
 	auto Types = TArray<EEffectType>();
 	EffectsByType.GetKeys(Types);
@@ -102,7 +100,7 @@ void UEffectable::Refresh()
 	}
 }
 
-void UEffectable::GetValueForEachEffect(TArray<float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts)
+void UEffectable::GetValueForEachEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts)
 {
 	for(const auto& Pair : EffectCounts)
 	{
@@ -110,7 +108,7 @@ void UEffectable::GetValueForEachEffect(TArray<float>& ValuesBuffer, TMap<UEffec
 		const auto Count = Pair.Value;
 
 		auto Value = Effect->StackingBehaviour->Stack(Effect, Count);
-		ValuesBuffer.Add(Value);
+		ValuesBuffer.Add(Effect, Value);
 	}
 }
 
