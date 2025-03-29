@@ -32,5 +32,5 @@ void UEffectInstance::BeginDestroy()
 
 void UEffectInstance::OnTimerEnded()
 {
-	Parent->RemoveEffect(this);
+	Parent->SrvRemoveEffect(this);
 }

@@ -4,9 +4,16 @@
 #include "Effects/EffectInstance.h"
 #include "Effects/EffectStackingBehaviour.h"
 #include "Effects/EffectSystemConfiguration.h"
+#include "Kismet/KismetSystemLibrary.h"
 
-void UEffectable::AddEffect(UEffectDataAsset* EffectData, AActor* Applier)
+void UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier)
 {
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		UE_LOG(LogTemp, Error, TEXT("UEffectable::SrvAddEffect called on client!"));
+		return;
+	}
+	
 	const auto Container = GetEffectContainer(EffectData->Type);
 	const auto Instance = NewObject<UEffectInstance>();
 
@@ -16,8 +23,14 @@ void UEffectable::AddEffect(UEffectDataAsset* EffectData, AActor* Applier)
 	Refresh();
 }
 
-void UEffectable::RemoveEffect(UEffectInstance* Effect)
+void UEffectable::SrvRemoveEffect(UEffectInstance* Effect)
 {
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		UE_LOG(LogTemp, Error, TEXT("UEffectable::SrvRemoveEffect called on client!"));
+		return;
+	}
+	
 	const auto Container = GetEffectContainer(Effect->Data->Type);
 
 	Container->RemoveInstance(Effect);

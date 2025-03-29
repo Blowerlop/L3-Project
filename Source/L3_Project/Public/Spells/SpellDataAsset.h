@@ -2,6 +2,7 @@
 
 #include "SpellDataAsset.generated.h"
 
+class UEffectDataAsset;
 class USpellAimerParams;
 class ASpellAimer;
 class ASpell;
@@ -21,6 +22,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<ASpell> Spell;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TArray<UEffectDataAsset*> Effects;
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText Name;
 

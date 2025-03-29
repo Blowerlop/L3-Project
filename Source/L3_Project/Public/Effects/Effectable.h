@@ -7,6 +7,10 @@ enum class EEffectType : uint8;
 class UEffectDataAsset;
 class UEffectInstance;
 
+///
+// UEffectable is only relevant on server. Effects will be applied on server and their consequences will be replicated to clients.
+///
+
 UCLASS(BlueprintType)
 class UEffectInstanceContainer : public UObject
 {
@@ -58,10 +62,10 @@ public:
 	UEffectSystemConfiguration* Configuration;
 	
 	UFUNCTION(BlueprintCallable)
-	void AddEffect(UEffectDataAsset* EffectData, AActor* Applier);
+	void SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier);
 
 	UFUNCTION(BlueprintCallable)
-	void RemoveEffect(UEffectInstance* Effect);
+	void SrvRemoveEffect(UEffectInstance* Effect);
 	
 	UPROPERTY(BlueprintReadOnly)
 	TMap<EEffectType, UEffectInstanceContainer*> EffectsByType;

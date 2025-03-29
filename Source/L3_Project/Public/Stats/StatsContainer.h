@@ -1,6 +1,14 @@
 #pragma once
 #include "StatsContainer.generated.h"
 
+UENUM(BlueprintType)
+enum class EGameStatType : uint8
+{
+	Attack,
+	Defense,
+	MoveSpeed,
+};
+
 USTRUCT(BlueprintType)
 struct FStat
 {
@@ -27,12 +35,16 @@ struct FStat
 	float ModCoef;
 };
 
-UENUM(BlueprintType)
-enum class EGameStatType : uint8
+USTRUCT()
+struct FReplicatedStat
 {
-	Attack,
-	Defense,
-	MoveSpeed,
+	GENERATED_BODY()
+
+	UPROPERTY()
+	EGameStatType Type;
+	
+	UPROPERTY()
+	float Value;
 };
 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
@@ -41,6 +53,8 @@ class UStatsContainer : public UActorComponent
 	GENERATED_BODY()
 	
 public:
+	UStatsContainer();
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EGameStatType, FStat> Stats;
 	
@@ -72,7 +86,10 @@ public:
 	void RemoveModCoefSilent(const EGameStatType Type, const float ModCoef);
 	
 private:
-	static void UpdateCurrentValue(const EGameStatType Type, FStat* Stat);
+	void UpdateCurrentValue(const EGameStatType Type, FStat* Stat);
 
 	void UpdateCurrentValue(const EGameStatType Type);
+
+	UFUNCTION(Client, Reliable)
+	void OnValueChangeRpc(const EGameStatType Type, const float Value);
 };
