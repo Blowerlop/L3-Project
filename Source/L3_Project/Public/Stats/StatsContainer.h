@@ -7,6 +7,7 @@ enum class EGameStatType : uint8
 	Attack,
 	Defense,
 	MoveSpeed,
+	HealBonus
 };
 
 USTRUCT(BlueprintType)

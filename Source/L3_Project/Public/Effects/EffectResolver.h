@@ -11,6 +11,9 @@ class UEffectResolver : public UObject
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool bNeedTicking = false;
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void Init(UEffectable* Parent, UEffectResolverParams* Params);
 
@@ -23,4 +26,7 @@ public:
 	// Useful to remove stun or effects of this kind
 	UFUNCTION(BlueprintImplementableEvent)
 	void UnResolve();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void Tick(float DeltaTime);
 };

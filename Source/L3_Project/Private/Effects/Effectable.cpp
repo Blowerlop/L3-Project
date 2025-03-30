@@ -146,3 +146,17 @@ UEffectResolver* UEffectable::GetResolver(const EEffectType Type)
 
 	return ResolversCache[Type];
 }
+
+void UEffectable::TickComponent(float DeltaTime, enum ELevelTick TickType,
+	FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	for(const auto Type : ActiveResolvers)
+	{
+		const auto Resolver = ResolversCache[Type];
+		if (!Resolver->bNeedTicking) continue;
+		
+		Resolver->Tick(DeltaTime);
+	}
+}
