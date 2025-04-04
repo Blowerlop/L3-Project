@@ -25,8 +25,8 @@ struct FStat
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float MaxValue;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+ 
+	UPROPERTY(BlueprintReadOnly)
 	float BaseValue;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -55,6 +55,8 @@ class UStatsContainer : public UActorComponent
 	
 public:
 	UStatsContainer();
+
+	virtual void BeginPlay() override;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EGameStatType, FStat> Stats;
@@ -68,22 +70,22 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	float GetBaseValue(const EGameStatType Type);
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void AddModFlat(const EGameStatType Type, const float ModFlat);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void RemoveModFlat(const EGameStatType Type, const float ModFlat);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void RemoveModFlatSilent(EGameStatType Type, float ModFlat);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void AddModCoef(const EGameStatType Type, const float ModCoef);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void RemoveModCoef(const EGameStatType Type, const float ModCoef);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void RemoveModCoefSilent(const EGameStatType Type, const float ModCoef);
 	
 private:

@@ -58,13 +58,15 @@ class L3_PROJECT_API UEffectable : public UActorComponent
 	GENERATED_BODY()
 	
 public:
+	UEffectable();
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UEffectSystemConfiguration* Configuration;
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvRemoveEffect(UEffectInstance* Effect);
 	
 	UPROPERTY(BlueprintReadOnly)

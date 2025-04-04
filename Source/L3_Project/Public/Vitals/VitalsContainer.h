@@ -44,18 +44,15 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetMaxValue(const EVitalType Type) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void Add(const EVitalType Type, float Value);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void Remove(const EVitalType Type, float Value);
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EVitalType, FVital> Vitals;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UStatsContainer* StatsContainer;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	float GetModifiedValue(const EVitalType Type, const float Value, const EVitalUpdateType UpdateType) const;

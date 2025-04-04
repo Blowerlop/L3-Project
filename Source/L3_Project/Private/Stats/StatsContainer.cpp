@@ -6,6 +6,16 @@ UStatsContainer::UStatsContainer()
 	SetIsReplicatedByDefault(true);
 }
 
+void UStatsContainer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	for(auto& [Type, Stat] : Stats)
+	{
+		Stat.BaseValue = Stat.Value;
+	}
+}
+
 float UStatsContainer::GetValue(const EGameStatType Type) const
 {
 	if (const FStat* Stat = Stats.Find(Type))

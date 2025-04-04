@@ -6,6 +6,11 @@
 #include "Effects/EffectSystemConfiguration.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+UEffectable::UEffectable()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
 void UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
