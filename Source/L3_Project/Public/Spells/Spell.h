@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Spell.generated.h"
 
+class UEffectable;
 class UAimResultHolder;
 class USpellDataAsset;
 
@@ -43,8 +44,5 @@ protected:
 	void Init_Internal();
 
 	UFUNCTION(BlueprintCallable)
-	void TryApply();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void TryApply_Internal();
+	void SrvApplyEffects(UEffectable* Target) const;
 };
