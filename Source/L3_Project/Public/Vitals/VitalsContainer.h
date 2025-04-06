@@ -32,12 +32,19 @@ struct FVital
 	float MaxValue;
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnVitalChangedDelegate, EVitalType, Type, float, Value);
+
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class UVitalsContainer : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:
+	UVitalsContainer();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnVitalChangedDelegate OnVitalChangedDelegate;
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetValue(const EVitalType Type) const;
 
@@ -45,10 +52,13 @@ public:
 	float GetMaxValue(const EVitalType Type) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void Add(const EVitalType Type, float Value);
+	void SrvAdd(const EVitalType Type, float Value);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void Remove(const EVitalType Type, float Value);
+	void SrvRemove(const EVitalType Type, float Value);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ChangeValueMulticast(const EVitalType Type, const float Value);
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
