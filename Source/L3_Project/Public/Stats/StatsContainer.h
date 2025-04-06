@@ -36,18 +36,10 @@ struct FStat
 	float ModCoef;
 };
 
-USTRUCT()
-struct FReplicatedStat
-{
-	GENERATED_BODY()
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStatChangedDelegate, EGameStatType, Type, float, Value);
 
-	UPROPERTY()
-	EGameStatType Type;
-	
-	UPROPERTY()
-	float Value;
-};
-
+// No need to have a replicated variable for stats, because player joins get default values, do things, server rpcs toward him.
+// If plyaer disconnects, and reconnects, he gets default values again.
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class UStatsContainer : public UActorComponent
 {
@@ -60,6 +52,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EGameStatType, FStat> Stats;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnStatChangedDelegate OnStatChangedDelegate;
 	
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	float GetValue(const EGameStatType Type) const;

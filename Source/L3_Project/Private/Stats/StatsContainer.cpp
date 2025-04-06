@@ -104,8 +104,16 @@ void UStatsContainer::UpdateCurrentValue(const EGameStatType Type, FStat* Stat)
 
 	const auto ModCoef = FMath::Clamp(Stat->ModCoef, 0.0f, 9999);
 	const auto Value = FMath::Clamp(Stat->BaseValue * ModCoef + Stat->ModFlat, 0, Stat->MaxValue);
-	Stat->Value = Value;
+
+	if (Value == Stat->Value)
+	{
+		return;
+	}
 	
+	Stat->Value = Value;
+	OnStatChangedDelegate.Broadcast(Type, Value);
+
+	// Replicate to client only if this component is on an actor controlled by player
 	const APlayerController* OwningPC = Cast<APlayerController>(GetOwner()->GetOwner());
 
 	if (OwningPC && !OwningPC->IsLocalController())
@@ -129,6 +137,7 @@ void UStatsContainer::OnValueChangeRpc_Implementation(const EGameStatType Type, 
 	if (FStat* Stat = Stats.Find(Type))
 	{
 		Stat->Value = Value;
+		OnStatChangedDelegate.Broadcast(Type, Value);
 		UE_LOG(LogTemp, Warning, TEXT("Stat %d updated to %f"), (int)Type, Stat->Value);
 	}
 	else
