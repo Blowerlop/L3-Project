@@ -89,26 +89,26 @@ void ASpellManager::RequestAttack(UAutoAttackController* AttackController, UAimR
 	}
 }
 
-void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result) const
+ASpell* ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
 		UE_LOG(LogTemp, Error, TEXT("TryCastSpell can only be called on the server!"));
-		return;
+		return nullptr;
 	}
 
 	if (!IsValid(SpellData))
 	{
 		UE_LOG(LogTemp, Error, TEXT("SpellData is not valid!"));
-		return;
+		return nullptr;
 	}
-	
+
 	if (!IsValid(Caster))
 	{
-	    UE_LOG(LogTemp, Error, TEXT("Caster is not valid"));
-        return;
+		UE_LOG(LogTemp, Error, TEXT("Caster is not valid"));
+		return nullptr;
 	}
-	
+
 	const auto SpellClass = SpellData->Spell;
 	const auto Location = Caster->GetActorLocation();
 
@@ -120,6 +120,8 @@ void ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAi
 
 	const auto SpellInstance = GetWorld()->SpawnActor<ASpell>(SpellClass, Location, FRotator::ZeroRotator, SpawnParams);
 	SpellInstance->Init(SpellData, Caster, Result);
+
+	return SpellInstance;
 }
 
 bool ASpellManager::IsInComboWindow(const USpellDataAsset* Spell, const double ClientTime, const double StartTime, const double EndTime)
