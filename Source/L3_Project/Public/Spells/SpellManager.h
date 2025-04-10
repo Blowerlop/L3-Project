@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SpellManager.generated.h"
 
+class ASpell;
 class USpellController;
 class UAutoAttackController;
 class UAimResultHolder;
@@ -32,7 +33,7 @@ public:
 	void RequestAttack(UAutoAttackController* AttackController, UAimResultHolder* Result, double ClientTime) const;
 	
 	UFUNCTION(BlueprintCallable)
-	void TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result) const;
+	ASpell* TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result);
 
 	static bool IsInComboWindow(const USpellDataAsset* Spell, double ClientTime, double StartTime, double EndTime);
 };
