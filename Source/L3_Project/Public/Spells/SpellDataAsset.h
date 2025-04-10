@@ -24,6 +24,12 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TArray<UEffectDataAsset*> Effects;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int Damage;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int Heal;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText Name;

@@ -32,6 +32,21 @@ struct FVital
 	float MaxValue;
 };
 
+USTRUCT()
+struct FReplicatedVital
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	EVitalType Type;
+
+	UPROPERTY()
+	float Value;
+
+	UPROPERTY()
+	float MaxValue;
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnVitalChangedDelegate, EVitalType, Type, float, Value);
 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
@@ -56,9 +71,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvRemove(const EVitalType Type, float Value);
-
-	UFUNCTION(NetMulticast, Reliable)
-	void ChangeValueMulticast(const EVitalType Type, const float Value);
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -66,4 +78,16 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	float GetModifiedValue(const EVitalType Type, const float Value, const EVitalUpdateType UpdateType) const;
+
+private:
+	UPROPERTY(ReplicatedUsing=OnInitialVitalsRep)
+	TArray<FReplicatedVital> ReplicatedVitals;
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void ChangeValueMulticast(const EVitalType Type, const float Value);
+
+	void UpdateReplicatedVitals(const EVitalType Type, const FVital* Vital);
+	
+	UFUNCTION()
+	void OnInitialVitalsRep();
 };
