@@ -122,6 +122,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsOwnerLocallyControlled() const;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	bool CanStartAiming_BP(int SpellIndex) const;
 	
 private:
 	UPROPERTY()
@@ -174,7 +177,7 @@ private:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool CanStartAiming(int SpellIndex) const;
-
+	
 	bool TryGetSpellAimer(int Index, ASpellAimer*& OutAimer) const;
 
 #pragma endregion 

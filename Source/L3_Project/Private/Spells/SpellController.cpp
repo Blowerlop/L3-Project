@@ -352,6 +352,8 @@ bool USpellController::IsInCooldown(const int Index) const
 
 bool USpellController::CanStartAiming(const int SpellIndex) const
 {
+	if (!CanStartAiming_BP(SpellIndex)) return false;
+	
 	if (IsCasting())
 	{
 		if (!CanCombo(SpellIndex)) return false;
