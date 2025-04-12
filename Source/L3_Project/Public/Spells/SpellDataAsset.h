@@ -2,6 +2,7 @@
 
 #include "SpellDataAsset.generated.h"
 
+class UEffectDataAsset;
 class USpellAimerParams;
 class ASpellAimer;
 class ASpell;
@@ -21,6 +22,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<ASpell> Spell;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TArray<UEffectDataAsset*> Effects;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int Damage;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int Heal;
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText Name;
 
@@ -30,6 +40,31 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float Cooldown;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool CanMove;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool CanRotate;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UAnimMontage* AnimationMontage;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int ComboIndex;
+	
+	// Combo
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bHasCombo;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector2f ComboWindow;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	USpellDataAsset* NextComboSpell;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FName GetMontageSectionName() const;
+	
 #if WITH_EDITOR
 protected:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;

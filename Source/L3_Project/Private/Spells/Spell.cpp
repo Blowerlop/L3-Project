@@ -3,7 +3,10 @@
 
 #include "Spells/Spell.h"
 
+#include "Effects/Effectable.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Spells/SpellDataAsset.h"
+#include "Vitals/VitalsContainer.h"
 
 ASpell::ASpell()
 {
@@ -22,8 +25,33 @@ void ASpell::Init(USpellDataAsset* SpellData, AActor* SpellCaster, UAimResultHol
 	bIsInit = true;
 }
 
-void ASpell::TryApply()
+bool ASpell::SrvApply(AActor* Target) const
 {
-	TryApply_Internal();
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvApplyEffects called on client!"));
+		return false;
+	}
+
+	bool IsValid = false;
+	
+	if (const auto Vitals = Target->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
+	{
+		Vitals->SrvAdd(EVitalType::Health, Data->Heal);
+		Vitals->SrvRemove(EVitalType::Health, Data->Damage);
+		IsValid = true;
+	}
+
+	if (const auto Effectable = Target->GetComponentByClass<UEffectable>(); Effectable != nullptr)
+	{
+		for(const auto Effect : Data->Effects)
+		{
+			Effectable->SrvAddEffect(Effect, Caster);
+		}
+
+		IsValid = true;
+	}
+
+	return IsValid;
 }
 
