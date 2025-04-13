@@ -26,24 +26,18 @@ public:
 	TEnumAsByte<EObjectTypeQuery> ApplyObjectType;
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
-	bool bIsInit = false;
-
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	AController* CasterController;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	AActor* Caster;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	USpellDataAsset* Data;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	UAimResultHolder* AimResult;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void Init_Internal();
-	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	bool SrvApply(AActor* Target) const;
+	bool SrvApply(AActor* Target);
 };

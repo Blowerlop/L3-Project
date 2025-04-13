@@ -5,6 +5,7 @@
 
 #include "InSceneManagersRefs.h"
 #include "GameFramework/GameStateBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Player/AutoAttackController.h"
 #include "Spells/Spell.h"
@@ -112,16 +113,23 @@ ASpell* ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, 
 	const auto SpellClass = SpellData->Spell;
 	const auto Location = Caster->GetActorLocation();
 
-	FActorSpawnParameters SpawnParams{};
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Owner = Caster;
-	// Is a pawn or nullptr
-	SpawnParams.Instigator = Cast<APawn>(Caster);
+	const FTransform SpawnTransform = FTransform(FRotator::ZeroRotator, Location);
+	AActor* MySpawningActor = Cast<AActor>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, SpellClass, SpawnTransform, ESpawnActorCollisionHandlingMethod::AlwaysSpawn));
 
-	const auto SpellInstance = GetWorld()->SpawnActor<ASpell>(SpellClass, Location, FRotator::ZeroRotator, SpawnParams);
-	SpellInstance->Init(SpellData, Caster, Result);
+	if (const auto SpellInstance = Cast<ASpell>(MySpawningActor))
+	{
+		SpellInstance->Init(SpellData, Caster, Result);
+		
+		SpellInstance->Owner = Caster;
+		SpellInstance->SetInstigator(Cast<APawn>(Caster));
+		
+		UGameplayStatics::FinishSpawningActor(MySpawningActor, SpawnTransform);
 
-	return SpellInstance;
+		return SpellInstance;
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("Failed to spawn spell actor!"));
+	return nullptr;
 }
 
 bool ASpellManager::IsInComboWindow(const USpellDataAsset* Spell, const double ClientTime, const double StartTime, const double EndTime)

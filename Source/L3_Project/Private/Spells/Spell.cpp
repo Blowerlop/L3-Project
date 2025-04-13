@@ -19,13 +19,9 @@ void ASpell::Init(USpellDataAsset* SpellData, AActor* SpellCaster, UAimResultHol
 	Caster = SpellCaster;
 	CasterController = Cast<AController>(SpellCaster->GetOwner());
 	AimResult = Result;
-	
-	Init_Internal();
-
-	bIsInit = true;
 }
 
-bool ASpell::SrvApply(AActor* Target) const
+bool ASpell::SrvApply(AActor* Target)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
