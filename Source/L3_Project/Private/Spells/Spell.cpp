@@ -40,14 +40,49 @@ bool ASpell::SrvApply(AActor* Target)
 
 	if (const auto Effectable = Target->GetComponentByClass<UEffectable>(); Effectable != nullptr)
 	{
-		for(const auto Effect : Data->Effects)
+		if (bShouldStoreAppliedEffects)
 		{
-			Effectable->SrvAddEffect(Effect, Caster);
+			if (!AppliedEffectsInstances.Contains(Target))
+			{
+				AppliedEffectsInstances.Add(Target, NewObject<UEffectInstanceContainer>());
+			}
+
+			Effectable->SrvAddEffectsWithBuffer(Data->Effects, Caster, AppliedEffectsInstances[Target]->Instances);
+		}
+		else
+		{
+			Effectable->SrvAddEffects(Data->Effects, Caster);
 		}
 
 		IsValid = true;
 	}
 
 	return IsValid;
+}
+
+void ASpell::SrvUnApply(AActor* Target)
+{
+	if (!bShouldStoreAppliedEffects)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvUnApply called without storing effects! "
+							  "You should set bShouldStoreAppliedEffects to true!"));
+		return;
+	}
+
+	if (!AppliedEffectsInstances.Contains(Target))
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvUnApply AppliedEffectsInstances does not contain target! "
+							  "You should set bShouldStoreAppliedEffects to true!"));
+		return;
+	}
+	
+	if (const auto Effectable = Target->GetComponentByClass<UEffectable>(); Effectable != nullptr)
+	{
+		const auto Container = AppliedEffectsInstances[Target];
+
+		Effectable->SrvRemoveEffects(Container->Instances);
+
+		AppliedEffectsInstances[Target]->Instances.Empty();
+	}
 }
 

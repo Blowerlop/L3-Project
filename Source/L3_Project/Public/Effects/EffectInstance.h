@@ -22,6 +22,8 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	AActor* Applier;
+
+	void Release();
 	
 private:
 	FTimerHandle LifetimeTimerHandle{};

@@ -47,7 +47,6 @@ public:
 		Instances.Remove(Instance);
 	}
 	
-private:
 	UPROPERTY()
 	TArray<UEffectInstance*> Instances;
 };
@@ -62,12 +61,23 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UEffectSystemConfiguration* Configuration;
+
+	// pas ouf les 3 mêmes fonctions
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	UEffectInstance* SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier);
+	void SrvAddEffects(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, AActor* Applier);
 
+	// Unreal UFunction doesn't support overloading
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, AActor* Applier, TArray<UEffectInstance*>& OutAppliedEffects);
+	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvRemoveEffect(UEffectInstance* Effect);
+	
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SrvRemoveEffects(UPARAM(ref) const TArray<UEffectInstance*>& Effects);
 	
 	UPROPERTY(BlueprintReadOnly)
 	TMap<EEffectType, UEffectInstanceContainer*> EffectsByType;

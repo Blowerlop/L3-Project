@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Spell.generated.h"
 
+class UEffectInstanceContainer;
+class UEffectInstance;
 class UVitalsContainer;
 class UEffectable;
 class UAimResultHolder;
@@ -38,6 +40,15 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	UAimResultHolder* AimResult;
 
+	UPROPERTY(BlueprintReadOnly)
+	TMap<AActor*, UEffectInstanceContainer*> AppliedEffectsInstances;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool bShouldStoreAppliedEffects = false;
+
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	bool SrvApply(AActor* Target);
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SrvUnApply(AActor* Target);
 };
