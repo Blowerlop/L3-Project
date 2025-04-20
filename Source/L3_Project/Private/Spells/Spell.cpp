@@ -6,6 +6,7 @@
 #include "Effects/Effectable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Spells/SpellDataAsset.h"
+#include "Stats/StatsContainer.h"
 #include "Vitals/VitalsContainer.h"
 
 ASpell::ASpell()
@@ -34,7 +35,16 @@ bool ASpell::SrvApply(AActor* Target)
 	if (const auto Vitals = Target->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
 	{
 		Vitals->SrvAdd(EVitalType::Health, Data->Heal);
-		Vitals->SrvRemove(EVitalType::Health, Data->Damage);
+
+		auto Damage = Data->Damage;
+		
+		if(const auto Stats = Caster->GetComponentByClass<UStatsContainer>(); Stats != nullptr)
+		{
+			Damage *= Stats->GetValue(EGameStatType::Attack);
+		}
+		
+		Vitals->SrvRemove(EVitalType::Health, Damage);
+		
 		IsValid = true;
 	}
 
