@@ -104,6 +104,9 @@ public:
 
 	bool CanCombo(const int SpellIndex) const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool IsAiming() const;
+
 protected:
 	UPROPERTY(Blueprintable, EditAnywhere)
 	float GlobalCooldownValue = 0.5f;

@@ -107,6 +107,11 @@ bool USpellController::CanCombo(const int SpellIndex) const
 	return CastState->Spell->bHasCombo && SpellIndex == CastState->SpellIndex;
 }
 
+bool USpellController::IsAiming() const
+{
+	return SpellAimers.ContainsByPredicate([](const ASpellAimer* Aimer) { return Aimer && Aimer->bIsAiming; });
+}
+
 USpellDataAsset* USpellController::GetSpellData(const int Index) const
 {
 	if (Index < 0 || Index >= SpellDatas.Num()) return nullptr;
@@ -362,7 +367,7 @@ bool USpellController::CanStartAiming(const int SpellIndex) const
 		if (!CanCombo(SpellIndex)) return false;
 	}
 	
-	return !SpellAimers.ContainsByPredicate([](const ASpellAimer* Aimer) { return Aimer && Aimer->bIsAiming; });
+	return !IsAiming();
 }
 
 bool USpellController::TryGetSpellAimer(int Index, ASpellAimer*& OutAimer) const
