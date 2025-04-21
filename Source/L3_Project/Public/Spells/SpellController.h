@@ -190,5 +190,8 @@ private:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void RequestSpellCastFromControllerRpc_Vector(int SpellIndex, USpellController* Caster, FVector Result);
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void RequestSpellCastFromControllerRpc_Actor(int SpellIndex, USpellController* Caster, AActor* Result);
+	
 #pragma endregion 
 };

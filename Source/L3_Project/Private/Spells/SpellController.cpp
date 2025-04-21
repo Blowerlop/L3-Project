@@ -13,6 +13,7 @@
 #include "Spells/SpellAimer.h"
 #include "Spells/SpellDataAsset.h"
 #include "Spells/SpellManager.h"
+#include "Spells/Results/ActorAimResultHolder.h"
 #include "Spells/Results/VectorAimResultHolder.h"
 
 USpellController::USpellController()
@@ -74,14 +75,14 @@ void USpellController::SrvOnAnimationCastSpellNotify()
 
 void USpellController::OnAnimationEndedNotify()
 {
+	CastState->IsCasting = false;
+	
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 
 	if (CastState->Spell->bHasCombo)
 	{
 		StartCooldown(CastState->SpellIndex);
 	}
-	
-	CastState->IsCasting = false;
 }
 
 bool USpellController::IsCasting() const
@@ -279,6 +280,8 @@ void USpellController::OnSpellInputStopped(int Index)
 
 	Aimer->Stop();
 
+	if (!Aimer->IsValid()) return;
+	
 	const auto Result = Aimer->GetAimResult();
 	if (!Result)
 	{
@@ -421,6 +424,25 @@ void USpellController::RequestSpellCastGenericResultToServer(const int SpellInde
 		const auto VectorResult = Cast<UVectorAimResultHolder>(Result);
 		RequestSpellCastFromControllerRpc_Vector(SpellIndex, this, VectorResult->Vector);
 	}
+	else if(ResultClass == UActorAimResultHolder::StaticClass())
+	{
+		const auto ActorResult = Cast<UActorAimResultHolder>(Result);
+
+		RequestSpellCastFromControllerRpc_Actor(SpellIndex, this, ActorResult->Actor);
+	}
+}
+
+void USpellController::RequestSpellCastFromControllerRpc_Actor_Implementation(int SpellIndex, USpellController* Caster,
+	AActor* Result)
+{
+	const auto Holder = NewObject<UActorAimResultHolder>();
+	Holder->Actor = Result;
+
+	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
+	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
+
+	const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, Time);
 }
 
 void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(const int SpellIndex, USpellController* Caster, const FVector Result)
