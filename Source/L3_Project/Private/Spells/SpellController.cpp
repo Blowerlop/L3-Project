@@ -261,6 +261,9 @@ void USpellController::SetupInputs()
 			EnhancedInputComponent->BindAction(Input, ETriggerEvent::Started, this, &USpellController::OnSpellInputStarted, i);
 			EnhancedInputComponent->BindAction(Input, ETriggerEvent::Completed, this, &USpellController::OnSpellInputStopped, i);
 		}
+
+		EnhancedInputComponent->BindAction(ValidateInput, ETriggerEvent::Started, this, &USpellController::OnValidateInputStarted);
+		EnhancedInputComponent->BindAction(CancelInput, ETriggerEvent::Started, this, &USpellController::OnCancelInputStarted);
 	}
 }
 
@@ -274,6 +277,7 @@ void USpellController::OnSpellInputStarted(const int Index)
 	if (!CanStartAiming(Index)) return;
 
 	Aimer->Start();
+	ActiveAimer = Aimer;
 }
 
 void USpellController::OnSpellInputStopped(int Index)
@@ -283,7 +287,22 @@ void USpellController::OnSpellInputStopped(int Index)
 
 	if (!Aimer->bIsAiming) return;
 
+	StopAndCast(Aimer, Index);
+}
+
+void USpellController::OnValidateInputStarted()
+{
+	if (!IsValid(ActiveAimer)) return;
+
+	const auto AimerIndex = SpellAimers.IndexOfByKey(ActiveAimer);
+
+	StopAndCast(ActiveAimer, AimerIndex);
+}
+
+void USpellController::StopAndCast(ASpellAimer* Aimer, const int Index)
+{
 	Aimer->Stop();
+	ActiveAimer = nullptr;
 
 	if (!Aimer->IsValid()) return;
 	
@@ -295,6 +314,14 @@ void USpellController::OnSpellInputStopped(int Index)
 	}
 	
 	RequestSpellCastGenericResultToServer(Index, Result);
+}
+
+void USpellController::OnCancelInputStarted()
+{
+	if (!IsValid(ActiveAimer)) return;
+
+	ActiveAimer->Stop();
+	ActiveAimer = nullptr;
 }
 
 void USpellController::StartGlobalCooldown()
