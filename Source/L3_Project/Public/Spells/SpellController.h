@@ -57,6 +57,12 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	USpellControllerCastState* CastState;
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* ValidateInput;
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* CancelInput;
 	
 	UPROPERTY(EditAnywhere)
 	TArray<UInputAction*> SpellInputs;
@@ -104,6 +110,9 @@ public:
 
 	bool CanCombo(const int SpellIndex) const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool IsAiming() const;
+
 protected:
 	UPROPERTY(Blueprintable, EditAnywhere)
 	float GlobalCooldownValue = 0.5f;
@@ -122,6 +131,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsOwnerLocallyControlled() const;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	bool CanStartAiming_BP(int SpellIndex) const;
 	
 private:
 	UPROPERTY()
@@ -137,6 +149,8 @@ private:
 	UPROPERTY()
 	TArray<ASpellAimer*> SpellAimers;
 
+	ASpellAimer* ActiveAimer;
+
 	virtual void BeginPlay() override;
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -147,6 +161,10 @@ private:
 
 	void OnSpellInputStarted(int Index);
 	void OnSpellInputStopped(int Index);
+
+	void OnValidateInputStarted();
+
+	void OnCancelInputStarted();
 
 #pragma endregion 
 	
@@ -162,6 +180,8 @@ private:
 	void OnGlobalCooldownReplicated();
 
 #pragma endregion 
+
+	void StopAndCast(ASpellAimer* Aimer, int Index);
 	
 	void UpdateSpellAimers();
 	
@@ -174,7 +194,7 @@ private:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool CanStartAiming(int SpellIndex) const;
-
+	
 	bool TryGetSpellAimer(int Index, ASpellAimer*& OutAimer) const;
 
 #pragma endregion 
@@ -187,5 +207,8 @@ private:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void RequestSpellCastFromControllerRpc_Vector(int SpellIndex, USpellController* Caster, FVector Result);
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void RequestSpellCastFromControllerRpc_Actor(int SpellIndex, USpellController* Caster, AActor* Result);
+	
 #pragma endregion 
 };

@@ -22,7 +22,12 @@ void UEffectInstance::Init(UEffectDataAsset* EffectAsset, AActor* EffectApplier,
 void UEffectInstance::BeginDestroy()
 {
 	UObject::BeginDestroy();
+	
+	Release();
+}
 
+void UEffectInstance::Release()
+{
 	// todo: Check thisp ls
 	if (LifetimeTimerHandle.IsValid())
 	{

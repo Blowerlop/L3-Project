@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Stop();
 
+	UFUNCTION(BlueprintNativeEvent)
+	bool IsValid();
+	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAimResultHolder* GetAimResult() const;
 	

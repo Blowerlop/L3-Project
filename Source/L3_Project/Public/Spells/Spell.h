@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Spell.generated.h"
 
+class UEffectInstanceContainer;
+class UEffectInstance;
 class UVitalsContainer;
 class UEffectable;
 class UAimResultHolder;
@@ -26,24 +28,27 @@ public:
 	TEnumAsByte<EObjectTypeQuery> ApplyObjectType;
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
-	bool bIsInit = false;
-
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	AController* CasterController;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	AActor* Caster;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	USpellDataAsset* Data;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	UAimResultHolder* AimResult;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void Init_Internal();
-	
+	UPROPERTY(BlueprintReadOnly)
+	TMap<AActor*, UEffectInstanceContainer*> AppliedEffectsInstances;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool bShouldStoreAppliedEffects = false;
+
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	bool SrvApply(AActor* Target) const;
+	bool SrvApply(AActor* Target);
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SrvUnApply(AActor* Target);
 };

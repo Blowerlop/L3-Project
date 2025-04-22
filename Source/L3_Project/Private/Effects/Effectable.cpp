@@ -11,12 +11,12 @@ UEffectable::UEffectable()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier)
+UEffectInstance* UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
 		UE_LOG(LogTemp, Error, TEXT("UEffectable::SrvAddEffect called on client!"));
-		return;
+		return nullptr;
 	}
 	
 	const auto Container = GetEffectContainer(EffectData->Type);
@@ -24,6 +24,54 @@ void UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier)
 
 	Instance->Init(EffectData, Applier, this);
 	Container->AddInstance(Instance);
+
+	Refresh();
+	return Instance;
+}
+
+void UEffectable::SrvAddEffects(const TArray<UEffectDataAsset*>& Effects, AActor* Applier)
+{
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		UE_LOG(LogTemp, Error, TEXT("UEffectable::SrvAddEffect called on client!"));
+		return;
+	}
+	
+	for(auto& Effect : Effects)
+	{
+		if (Effect == nullptr) continue;
+		
+		const auto Container = GetEffectContainer(Effect->Type);
+		const auto Instance = NewObject<UEffectInstance>();
+
+		Instance->Init(Effect, Applier, this);
+		Container->AddInstance(Instance);
+	}
+
+	Refresh();
+}
+
+void UEffectable::SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, AActor* Applier, TArray<UEffectInstance*>& OutAppliedEffects)
+{
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		UE_LOG(LogTemp, Error, TEXT("UEffectable::SrvAddEffect called on client!"));
+		return;
+	}
+	
+	OutAppliedEffects.Empty();
+	
+	for(auto& Effect : Effects)
+	{
+		if (Effect == nullptr) continue;
+		
+		const auto Container = GetEffectContainer(Effect->Type);
+		const auto Instance = NewObject<UEffectInstance>();
+
+		Instance->Init(Effect, Applier, this);
+		Container->AddInstance(Instance);
+		OutAppliedEffects.Add(Instance);
+	}
 
 	Refresh();
 }
@@ -39,6 +87,29 @@ void UEffectable::SrvRemoveEffect(UEffectInstance* Effect)
 	const auto Container = GetEffectContainer(Effect->Data->Type);
 
 	Container->RemoveInstance(Effect);
+
+	Effect->Release();
+	
+	Refresh();
+}
+
+void UEffectable::SrvRemoveEffects(const TArray<UEffectInstance*>& Effects)
+{
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		UE_LOG(LogTemp, Error, TEXT("UEffectable::SrvRemoveEffect called on client!"));
+		return;
+	}
+
+	for(auto& Effect : Effects)
+	{
+		if (Effect == nullptr) continue;
+		
+		const auto Container = GetEffectContainer(Effect->Data->Type);
+		Container->RemoveInstance(Effect);
+
+		Effect->Release();
+	}
 
 	Refresh();
 }

@@ -43,6 +43,11 @@ void ASpellAimer::Stop()
 	Stop_Internal();
 }
 
+bool ASpellAimer::IsValid_Implementation()
+{
+	return true;
+}
+
 UAimResultHolder* ASpellAimer::GetAimResult_Implementation() const
 {
 	return{};

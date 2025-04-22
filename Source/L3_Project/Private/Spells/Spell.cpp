@@ -6,6 +6,7 @@
 #include "Effects/Effectable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Spells/SpellDataAsset.h"
+#include "Stats/StatsContainer.h"
 #include "Vitals/VitalsContainer.h"
 
 ASpell::ASpell()
@@ -19,13 +20,9 @@ void ASpell::Init(USpellDataAsset* SpellData, AActor* SpellCaster, UAimResultHol
 	Caster = SpellCaster;
 	CasterController = Cast<AController>(SpellCaster->GetOwner());
 	AimResult = Result;
-	
-	Init_Internal();
-
-	bIsInit = true;
 }
 
-bool ASpell::SrvApply(AActor* Target) const
+bool ASpell::SrvApply(AActor* Target)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -38,20 +35,64 @@ bool ASpell::SrvApply(AActor* Target) const
 	if (const auto Vitals = Target->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
 	{
 		Vitals->SrvAdd(EVitalType::Health, Data->Heal);
-		Vitals->SrvRemove(EVitalType::Health, Data->Damage);
+
+		auto Damage = Data->Damage;
+		
+		if(const auto Stats = Caster->GetComponentByClass<UStatsContainer>(); Stats != nullptr)
+		{
+			Damage *= Stats->GetValue(EGameStatType::Attack);
+		}
+		
+		Vitals->SrvRemove(EVitalType::Health, Damage);
+		
 		IsValid = true;
 	}
 
 	if (const auto Effectable = Target->GetComponentByClass<UEffectable>(); Effectable != nullptr)
 	{
-		for(const auto Effect : Data->Effects)
+		if (bShouldStoreAppliedEffects)
 		{
-			Effectable->SrvAddEffect(Effect, Caster);
+			if (!AppliedEffectsInstances.Contains(Target))
+			{
+				AppliedEffectsInstances.Add(Target, NewObject<UEffectInstanceContainer>());
+			}
+
+			Effectable->SrvAddEffectsWithBuffer(Data->Effects, Caster, AppliedEffectsInstances[Target]->Instances);
+		}
+		else
+		{
+			Effectable->SrvAddEffects(Data->Effects, Caster);
 		}
 
 		IsValid = true;
 	}
 
 	return IsValid;
+}
+
+void ASpell::SrvUnApply(AActor* Target)
+{
+	if (!bShouldStoreAppliedEffects)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvUnApply called without storing effects! "
+							  "You should set bShouldStoreAppliedEffects to true!"));
+		return;
+	}
+
+	if (!AppliedEffectsInstances.Contains(Target))
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvUnApply AppliedEffectsInstances does not contain target! "
+							  "You should set bShouldStoreAppliedEffects to true!"));
+		return;
+	}
+	
+	if (const auto Effectable = Target->GetComponentByClass<UEffectable>(); Effectable != nullptr)
+	{
+		const auto Container = AppliedEffectsInstances[Target];
+
+		Effectable->SrvRemoveEffects(Container->Instances);
+
+		AppliedEffectsInstances[Target]->Instances.Empty();
+	}
 }
 
