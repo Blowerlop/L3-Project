@@ -7,13 +7,15 @@
 #include "GroupManagement/InstancesUserComponent.h"
 #include "Instances/InstanceDataAsset.h"
 #include "Networking/BaseGameInstance.h"
+#include "Networking/InstanceSettings.h"
 #include "Networking/SessionsManagerSubsystem.h"
 
 int UInstancesManagerSubsystem::InstanceIDCounter{};
-int UInstancesManagerSubsystem::InstanceSessionID{};
 bool UInstancesManagerSubsystem::IsInstanceBeingDestroyed{};
 
-void UInstancesManagerSubsystem::StartNewInstance(int SessionID, UInstanceDataAsset* Data)
+FInstanceSettings UInstancesManagerSubsystem::CurrentInstanceSettings{};
+
+void UInstancesManagerSubsystem::StartNewInstance(FInstanceSettings Settings)
 {
 	UBaseGameInstance* GameInstance;
 	if (!TryGetBaseGameInstance(GameInstance))
@@ -31,9 +33,12 @@ void UInstancesManagerSubsystem::StartNewInstance(int SessionID, UInstanceDataAs
 		return;
 	}
 
-	auto OnTransition = [this, SessionID, Data]() {
+	auto OnTransition = [this, Settings]() {
 		UE_LOG(LogTemp, Log, TEXT("Transition completed. Starting new instance."));
-		StartListenServer(SessionID, Data->MapPath);
+
+		CurrentInstanceSettings = Settings;
+		
+		StartListenServer(Settings.SessionID, Settings.DataAsset->MapPath);
 	};
 	
 	auto OnSessionDestroyed = [this, GameInstance, OnTransition](const bool bWasSuccessful) {
@@ -61,8 +66,6 @@ void UInstancesManagerSubsystem::StartListenServer(const int SessionID, const FS
 
 	if (UWorld* World = GetWorld(); World != nullptr)
 	{
-		InstanceSessionID = SessionID;
-		
 		const FURL ListenURL(nullptr, *(InstanceMapPath + "?listen"), TRAVEL_Absolute);
 		World->ServerTravel(ListenURL.ToString());
 	}

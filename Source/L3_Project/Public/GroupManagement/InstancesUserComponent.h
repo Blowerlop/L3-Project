@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 #include "GroupableComponent.h"
 #include "Components/ActorComponent.h"
+#include "Networking/InstanceSettings.h"
 #include "InstancesUserComponent.generated.h"
 
 class UInstanceDataAsset;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInstanceStartedDelegate, int32, InstanceId, UInstanceDataAsset*, InstanceDataAsset);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstanceStartedDelegate, FInstanceSettings, Settings);
 
 UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class L3_PROJECT_API UInstancesUserComponent : public UActorComponent
@@ -26,13 +28,13 @@ public:
 	
 private:
 	UFUNCTION(Server, Reliable)
-	void StartInstanceServerRPC(int32 InstanceDataID);
+	void StartInstanceServerRPC(UInstanceDataAsset* InstanceDataAsset);
 
 	UFUNCTION(Client, Reliable)
-	void OnInstanceValidatedClientRPC(int32 InstanceID, int32 InstanceDataID);
+	void OnInstanceValidatedClientRPC(FInstanceSettings Settings);
 	
 	UFUNCTION(Client, Reliable)
-	void OnInstanceStartedClientRPC(const int32 InstanceID, const int32 InstanceDataID);
+	void OnInstanceStartedClientRPC(FInstanceSettings Settings);
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Sessions")
 	void StartInstance(UInstanceDataAsset* Asset);
