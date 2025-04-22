@@ -24,7 +24,7 @@ public:
 
 	virtual void BeginPlay() override;
 
-	virtual void Destroyed() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	UFUNCTION(BlueprintCallable)
 	void RequestSpellCastFromController(int SpellIndex, USpellController* SpellController, UAimResultHolder* Result, double ClientTime) const;

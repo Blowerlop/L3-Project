@@ -27,12 +27,13 @@ void ASpellManager::BeginPlay()
 	InSceneManagers->RegisterManager(StaticClass(), this);
 }
 
-void ASpellManager::Destroyed()
+void ASpellManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	Super::Destroyed();
+	Super::EndPlay(EndPlayReason);
 
 	const auto GameInstance = GetWorld()->GetGameInstance();
 	if (!GameInstance) return;
+	
 	const auto InSceneManagers = GameInstance->GetSubsystem<UInSceneManagersRefs>();
 	if (!InSceneManagers) return;
 	
