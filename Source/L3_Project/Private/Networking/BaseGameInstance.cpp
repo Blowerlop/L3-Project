@@ -8,9 +8,12 @@
 #include "Networking/InstancesManagerSubsystem.h"
 #include "Networking/SessionsManagerSubsystem.h"
 
+const FString UBaseGameInstance::UUIDConnectOptionsKey = "UUID";
+const FString UBaseGameInstance::UserNameConnectOptionsKey = "UserName";
+
 #pragma region Login/out
 
-void UBaseGameInstance::Login(const bool bUseDevTool, FString AuthToolId) const
+void UBaseGameInstance::Login(const bool bUseDevTool, FString AuthToolId)
 {
 	if (const IOnlineSubsystem* OnlineSubsystem = Online::GetSubsystem(GetWorld(), "EOS"))
 	{
@@ -30,7 +33,8 @@ void UBaseGameInstance::Login(const bool bUseDevTool, FString AuthToolId) const
 				Credentials.Id = "";
 				Credentials.Token = "";
 			}
-				
+
+			LoginDelegateHandle = IdentityInterface->OnLoginCompleteDelegates->AddUObject(this, &UBaseGameInstance::OnLoginComplete);
 			IdentityInterface->Login(0, Credentials);
 		}
 	}
@@ -67,6 +71,9 @@ void UBaseGameInstance::Init()
 	{
 		GEngine->OnNetworkFailure().AddUObject(this, &UBaseGameInstance::OnNetworkFailure);
 	}
+
+	// todo: temp
+	UserName = FPlatformProcess::ComputerName();
 }
 
 void UBaseGameInstance::Shutdown()
@@ -95,6 +102,30 @@ void UBaseGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, E
 
 	// Try to return to lobby if in instance
 	// If already in lobby, or can't return to lobby, go back to main menu
+}
+
+void UBaseGameInstance::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful, const FUniqueNetId& UserId,
+	const FString& Error)
+{
+	if (bWasSuccessful)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Login successful! UserId: %s"), *UserId.ToString());
+
+		SelfClientData = FClientData(UserId.ToString(), UserName);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Login failed: %s"), *Error);
+	}
+
+	if (const IOnlineSubsystem* OnlineSubsystem = Online::GetSubsystem(GetWorld(), "EOS"))
+	{
+		if (const IOnlineIdentityPtr IdentityInterface = OnlineSubsystem->GetIdentityInterface(); IdentityInterface.IsValid())
+		{
+			IdentityInterface->ClearOnLoginCompleteDelegate_Handle(LocalUserNum, LoginDelegateHandle);
+			LoginDelegateHandle.Reset();
+		}
+	}
 }
 
 #pragma endregion
@@ -137,7 +168,7 @@ void UBaseGameInstance::OnTransitionEntered()
 
 #pragma region Debug
 
-void UBaseGameInstance::DebugLoginWithDevAuthTool(const FString& Args) const
+void UBaseGameInstance::DebugLoginWithDevAuthTool(const FString& Args)
 {
 	Login(true, Args);
 }

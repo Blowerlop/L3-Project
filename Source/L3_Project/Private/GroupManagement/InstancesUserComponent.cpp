@@ -45,7 +45,7 @@ void UInstancesUserComponent::OnInstanceStartedClientRPC_Implementation(FInstanc
 	OnInstanceStartedDelegate.Broadcast(Settings);
 }
 
-void UInstancesUserComponent::OnInstanceValidatedClientRPC_Implementation(FInstanceSettings Settings)
+void UInstancesUserComponent::OnInstanceValidatedClientRPC_Implementation(FServerInstanceSettings Settings)
 {
 	const auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (!IsValid(GameInstance)) return;
@@ -73,13 +73,19 @@ void UInstancesUserComponent::StartInstanceServerRPC_Implementation(UInstanceDat
 	const auto SessionId = UInstancesManagerSubsystem::GetNextInstanceID();
 	const auto Group = FGroupManager::GetGroup(GroupableComponent->ReplicatedGroupData.GroupId);
 
-	const FInstanceSettings Settings = {
+	const FServerInstanceSettings HostSettings = {
 		InstanceDataAsset,
 		SessionId,
-		Group->GroupMembers.Num()
+		Group->GetMembersAsClientData()
 	};
 	
-	OnInstanceValidatedClientRPC(Settings);
+	OnInstanceValidatedClientRPC(HostSettings);
+
+	const FInstanceSettings ClientSettings = {
+		InstanceDataAsset,
+		SessionId,
+		Group->GetMembersAsString()
+	};
 	
 	// Do not send this callback to the leader
 	for (int32 i = 1; i < Group->GroupMembers.Num(); ++i)
@@ -94,7 +100,7 @@ void UInstancesUserComponent::StartInstanceServerRPC_Implementation(UInstanceDat
 			continue;
 		}
 		
-		InstancesUser->OnInstanceStartedClientRPC(Settings);
+		InstancesUser->OnInstanceStartedClientRPC(ClientSettings);
 	}
 }
 

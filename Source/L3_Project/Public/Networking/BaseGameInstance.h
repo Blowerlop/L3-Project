@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "CoreMinimal.h"
+#include "InstanceSettings.h"
 #include "Engine/GameInstance.h"
 #include "BaseGameInstance.generated.h"
 
@@ -36,8 +37,17 @@ class L3_PROJECT_API UBaseGameInstance : public UGameInstance
 	DECLARE_DELEGATE(FTransitionDelegate);
 	
 public:
+	static const FString UUIDConnectOptionsKey;
+	static const FString UserNameConnectOptionsKey;
+	
+	UPROPERTY(BlueprintReadOnly)
+	FClientData SelfClientData;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString UserName;
+	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void Login(bool bUseDevTool, FString AuthToolId = "") const;
+	void Login(bool bUseDevTool, FString AuthToolId = "");
 
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
 	void Logout() const;
@@ -53,6 +63,8 @@ public:
 	void OnTransitionEntered();
 	
 private:
+	FDelegateHandle LoginDelegateHandle;
+	
 	FTransitionDelegate TransitionDelegate;
 
 	IConsoleCommand* LoginWithDevAuthToolCommand;
@@ -62,8 +74,10 @@ private:
 	
 	void OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type Arg, const FString& String);
 
+	void OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful, const FUniqueNetId& UserId, const FString& Error);
+	
 	UFUNCTION(Exec)
-	void DebugLoginWithDevAuthTool(const FString& Args) const;
+	void DebugLoginWithDevAuthTool(const FString& Args);
 
 	UFUNCTION(Exec)
 	static void SetHostingType(const FString& Args);

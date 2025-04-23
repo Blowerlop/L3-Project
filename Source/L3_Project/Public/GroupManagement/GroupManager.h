@@ -1,5 +1,6 @@
 #pragma once
 #include "CoreMinimal.h"
+#include "Networking/InstanceSettings.h"
 #include "GroupManager.generated.h"
 
 class UGroupableComponent;
@@ -42,6 +43,8 @@ public:
 	}
 
 	TArray<FString> GetMembersAsString() const;
+
+	TArray<FClientData> GetMembersAsClientData() const;
 };
 
 USTRUCT(BlueprintType)

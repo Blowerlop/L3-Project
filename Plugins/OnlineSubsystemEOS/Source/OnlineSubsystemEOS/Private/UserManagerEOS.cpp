@@ -417,8 +417,10 @@ void FUserManagerEOS::LoginWithDeviceID()
 			OnlineAccountCredentials.Id = "";
 			OnlineAccountCredentials.Token = "";
 			
-			AddLocalUser(LocalUserNum, nullptr, Data->LocalUserId, OnlineAccountCredentials);
+			const auto User = AddLocalUser(LocalUserNum, nullptr, Data->LocalUserId, OnlineAccountCredentials);
 			FUniqueNetIdEOSPtr UniqueNetId = GetLocalUniqueNetIdEOS(LocalUserNum);
+
+			TriggerOnLoginCompleteDelegates(LocalUserNum, true, *User.UniqueNetId, FString());
 		}
 		else if(Data->ResultCode == EOS_EResult::EOS_NotFound)
 		{

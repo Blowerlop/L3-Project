@@ -31,7 +31,7 @@ private:
 	void StartInstanceServerRPC(UInstanceDataAsset* InstanceDataAsset);
 
 	UFUNCTION(Client, Reliable)
-	void OnInstanceValidatedClientRPC(FInstanceSettings Settings);
+	void OnInstanceValidatedClientRPC(FServerInstanceSettings Settings);
 	
 	UFUNCTION(Client, Reliable)
 	void OnInstanceStartedClientRPC(FInstanceSettings Settings);

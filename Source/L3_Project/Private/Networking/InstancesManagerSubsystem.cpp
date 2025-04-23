@@ -13,9 +13,9 @@
 int UInstancesManagerSubsystem::InstanceIDCounter{};
 bool UInstancesManagerSubsystem::IsInstanceBeingDestroyed{};
 
-FInstanceSettings UInstancesManagerSubsystem::CurrentInstanceSettings{};
+FServerInstanceSettings UInstancesManagerSubsystem::CurrentInstanceSettings{};
 
-void UInstancesManagerSubsystem::StartNewInstance(FInstanceSettings Settings)
+void UInstancesManagerSubsystem::StartNewInstance(FServerInstanceSettings Settings)
 {
 	UBaseGameInstance* GameInstance;
 	if (!TryGetBaseGameInstance(GameInstance))
@@ -38,7 +38,7 @@ void UInstancesManagerSubsystem::StartNewInstance(FInstanceSettings Settings)
 
 		CurrentInstanceSettings = Settings;
 		
-		StartListenServer(Settings.SessionID, Settings.DataAsset->MapPath);
+		StartListenServer(Settings.DataAsset->MapPath);
 	};
 	
 	auto OnSessionDestroyed = [this, GameInstance, OnTransition](const bool bWasSuccessful) {
@@ -56,7 +56,7 @@ void UInstancesManagerSubsystem::StartNewInstance(FInstanceSettings Settings)
 	SessionManager->DestroySessionWithCallback(OnSessionDestroyed, LobbyOnlineSubsystem);
 }
 
-void UInstancesManagerSubsystem::StartListenServer(const int SessionID, const FString& InstanceMapPath) const
+void UInstancesManagerSubsystem::StartListenServer(const FString& InstanceMapPath) const
 {
 	if (USessionsManagerSubsystem::HasRunningSession)
 	{

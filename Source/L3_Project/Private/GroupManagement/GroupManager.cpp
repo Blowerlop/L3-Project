@@ -1,6 +1,7 @@
 #include "GroupManagement/GroupManager.h"
 #include "GameFramework/PlayerState.h"
 #include "GroupManagement/GroupableComponent.h"
+#include "Networking/ZodiaqPlayerState.h"
 
 TMap<int32, FServerGroupData> FGroupManager::Groups = TMap<int, FServerGroupData>();
 int32 FGroupManager::GroupIdCounter = 0;
@@ -18,6 +19,23 @@ FString GetGroupMemberName(const UGroupableComponent* GroupMember)
 	return PlayerController->GetPlayerState<APlayerState>()->GetPlayerName();
 }
 
+bool GetGroupMemberClientData(const UGroupableComponent* GroupMember, FClientData& OutClientData)
+{
+	if (!IsValid(GroupMember)) return false;
+	
+	const auto Owner = GroupMember->GetOwner();
+	if (!IsValid(Owner)) return false;
+
+	const auto PlayerController = Cast<APlayerController>(Owner);
+	if (!IsValid(PlayerController)) return false;
+	
+	const auto PlayerState = PlayerController->GetPlayerState<AZodiaqPlayerState>();
+	if (!IsValid(PlayerState)) return false;
+
+	OutClientData = PlayerState->ClientData;
+	return true;
+}
+
 TArray<FString> FServerGroupData::GetMembersAsString() const
 {
 	TArray<FString> Members;
@@ -28,6 +46,27 @@ TArray<FString> FServerGroupData::GetMembersAsString() const
 		Members.Add(GetGroupMemberName(GroupMember));
 	}
 		
+	return Members;
+}
+
+TArray<FClientData> FServerGroupData::GetMembersAsClientData() const
+{
+	TArray<FClientData> Members;
+	Members.Reserve(GroupMembers.Num());
+
+	for (const auto GroupMember : GroupMembers)
+	{
+		FClientData ClientData;
+
+		if (!GetGroupMemberClientData(GroupMember, ClientData))
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to get client data for group member: %s"), *GetGroupMemberName(GroupMember));
+			continue;
+		}
+		
+		Members.Add(ClientData);
+	}
+	
 	return Members;
 }
 

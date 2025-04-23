@@ -4,6 +4,7 @@
 #include "OnlineSubsystemUtils.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/GameSession.h"
+#include "Networking/BaseGameInstance.h"
 
 bool USessionsManagerSubsystem::IsSessionHost{};
 bool USessionsManagerSubsystem::HasRunningSession{};
@@ -248,7 +249,20 @@ void USessionsManagerSubsystem::HandleJoinSessionCompleted(FName SessionName, EO
 		{
 			if (APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController())
 			{
-				UE_LOG(LogTemp, Log, TEXT("Client travel to %s"), *ConnectInfos);
+				const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+				if (!IsValid(GameInstance))
+				{
+					UE_LOG(LogTemp, Error, TEXT("Can't client travel: GameInstance is not a UBaseGameInstance."));
+					return;
+				}
+				
+				ConnectInfos.Append(FString::Printf(TEXT("?%s=%s"), *UBaseGameInstance::UUIDConnectOptionsKey,
+					*GameInstance->SelfClientData.UUID));
+				
+				ConnectInfos.Append(FString::Printf(TEXT("?%s=%s"), *UBaseGameInstance::UserNameConnectOptionsKey,
+					*GameInstance->SelfClientData.Name));
+				
+				UE_LOG(LogTemp, Error, TEXT("Client travel to %s"), *ConnectInfos);
 				PlayerController->ClientTravel(ConnectInfos, TRAVEL_Absolute);
 			}
 			else
