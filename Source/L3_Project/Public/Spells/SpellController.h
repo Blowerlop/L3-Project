@@ -49,9 +49,7 @@ class L3_PROJECT_API USpellController : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
-	static constexpr int Max_Spells = 4;
-	
+public:	
 	USpellController();
 	
 
@@ -73,6 +71,9 @@ public:
 	UPROPERTY(ReplicatedUsing=OnSpellDataReplicated, EditAnywhere, BlueprintReadWrite)
 	TArray<USpellDataAsset*> SpellDatas;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int MaxSpells = 5;
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnSpellsChanged OnSpellDatasChanged;
 
