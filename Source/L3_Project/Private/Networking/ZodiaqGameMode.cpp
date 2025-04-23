@@ -4,11 +4,15 @@
 #include "Networking/ZodiaqGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Networking/BaseGameInstance.h"
+#include "Networking/SessionsManagerSubsystem.h"
 #include "Networking/ZodiaqPlayerState.h"
 
 FString AZodiaqGameMode::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                        const FString& Options, const FString& Portal)
 {
+	if (!USessionsManagerSubsystem::HasRunningSession)
+		return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
+	
 	const auto UUID = UGameplayStatics::ParseOption(Options, UBaseGameInstance::UUIDConnectOptionsKey);
 	if (UUID.IsEmpty())
 	{
@@ -30,6 +34,7 @@ FString AZodiaqGameMode::InitNewPlayer(APlayerController* NewPlayerController, c
 		return "Server error. Try to reconnect.";
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("Player %s connected with UUID %s"), *Name, *UUID);
 	PlayerState->ClientData = FClientData(UUID, Name);
 	
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
