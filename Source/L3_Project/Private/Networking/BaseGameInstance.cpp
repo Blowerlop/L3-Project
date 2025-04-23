@@ -74,6 +74,7 @@ void UBaseGameInstance::Init()
 
 	// todo: temp
 	UserName = FPlatformProcess::ComputerName();
+	UserName += FString::Printf(TEXT("%d"), FMath::RandRange(0, 1000));
 }
 
 void UBaseGameInstance::Shutdown()
@@ -109,7 +110,7 @@ void UBaseGameInstance::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful,
 {
 	if (bWasSuccessful)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Login successful! UserId: %s"), *UserId.ToString());
+		UE_LOG(LogTemp, Log, TEXT("Login successful! UserId: %s"), *UserId.ToString());
 
 		SelfClientData = FClientData(UserId.ToString(), UserName);
 	}
