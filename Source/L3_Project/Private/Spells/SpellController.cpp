@@ -139,10 +139,10 @@ void USpellController::BeginPlay()
 	
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
-	Cooldowns.SetNum(Max_Spells);
+	Cooldowns.SetNum(MaxSpells);
 	
-	SpellDatas.SetNum(Max_Spells);
-	RepCooldowns.SetNum(Max_Spells);
+	SpellDatas.SetNum(MaxSpells);
+	RepCooldowns.SetNum(MaxSpells);
 
 	ReplicateSpellDatas(SpellDatas);
 	ReplicateCooldowns(RepCooldowns);
