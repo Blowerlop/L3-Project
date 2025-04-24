@@ -38,13 +38,13 @@ struct FReplicatedVital
 	GENERATED_BODY()
 
 	UPROPERTY()
-	EVitalType Type;
+	EVitalType Type{};
 
 	UPROPERTY()
-	float Value;
+	float Value{};
 
 	UPROPERTY()
-	float MaxValue;
+	float MaxValue{};
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnVitalChangedDelegate, EVitalType, Type, float, Value);

@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "BaseGameInstance.h"
+#include "InstanceSettings.h"
 #include "SessionsManagerSubsystem.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "InstancesManagerSubsystem.generated.h"
 
+struct FInstanceSettings;
 class UInstanceDataAsset;
 struct FBlueprintSessionSearchResult;
 
@@ -21,11 +23,12 @@ class L3_PROJECT_API UInstancesManagerSubsystem : public UGameInstanceSubsystem
 
 public:
 	static int InstanceIDCounter;
-	static int InstanceSessionID;
 	static bool IsInstanceBeingDestroyed;
+
+	static FServerInstanceSettings CurrentInstanceSettings;
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Session")
-	void StartNewInstance(int SessionID, UInstanceDataAsset* Data);
+	void StartNewInstance(FServerInstanceSettings Settings);
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Session")
 	void StopInstance();
@@ -42,9 +45,9 @@ public:
 	}
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Session")
-	static int GetCurrentInstanceID()
+	static FServerInstanceSettings& GetCurrentInstanceSettings()
 	{
-		return InstanceSessionID;
+		return CurrentInstanceSettings;
 	}
 
 	UFUNCTION(BlueprintCallable, Category = "Networking")
@@ -59,7 +62,7 @@ public:
 private:
 	const FName LobbyOnlineSubsystem = "EOS";
 	
-	void StartListenServer(const int SessionID, const FString& InstanceMapPath) const;
+	void StartListenServer(const FString& InstanceMapPath) const;
 
 	bool TryGetBaseGameInstance(UBaseGameInstance*& Out) const
 	{

@@ -14,7 +14,7 @@ struct FEffectResolverData
 	TSubclassOf<UEffectResolver> ResolverClass;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Instanced)
-	UEffectResolverParams* Params;
+	UEffectResolverParams* Params{};
 };
 
 UCLASS(BlueprintType)

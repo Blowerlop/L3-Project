@@ -7,6 +7,7 @@
 #include "Instances/InstanceDataAsset.h"
 #include "Instances/InstanceDatabase.h"
 #include "Networking/BaseGameInstance.h"
+#include "Networking/InstanceSettings.h"
 #include "Networking/InstancesManagerSubsystem.h"
 
 
@@ -30,11 +31,10 @@ void UInstancesUserComponent::ReturnToLobbyClientRPC_Implementation()
 
 void UInstancesUserComponent::StartInstance(UInstanceDataAsset* Asset)
 {
-	StartInstanceServerRPC(Asset->AssetID);
+	StartInstanceServerRPC(Asset);
 }
 
-void UInstancesUserComponent::OnInstanceStartedClientRPC_Implementation(const int32 InstanceID,
-                                                                        const int32 InstanceDataID)
+void UInstancesUserComponent::OnInstanceStartedClientRPC_Implementation(FInstanceSettings Settings)
 {
 	const auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (!IsValid(GameInstance)) return;
@@ -42,17 +42,10 @@ void UInstancesUserComponent::OnInstanceStartedClientRPC_Implementation(const in
 	const auto InstanceDatabase = GameInstance->GetSubsystem<UInstanceDatabase>();
 	if (!IsValid(InstanceDatabase)) return;
 	
-	const auto Data = InstanceDatabase->GetInstanceDataAsset(InstanceDataID);
-	if (!Data)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Can't find InstanceDataAsset with id %d!"), InstanceDataID);
-		return;
-	}
-	
-	OnInstanceStartedDelegate.Broadcast(InstanceID, Data);
+	OnInstanceStartedDelegate.Broadcast(Settings);
 }
 
-void UInstancesUserComponent::OnInstanceValidatedClientRPC_Implementation(int32 InstanceID, int32 InstanceDataID)
+void UInstancesUserComponent::OnInstanceValidatedClientRPC_Implementation(FServerInstanceSettings Settings)
 {
 	const auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (!IsValid(GameInstance)) return;
@@ -62,18 +55,11 @@ void UInstancesUserComponent::OnInstanceValidatedClientRPC_Implementation(int32 
 
 	const auto InstanceDatabase = GameInstance->GetSubsystem<UInstanceDatabase>();
 	if (!IsValid(InstanceDatabase)) return;
-
-	const auto Data = InstanceDatabase->GetInstanceDataAsset(InstanceDataID);
-	if (!Data)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Can't find InstanceDataAsset with id %d!"), InstanceDataID);
-		return;
-	}
 	
-	InstancesManager->StartNewInstance(InstanceID, Data);
+	InstancesManager->StartNewInstance(Settings);
 }
 
-void UInstancesUserComponent::StartInstanceServerRPC_Implementation(int32 InstanceDataID)
+void UInstancesUserComponent::StartInstanceServerRPC_Implementation(UInstanceDataAsset* InstanceDataAsset)
 {
 	UGroupableComponent* GroupableComponent = nullptr;
 	if (!TryGetGroupableComponent(GroupableComponent))
@@ -84,10 +70,22 @@ void UInstancesUserComponent::StartInstanceServerRPC_Implementation(int32 Instan
 	
 	if (!FGroupManager::IsGroupLeader(GroupableComponent)) return;
 
-	const auto NewInstanceId = UInstancesManagerSubsystem::GetNextInstanceID();
+	const auto SessionId = UInstancesManagerSubsystem::GetNextInstanceID();
 	const auto Group = FGroupManager::GetGroup(GroupableComponent->ReplicatedGroupData.GroupId);
 
-	OnInstanceValidatedClientRPC(NewInstanceId, InstanceDataID);
+	const FServerInstanceSettings HostSettings = {
+		InstanceDataAsset,
+		SessionId,
+		Group->GetMembersAsClientData()
+	};
+	
+	OnInstanceValidatedClientRPC(HostSettings);
+
+	const FInstanceSettings ClientSettings = {
+		InstanceDataAsset,
+		SessionId,
+		Group->GetMembersAsString()
+	};
 	
 	// Do not send this callback to the leader
 	for (int32 i = 1; i < Group->GroupMembers.Num(); ++i)
@@ -102,7 +100,7 @@ void UInstancesUserComponent::StartInstanceServerRPC_Implementation(int32 Instan
 			continue;
 		}
 		
-		InstancesUser->OnInstanceStartedClientRPC(NewInstanceId, InstanceDataID);
+		InstancesUser->OnInstanceStartedClientRPC(ClientSettings);
 	}
 }
 
