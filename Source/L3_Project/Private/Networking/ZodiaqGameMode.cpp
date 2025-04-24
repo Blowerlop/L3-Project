@@ -36,6 +36,8 @@ FString AZodiaqGameMode::InitNewPlayer(APlayerController* NewPlayerController, c
 
 	UE_LOG(LogTemp, Warning, TEXT("Player %s connected with UUID %s"), *Name, *UUID);
 	PlayerState->ClientData = FClientData(UUID, Name);
+
+	OnPlayerInitializedDelegate.Broadcast(PlayerState->ClientData);
 	
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 }
