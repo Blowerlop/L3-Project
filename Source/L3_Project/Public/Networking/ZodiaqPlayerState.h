@@ -12,4 +12,6 @@ class AZodiaqPlayerState : public APlayerState
 public:
 	UPROPERTY(BlueprintReadOnly)
 	FClientData ClientData;
+	
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };

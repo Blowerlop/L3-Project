@@ -1,11 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Networking/ZodiaqGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Networking/BaseGameInstance.h"
 #include "Networking/SessionsManagerSubsystem.h"
 #include "Networking/ZodiaqPlayerState.h"
+
+void AZodiaqGameMode::OnPlayerStateEndPlay(const AZodiaqPlayerState* PlayerState) const
+{
+	OnClientDestroyedDelegate.Broadcast(PlayerState->ClientData);
+}
 
 FString AZodiaqGameMode::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                        const FString& Options, const FString& Portal)
@@ -37,7 +41,7 @@ FString AZodiaqGameMode::InitNewPlayer(APlayerController* NewPlayerController, c
 	UE_LOG(LogTemp, Warning, TEXT("Player %s connected with UUID %s"), *Name, *UUID);
 	PlayerState->ClientData = FClientData(UUID, Name);
 
-	OnPlayerInitializedDelegate.Broadcast(PlayerState->ClientData);
+	OnClientSpawnedDelegate.Broadcast(PlayerState->ClientData);
 	
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 }

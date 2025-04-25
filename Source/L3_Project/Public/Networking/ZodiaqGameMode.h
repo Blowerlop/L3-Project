@@ -11,7 +11,9 @@
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerInitialized, FClientData, ClientData);
+class AZodiaqPlayerState;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOnClientSpawned, FClientData, ClientData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnClientDestroyed, FClientData, ClientData);
 
 UCLASS()
 class L3_PROJECT_API AZodiaqGameMode : public AGameModeBase
@@ -20,8 +22,13 @@ class L3_PROJECT_API AZodiaqGameMode : public AGameModeBase
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FOnPlayerInitialized OnPlayerInitializedDelegate;
+	FOnOnClientSpawned OnClientSpawnedDelegate;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnClientDestroyed OnClientDestroyedDelegate;
+	
+	void OnPlayerStateEndPlay(const AZodiaqPlayerState* PlayerState) const;
+	
 protected:
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal) override;
 };
