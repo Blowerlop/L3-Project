@@ -14,6 +14,28 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="SpellFireTest" ID="{65B0CA31-3B0A-4C9C-9066-CE13E3C0CD72}">
+					<ChildrenList>
+						<Action Name="" ID="{6A1A5FED-4393-4B36-89D6-D307D02A89A6}" ShortID="234046489">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="spell_fire_test" ID="{2E874BA7-3F7F-4F91-9B02-42B247D0E1DD}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="DashTest" ID="{45A5FD2E-1CEA-48BF-A665-9E9F70F04441}">
+					<ChildrenList>
+						<Action Name="" ID="{2D6097F4-DF39-433E-BF7F-10B6BE02D60B}" ShortID="293069730">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="dash_test" ID="{69B6DFDF-6DF1-45BA-A42D-E2B2600915E1}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

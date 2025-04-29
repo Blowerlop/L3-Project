@@ -10,11 +10,19 @@
     "Type": "User",
     "GUID": "{629FAB7B-C345-4463-854D-D8C6F1A181C2}",
     "Language": "SFX",
-    "Hash": "{BE6B8E7E-2F83-8DCC-4A63-F2B73895496B}",
+    "Hash": "{7A27BA51-EC43-BB50-61B9-1930253D2ABA}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main",
     "ShortName": "Main",
     "Path": "Main.bnk",
     "Media": [
+     {
+      "Id": "28388860",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "fire_spell_1.wav",
+      "CachePath": "SFX/fire_spell_1_818F3B66.wem"
+     },
      {
       "Id": "434028665",
       "Language": "SFX",
@@ -22,6 +30,14 @@
       "Location": "Memory",
       "ShortName": "auto_attack_dist_temp.wav",
       "CachePath": "SFX/auto_attack_dist_temp_818F3B66.wem"
+     },
+     {
+      "Id": "660533776",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "auto_attack_cac_3.wav",
+      "CachePath": "SFX/auto_attack_cac_3_818F3B66.wem"
      }
     ],
     "Events": [
@@ -38,10 +54,38 @@
         "Id": "434028665"
        }
       ]
+     },
+     {
+      "Id": "136155997",
+      "Name": "DashTest",
+      "ObjectPath": "\\Events\\Default Work Unit\\DashTest",
+      "GUID": "{45A5FD2E-1CEA-48BF-A665-9E9F70F04441}",
+      "DurationType": "OneShot",
+      "DurationMin": "1.064088",
+      "DurationMax": "1.064088",
+      "MediaRefs": [
+       {
+        "Id": "660533776"
+       }
+      ]
+     },
+     {
+      "Id": "7265457",
+      "Name": "SpellFireTest",
+      "ObjectPath": "\\Events\\Default Work Unit\\SpellFireTest",
+      "GUID": "{65B0CA31-3B0A-4C9C-9066-CE13E3C0CD72}",
+      "DurationType": "OneShot",
+      "DurationMin": "1.1677234",
+      "DurationMax": "1.1677234",
+      "MediaRefs": [
+       {
+        "Id": "28388860"
+       }
+      ]
      }
     ]
    }
   ],
-  "FileHash": "{A73F6F3F-F7E8-B848-BAB5-8D85E003EE14}"
+  "FileHash": "{CAA785D9-1D95-F1E9-47B4-5A76BDA909BE}"
  }
 }

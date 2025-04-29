@@ -15,6 +15,16 @@
 								</ModifierInfo>
 							</ModifierList>
 						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-8</Value>
+							</ValueList>
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{D5B6E5C7-5405-4B6E-900C-F097DA1DCAA1}"/>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
@@ -35,6 +45,105 @@
 					</ChildrenList>
 					<ActiveSourceList>
 						<ActiveSource Name="auto_attack_dist_temp" ID="{970510E9-5F20-4006-AA59-AF95296B7A99}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+				<Sound Name="spell_fire_test" ID="{2E874BA7-3F7F-4F91-9B02-42B247D0E1DD}" ShortID="971319739">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{AAAEA12A-6AC5-4EFA-B124-74AD76901499}"/>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-8</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="auto_attack_dist_temp" ID="{F2981336-1AA9-4F50-BACD-1915BB7356EA}">
+							<Language>SFX</Language>
+							<AudioFile>auto_attack_dist_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="434028665"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="fire_spell_1" ID="{2597FFDE-B061-4541-9813-A0B6196BDD8C}">
+							<Language>SFX</Language>
+							<AudioFile>fire_spell_1.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="28388860"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="fire_spell_1" ID="{2597FFDE-B061-4541-9813-A0B6196BDD8C}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+				<Sound Name="dash_test" ID="{69B6DFDF-6DF1-45BA-A42D-E2B2600915E1}" ShortID="928059601">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{1108E4BE-B2A3-4745-9423-8204CC6C84F9}"/>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-8</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="auto_attack_dist_temp" ID="{C49EB26A-90BC-40AA-9695-7AC46FABD169}">
+							<Language>SFX</Language>
+							<AudioFile>auto_attack_dist_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="434028665"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="fire_spell_1" ID="{CAF15CBA-CEBC-45B8-A4F2-B0D3EE538E8F}">
+							<Language>SFX</Language>
+							<AudioFile>fire_spell_1.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="28388860"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="auto_attack_cac_3" ID="{A206AD80-39BA-4D80-B0C5-007CEBB64110}">
+							<Language>SFX</Language>
+							<AudioFile>auto_attack_cac_3.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="660533776"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="auto_attack_cac_3" ID="{A206AD80-39BA-4D80-B0C5-007CEBB64110}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 			</ChildrenList>
