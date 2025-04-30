@@ -4,10 +4,53 @@
 #include "Http.h"
 #include "Json.h"
 #include "JsonUtilities.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Misc/Base64.h"
+
+FString UDatabaseLibrary::LoadFirebaseApiKey()
+{
+    FString JsonRaw;
+    const FString FilePath = FPaths::ProjectContentDir() / TEXT("Keys.json");
+
+    if (!FFileHelper::LoadFileToString(JsonRaw, *FilePath))
+    {
+        UE_LOG(LogTemp, Error, TEXT("Loading Keys.json Failed"));
+        return FString();
+    }
+
+    TSharedPtr<FJsonObject> RootObject;
+    TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonRaw);
+
+    if (FJsonSerializer::Deserialize(Reader, RootObject) && RootObject.IsValid())
+    {
+        TSharedPtr<FJsonObject> ApiKeysObject = RootObject->GetObjectField(TEXT("APIKeys"));
+        if (ApiKeysObject.IsValid())
+        {
+            FString EncodedKey;
+            if (ApiKeysObject->TryGetStringField(TEXT("FirebaseKey"), EncodedKey))
+            {
+                FString DecodedKey;
+                FBase64::Decode(EncodedKey, DecodedKey);
+                return DecodedKey;
+            }
+        }
+    }
+
+    UE_LOG(LogTemp, Error, TEXT("Error Key missing"));
+    return FString();
+}
 
 void UDatabaseLibrary::FirebaseAuthRequest(const FString& Email, const FString& Password)
 {
-    const FString FirebaseApiKey = TEXT("TODO API KEY");
+    FString FirebaseApiKey = LoadFirebaseApiKey();
+
+    if (FirebaseApiKey.IsEmpty())
+    {
+        UE_LOG(LogTemp, Error, TEXT("Missing API Key"));
+        return;
+    }
+
     const FString Url = FString::Printf(TEXT("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=%s"), *FirebaseApiKey);
 
     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
@@ -15,7 +58,6 @@ void UDatabaseLibrary::FirebaseAuthRequest(const FString& Email, const FString& 
     Request->SetVerb("POST");
     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 
-    // Corps JSON
     TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
     JsonObject->SetStringField("email", Email);
     JsonObject->SetStringField("password", Password);

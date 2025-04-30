@@ -12,4 +12,8 @@ public:
 	// Auth User
 	UFUNCTION(BlueprintCallable, Category = "Firebase")
 	static void FirebaseAuthRequest(const FString& Email, const FString& Password);
+
+private:
+	// Get API Key
+	static FString LoadFirebaseApiKey();
 };
