@@ -72,7 +72,7 @@ public:
 	TArray<USpellDataAsset*> SpellDatas;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	int MaxSpells = 5;
+	int MaxSpells = 6;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnSpellsChanged OnSpellDatasChanged;
@@ -99,6 +99,9 @@ public:
 	
 	UFUNCTION(NetMulticast, Reliable)
 	void SpellCastResponseMultiCastRpc(int SpellIndex, USpellDataAsset* Spell);
+
+	UFUNCTION(Client, Reliable)
+	void InvalidSpellCastResponseOwnerRpc();
 	
 	UFUNCTION(BlueprintCallable)
 	void SrvOnAnimationCastSpellNotify();
@@ -135,6 +138,12 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	bool CanStartAiming_BP(int SpellIndex) const;
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPredictedCast(int SpellIndex, UAimResultHolder* Result);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnInvalidCastResponse();
 	
 private:
 	UPROPERTY()
@@ -201,15 +210,15 @@ private:
 #pragma endregion 
 	
 #pragma region RPCs
-
+	
 	UFUNCTION(BlueprintCallable)
 	void RequestSpellCastGenericResultToServer(int SpellIndex, UAimResultHolder* Result);
 	
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void RequestSpellCastFromControllerRpc_Vector(int SpellIndex, USpellController* Caster, FVector Result);
+	void RequestSpellCastFromControllerRpc_Vector(int SpellIndex, USpellController* Caster, FVector Result, double ClientTime);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void RequestSpellCastFromControllerRpc_Actor(int SpellIndex, USpellController* Caster, AActor* Result);
+	void RequestSpellCastFromControllerRpc_Actor(int SpellIndex, USpellController* Caster, AActor* Result, double ClientTime);
 	
 #pragma endregion 
 };

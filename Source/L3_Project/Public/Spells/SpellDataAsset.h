@@ -45,6 +45,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool CanRotate;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool IsInstantAiming;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UAnimMontage* AnimationMontage;

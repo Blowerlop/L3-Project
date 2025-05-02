@@ -63,6 +63,15 @@ void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int Sp
 	OnCastStart.Broadcast(CastState->Spell, CastState->SpellIndex);
 }
 
+void USpellController::InvalidSpellCastResponseOwnerRpc_Implementation()
+{
+	if (UKismetSystemLibrary::IsServer(this)) return;
+	
+	CastState->IsCasting = false;
+	
+	OnInvalidCastResponse();
+}
+
 void USpellController::SrvOnAnimationCastSpellNotify()
 {
 	if (!UKismetSystemLibrary::IsServer(this)) return;
@@ -276,6 +285,15 @@ void USpellController::OnSpellInputStarted(const int Index)
 	
 	if (!CanStartAiming(Index)) return;
 
+	const auto Spell = GetSpellData(Index);
+	
+	if (Spell->IsInstantAiming)
+	{
+		Aimer->ForceUpdateAimResult();
+		StopAndCast(Aimer, Index);
+		return;
+	}
+
 	Aimer->Start();
 	ActiveAimer = Aimer;
 }
@@ -312,7 +330,26 @@ void USpellController::StopAndCast(ASpellAimer* Aimer, const int Index)
 		UE_LOG(LogTemp, Error, TEXT("Aimer at index %d of class %s gave no result. Spell will not be casted."), Index, *Aimer->GetClass()->GetName());
 		return;
 	}
+
+	// todo: replace with a precise server time
+	const auto ClientTime = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+	const auto Validity = ASpellManager::GetSpellRequestValidity(Index, this, ClientTime);
+
+	if (Validity == ESpellRequestValidity::Invalid)
+	{
+		return;
+	}
+
+	// Host doesn't need prediciton
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		CastState->Spell = GetSpellData(Index);
+		CastState->SpellIndex = Index;
+		CastState->IsCasting = true;
 	
+		OnPredictedCast(Index, Result);
+	}
+
 	RequestSpellCastGenericResultToServer(Index, Result);
 }
 
@@ -449,44 +486,45 @@ void USpellController::TrySelectSpellRpc_Implementation(const int Index, USpellD
 void USpellController::RequestSpellCastGenericResultToServer(const int SpellIndex, UAimResultHolder* Result)
 {
 	const auto ResultClass = Result->GetClass();
+
+	const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
 	
 	// Can't switch. Only works on ints
 	if (ResultClass == UVectorAimResultHolder::StaticClass())
 	{
 		const auto VectorResult = Cast<UVectorAimResultHolder>(Result);
-		RequestSpellCastFromControllerRpc_Vector(SpellIndex, this, VectorResult->Vector);
+		RequestSpellCastFromControllerRpc_Vector(SpellIndex, this, VectorResult->Vector, Time);
 	}
 	else if(ResultClass == UActorAimResultHolder::StaticClass())
 	{
 		const auto ActorResult = Cast<UActorAimResultHolder>(Result);
 
-		RequestSpellCastFromControllerRpc_Actor(SpellIndex, this, ActorResult->Actor);
+		RequestSpellCastFromControllerRpc_Actor(SpellIndex, this, ActorResult->Actor, Time);
 	}
 }
 
 void USpellController::RequestSpellCastFromControllerRpc_Actor_Implementation(int SpellIndex, USpellController* Caster,
-	AActor* Result)
+	AActor* Result, double ClientTime)
 {
 	const auto Holder = NewObject<UActorAimResultHolder>();
 	Holder->Actor = Result;
 
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
-
-	const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
-	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, Time);
+	
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, ClientTime);
 }
 
-void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(const int SpellIndex, USpellController* Caster, const FVector Result)
+void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(const int SpellIndex, USpellController* Caster,
+	const FVector Result, double ClientTime)
 {
 	const auto Holder = NewObject<UVectorAimResultHolder>();
 	Holder->Vector = Result;
 
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
-
-	const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
-	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, Time);
+	
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, ClientTime);
 }
 
 void USpellController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

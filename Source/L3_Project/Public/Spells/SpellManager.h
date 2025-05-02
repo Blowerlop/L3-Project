@@ -12,7 +12,13 @@ class UAutoAttackController;
 class UAimResultHolder;
 class USpellDataAsset;
 
-
+UENUM()
+enum ESpellRequestValidity
+{
+	Invalid,
+	Normal,
+	Combo
+};
 
 UCLASS()
 class L3_PROJECT_API ASpellManager : public AActor
@@ -28,9 +34,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void RequestSpellCastFromController(int SpellIndex, USpellController* SpellController, UAimResultHolder* Result, double ClientTime) const;
-
-	UFUNCTION(BlueprintCallable)
-	void RequestAttack(UAutoAttackController* AttackController, UAimResultHolder* Result, double ClientTime) const;
+	
+	static ESpellRequestValidity GetSpellRequestValidity(int SpellIndex, USpellController* SpellController, const double ClientTime);
 	
 	UFUNCTION(BlueprintCallable)
 	ASpell* TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result);

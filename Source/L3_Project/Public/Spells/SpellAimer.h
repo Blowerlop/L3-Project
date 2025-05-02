@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	bool IsValid();
 	
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ForceUpdateAimResult();
+	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAimResultHolder* GetAimResult() const;
 	
