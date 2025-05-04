@@ -5,6 +5,7 @@
 
 #include "InSceneManagersRefs.h"
 #include "GameFramework/GameStateBase.h"
+#include "GameFramework/PlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Spells/Spell.h"
@@ -40,7 +41,7 @@ void ASpellManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 }
 
 void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellController* SpellController,
-	UAimResultHolder* Result, double ClientTime) const
+                                                   UAimResultHolder* Result) const
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -48,7 +49,11 @@ void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellC
 		return;
 	}
 
-	switch(GetSpellRequestValidity(SpellIndex, SpellController, ClientTime))
+	// Remove the latency between input and server receiving the input
+	// + Remove latency between server animation start and client animation start
+	const auto CompensatedTime = GetWorld()->GetTimeSeconds() - GetRttForControllerInSeconds(SpellController);
+
+	switch(GetSpellRequestValidity(SpellIndex, SpellController, CompensatedTime))
 	{
 		case Invalid:
 			SpellController->InvalidSpellCastResponseOwnerRpc();
@@ -70,12 +75,12 @@ void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellC
 }
 
 ESpellRequestValidity ASpellManager::GetSpellRequestValidity(int SpellIndex, USpellController* SpellController,
-	const double ClientTime)
+	const double Time)
 {
 	const auto CastState = SpellController->CastState;
 	const auto Spell = CastState->Spell;
 	
-	if (SpellIndex == CastState->SpellIndex && IsInComboWindow(Spell, ClientTime, CastState->AnimationStartTime, CastState->AnimationEndTime))
+	if (SpellIndex == CastState->SpellIndex && IsInComboWindow(Spell, Time, CastState->AnimationStartTime, CastState->AnimationEndTime))
 	{
 		return Combo;
 	}
@@ -142,5 +147,19 @@ bool ASpellManager::IsInComboWindow(const USpellDataAsset* Spell, const double C
 		return false;
 
 	return true;
+}
+
+double ASpellManager::GetRttForControllerInSeconds(const USpellController* SpellController)
+{
+	const auto Owner = SpellController->GetOwner()->GetOwner();
+	if (!IsValid(Owner)) return 0.0;
+
+	const auto PlayerController = Cast<APlayerController>(Owner);
+	if (!IsValid(PlayerController)) return 0.0;
+
+	const auto PlayerState = PlayerController->PlayerState;
+	if (!IsValid(PlayerState)) return 0.0;
+
+	return static_cast<double>(PlayerState->ExactPing) / 1000.0;
 }
 

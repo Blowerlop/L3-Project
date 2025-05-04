@@ -33,12 +33,15 @@ public:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	UFUNCTION(BlueprintCallable)
-	void RequestSpellCastFromController(int SpellIndex, USpellController* SpellController, UAimResultHolder* Result, double ClientTime) const;
+	void RequestSpellCastFromController(int SpellIndex, USpellController* SpellController, UAimResultHolder* Result) const;
 	
-	static ESpellRequestValidity GetSpellRequestValidity(int SpellIndex, USpellController* SpellController, const double ClientTime);
+	static ESpellRequestValidity GetSpellRequestValidity(int SpellIndex, USpellController* SpellController, const double Time);
 	
 	UFUNCTION(BlueprintCallable)
 	ASpell* TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result);
 
 	static bool IsInComboWindow(const USpellDataAsset* Spell, double ClientTime, double StartTime, double EndTime);
+
+private:
+	static double GetRttForControllerInSeconds(const USpellController* SpellController);
 };

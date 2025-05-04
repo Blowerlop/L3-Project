@@ -55,7 +55,7 @@ void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int Sp
 	
     CastState->Spell = Spell;
     
-    const auto StartTime = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+    const auto StartTime = GetWorld()->GetTimeSeconds();
     	
     CastState->AnimationStartTime = StartTime;
     CastState->AnimationEndTime = StartTime + CastState->Spell->AnimationMontage->GetSectionLength(CastState->Spell->ComboIndex);
@@ -330,10 +330,8 @@ void USpellController::StopAndCast(ASpellAimer* Aimer, const int Index)
 		UE_LOG(LogTemp, Error, TEXT("Aimer at index %d of class %s gave no result. Spell will not be casted."), Index, *Aimer->GetClass()->GetName());
 		return;
 	}
-
-	// todo: replace with a precise server time
-	const auto ClientTime = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
-	const auto Validity = ASpellManager::GetSpellRequestValidity(Index, this, ClientTime);
+	
+	const auto Validity = ASpellManager::GetSpellRequestValidity(Index, this, GetWorld()->GetTimeSeconds());
 
 	if (Validity == ESpellRequestValidity::Invalid)
 	{
@@ -486,25 +484,23 @@ void USpellController::TrySelectSpellRpc_Implementation(const int Index, USpellD
 void USpellController::RequestSpellCastGenericResultToServer(const int SpellIndex, UAimResultHolder* Result)
 {
 	const auto ResultClass = Result->GetClass();
-
-	const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
 	
 	// Can't switch. Only works on ints
 	if (ResultClass == UVectorAimResultHolder::StaticClass())
 	{
 		const auto VectorResult = Cast<UVectorAimResultHolder>(Result);
-		RequestSpellCastFromControllerRpc_Vector(SpellIndex, this, VectorResult->Vector, Time);
+		RequestSpellCastFromControllerRpc_Vector(SpellIndex, this, VectorResult->Vector);
 	}
 	else if(ResultClass == UActorAimResultHolder::StaticClass())
 	{
 		const auto ActorResult = Cast<UActorAimResultHolder>(Result);
 
-		RequestSpellCastFromControllerRpc_Actor(SpellIndex, this, ActorResult->Actor, Time);
+		RequestSpellCastFromControllerRpc_Actor(SpellIndex, this, ActorResult->Actor);
 	}
 }
 
 void USpellController::RequestSpellCastFromControllerRpc_Actor_Implementation(int SpellIndex, USpellController* Caster,
-	AActor* Result, double ClientTime)
+                                                                              AActor* Result)
 {
 	const auto Holder = NewObject<UActorAimResultHolder>();
 	Holder->Actor = Result;
@@ -512,11 +508,11 @@ void USpellController::RequestSpellCastFromControllerRpc_Actor_Implementation(in
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
 	
-	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, ClientTime);
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder);
 }
 
 void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(const int SpellIndex, USpellController* Caster,
-	const FVector Result, double ClientTime)
+                                                                               const FVector Result)
 {
 	const auto Holder = NewObject<UVectorAimResultHolder>();
 	Holder->Vector = Result;
@@ -524,7 +520,7 @@ void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(c
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
 	
-	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, ClientTime);
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder);
 }
 
 void USpellController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
