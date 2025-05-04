@@ -1,6 +1,7 @@
 #pragma once
 #include "EffectDataAsset.generated.h"
 
+enum class EEffectImpact : uint8;
 class UEffectStackingBehaviour;
 enum class EEffectStackingType : uint8;
 enum class EEffectValueType : uint8;
@@ -15,6 +16,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	EEffectType Type;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	EEffectImpact Impact;
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	bool bUseDuration;
 	

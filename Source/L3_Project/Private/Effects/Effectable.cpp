@@ -4,6 +4,7 @@
 #include "Effects/EffectInstance.h"
 #include "Effects/EffectStackingBehaviour.h"
 #include "Effects/EffectSystemConfiguration.h"
+#include "Effects/EffectType.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 UEffectable::UEffectable()
@@ -112,6 +113,44 @@ void UEffectable::SrvRemoveEffects(const TArray<UEffectInstance*>& Effects)
 	}
 
 	Refresh();
+}
+
+void UEffectable::Cleanse()
+{
+	RemoveEffectsBuffer.Empty();
+	
+	for(auto& [_, Container] : EffectsByType)
+	{
+		for(int i = Container->GetNumInstances() - 1; i >= 0; i--)
+		{
+			const auto Instance = Container->GetInstanceUnsafe(i);
+			if (Instance->Data->Impact == EEffectImpact::Bad)
+			{
+				RemoveEffectsBuffer.Add(Instance);
+			}
+		}
+	}
+
+	SrvRemoveEffects(RemoveEffectsBuffer);
+}
+
+void UEffectable::Debuff()
+{
+	RemoveEffectsBuffer.Empty();
+	
+	for(auto& [_, Container] : EffectsByType)
+	{
+		for(int i = Container->GetNumInstances(); i >= 0; i--)
+		{
+			const auto Instance = Container->GetInstanceUnsafe(i);
+			if (Instance->Data->Impact == EEffectImpact::Good)
+			{
+				RemoveEffectsBuffer.Add(Instance);
+			}
+		}
+	}
+
+	SrvRemoveEffects(RemoveEffectsBuffer);
 }
 
 UEffectInstanceContainer* UEffectable::GetEffectContainer(const EEffectType Type)

@@ -78,6 +78,12 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvRemoveEffects(UPARAM(ref) const TArray<UEffectInstance*>& Effects);
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void Cleanse();
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void Debuff();
 	
 	UPROPERTY(BlueprintReadOnly)
 	TMap<EEffectType, UEffectInstanceContainer*> EffectsByType;
@@ -89,6 +95,8 @@ public:
 	TArray<EEffectType> ActiveResolvers;
 
 private:
+	TArray<UEffectInstance*> RemoveEffectsBuffer{};
+	
 	UEffectInstanceContainer* GetEffectContainer(EEffectType Type);
 
 	void Refresh();

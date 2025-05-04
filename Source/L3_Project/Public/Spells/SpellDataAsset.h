@@ -30,6 +30,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int Heal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Bitmask, BitmaskEnum = ESpellAction))
+	int32 SpellActions = 0;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText Name;

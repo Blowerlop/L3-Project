@@ -4,6 +4,7 @@
 #include "Spells/Spell.h"
 
 #include "Effects/Effectable.h"
+#include "Effects/EffectType.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Spells/SpellDataAsset.h"
 #include "Stats/StatsContainer.h"
@@ -50,6 +51,8 @@ bool ASpell::SrvApply(AActor* Target)
 
 	if (const auto Effectable = Target->GetComponentByClass<UEffectable>(); Effectable != nullptr)
 	{
+		HandleSpellActions(Effectable);
+		
 		if (bShouldStoreAppliedEffects)
 		{
 			if (!AppliedEffectsInstances.Contains(Target))
@@ -93,6 +96,21 @@ void ASpell::SrvUnApply(AActor* Target)
 		Effectable->SrvRemoveEffects(Container->Instances);
 
 		AppliedEffectsInstances[Target]->Instances.Empty();
+	}
+}
+
+void ASpell::HandleSpellActions(UEffectable* Effectable) const
+{
+	const auto Actions = Data->SpellActions;
+
+	if (Actions & static_cast<int32>(ESpellAction::Cleanse))
+	{
+		Effectable->Cleanse();
+	}
+	
+	if (Actions & static_cast<int32>(ESpellAction::Debuff))
+	{
+		Effectable->Debuff();
 	}
 }
 
