@@ -5,9 +5,9 @@
 
 #include "InSceneManagersRefs.h"
 #include "GameFramework/GameStateBase.h"
+#include "GameFramework/PlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "Player/AutoAttackController.h"
 #include "Spells/Spell.h"
 #include "Spells/SpellController.h"
 #include "Spells/SpellDataAsset.h"
@@ -41,7 +41,7 @@ void ASpellManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 }
 
 void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellController* SpellController,
-	UAimResultHolder* Result, double ClientTime) const
+                                                   UAimResultHolder* Result) const
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -49,46 +49,45 @@ void ASpellManager::RequestSpellCastFromController(const int SpellIndex, USpellC
 		return;
 	}
 
-	const auto CastState = SpellController->CastState;
-	const auto Spell = CastState->Spell;
-	
-	if (SpellIndex == CastState->SpellIndex && IsInComboWindow(Spell, ClientTime, CastState->AnimationStartTime, CastState->AnimationEndTime))
-	{
-		SpellController->SendSpellCastResponse(SpellIndex, CastState->AimResult, Spell->NextComboSpell);
-	}
-	else
-	{
-		if (SpellController->IsCasting()) return;
+	// Remove the latency between input and server receiving the input
+	// + Remove latency between server animation start and client animation start
+	const auto CompensatedTime = GetWorld()->GetTimeSeconds() - GetRttForControllerInSeconds(SpellController);
 
-		// No combo
-		SpellController->SendSpellCastResponse(SpellIndex, Result);
+	switch(GetSpellRequestValidity(SpellIndex, SpellController, CompensatedTime))
+	{
+		case Invalid:
+			SpellController->InvalidSpellCastResponseOwnerRpc();
+			return;
+		case Normal:
+			SpellController->SendSpellCastResponse(SpellIndex, Result);
+			break;
+		case Combo:
+			{
+				const auto CastState = SpellController->CastState;
+				const auto Spell = CastState->Spell;
+			
+				SpellController->SendSpellCastResponse(SpellIndex, CastState->AimResult, Spell->NextComboSpell);
+			}
+			break;
 	}
 	
 	SpellController->StartGlobalCooldown();
 }
 
-void ASpellManager::RequestAttack(UAutoAttackController* AttackController, UAimResultHolder* Result, const double ClientTime) const
+ESpellRequestValidity ASpellManager::GetSpellRequestValidity(int SpellIndex, USpellController* SpellController,
+	const double Time)
 {
-	if (!UKismetSystemLibrary::IsServer(this))
-	{
-		UE_LOG(LogTemp, Error, TEXT("TryCastAttackSpell can only be called on the server!"));
-		return;
-	}
-
-	const auto AttackState = AttackController->AttackState;
-	const auto AttackSpell = AttackState->AttackSpell;
+	const auto CastState = SpellController->CastState;
+	const auto Spell = CastState->Spell;
 	
-	if (IsInComboWindow(AttackSpell, ClientTime, AttackState->AnimationStartTime, AttackState->AnimationEndTime))
+	if (SpellIndex == CastState->SpellIndex && IsInComboWindow(Spell, Time, CastState->AnimationStartTime, CastState->AnimationEndTime))
 	{
-		AttackController->SendAttackResponse(AttackState->AimResult, AttackSpell->NextComboSpell);
+		return Combo;
 	}
-	else
-	{
-		if (AttackController->IsAttacking()) return;
+	
+	if (SpellController->IsCasting()) return Invalid;
 
-		// No combo
-		AttackController->SendAttackResponse(Result);
-	}
+	return Normal;
 }
 
 ASpell* ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result)
@@ -148,5 +147,19 @@ bool ASpellManager::IsInComboWindow(const USpellDataAsset* Spell, const double C
 		return false;
 
 	return true;
+}
+
+double ASpellManager::GetRttForControllerInSeconds(const USpellController* SpellController)
+{
+	const auto Owner = SpellController->GetOwner()->GetOwner();
+	if (!IsValid(Owner)) return 0.0;
+
+	const auto PlayerController = Cast<APlayerController>(Owner);
+	if (!IsValid(PlayerController)) return 0.0;
+
+	const auto PlayerState = PlayerController->PlayerState;
+	if (!IsValid(PlayerState)) return 0.0;
+
+	return static_cast<double>(PlayerState->ExactPing) / 1000.0;
 }
 

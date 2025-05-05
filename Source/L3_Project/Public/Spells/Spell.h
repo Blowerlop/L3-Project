@@ -51,4 +51,7 @@ protected:
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvUnApply(AActor* Target);
+
+private:
+	void HandleSpellActions(UEffectable* Effectable) const;
 };

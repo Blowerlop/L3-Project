@@ -55,12 +55,21 @@ void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int Sp
 	
     CastState->Spell = Spell;
     
-    const auto StartTime = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
+    const auto StartTime = GetWorld()->GetTimeSeconds();
     	
     CastState->AnimationStartTime = StartTime;
     CastState->AnimationEndTime = StartTime + CastState->Spell->AnimationMontage->GetSectionLength(CastState->Spell->ComboIndex);
     
 	OnCastStart.Broadcast(CastState->Spell, CastState->SpellIndex);
+}
+
+void USpellController::InvalidSpellCastResponseOwnerRpc_Implementation()
+{
+	if (UKismetSystemLibrary::IsServer(this)) return;
+	
+	CastState->IsCasting = false;
+	
+	OnInvalidCastResponse();
 }
 
 void USpellController::SrvOnAnimationCastSpellNotify()
@@ -276,6 +285,15 @@ void USpellController::OnSpellInputStarted(const int Index)
 	
 	if (!CanStartAiming(Index)) return;
 
+	const auto Spell = GetSpellData(Index);
+	
+	if (Spell->IsInstantAiming)
+	{
+		Aimer->ForceUpdateAimResult();
+		StopAndCast(Aimer, Index);
+		return;
+	}
+
 	Aimer->Start();
 	ActiveAimer = Aimer;
 }
@@ -313,6 +331,23 @@ void USpellController::StopAndCast(ASpellAimer* Aimer, const int Index)
 		return;
 	}
 	
+	const auto Validity = ASpellManager::GetSpellRequestValidity(Index, this, GetWorld()->GetTimeSeconds());
+
+	if (Validity == ESpellRequestValidity::Invalid)
+	{
+		return;
+	}
+
+	// Host doesn't need prediciton
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		CastState->Spell = GetSpellData(Index);
+		CastState->SpellIndex = Index;
+		CastState->IsCasting = true;
+	
+		OnPredictedCast(Index, Result);
+	}
+
 	RequestSpellCastGenericResultToServer(Index, Result);
 }
 
@@ -465,28 +500,27 @@ void USpellController::RequestSpellCastGenericResultToServer(const int SpellInde
 }
 
 void USpellController::RequestSpellCastFromControllerRpc_Actor_Implementation(int SpellIndex, USpellController* Caster,
-	AActor* Result)
+                                                                              AActor* Result)
 {
 	const auto Holder = NewObject<UActorAimResultHolder>();
 	Holder->Actor = Result;
 
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
-
-	const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
-	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, Time);
+	
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder);
 }
 
-void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(const int SpellIndex, USpellController* Caster, const FVector Result)
+void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(const int SpellIndex, USpellController* Caster,
+                                                                               const FVector Result)
 {
 	const auto Holder = NewObject<UVectorAimResultHolder>();
 	Holder->Vector = Result;
 
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
-
-	const auto Time = GetWorld()->GetGameState()->GetServerWorldTimeSeconds();
-	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder, Time);
+	
+	SpellManager->RequestSpellCastFromController(SpellIndex, Caster, Holder);
 }
 
 void USpellController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

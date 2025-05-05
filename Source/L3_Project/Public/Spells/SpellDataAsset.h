@@ -30,6 +30,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int Heal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Bitmask, BitmaskEnum = ESpellAction))
+	int32 SpellActions = 0;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText Name;
@@ -45,6 +48,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool CanRotate;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool IsInstantAiming;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UAnimMontage* AnimationMontage;
