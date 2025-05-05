@@ -1,9 +1,6 @@
 #include "Database/DatabaseLibrary.h"
 #include "HttpModule.h"
 #include "Interfaces/IHttpResponse.h"
-#include "Http.h"
-#include "Json.h"
-#include "JsonUtilities.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
 #include "Misc/Base64.h"
@@ -41,7 +38,7 @@ FString UDatabaseLibrary::LoadFirebaseApiKey()
     return FString();
 }
 
-void UDatabaseLibrary::FirebaseAuthRequest(const FString& Email, const FString& Password)
+void UDatabaseLibrary::AuthRequest(const FString& Email, const FString& Password)
 {
     FString FirebaseApiKey = LoadFirebaseApiKey();
 
@@ -94,4 +91,13 @@ void UDatabaseLibrary::FirebaseAuthRequest(const FString& Email, const FString& 
     });
 
     Request->ProcessRequest();
+}
+
+void UDatabaseLibrary::RegisterRequest(const FString& UserName, const FString& Email, const FString& Password)
+{
+}
+
+void UDatabaseLibrary::GetData(const FString& UserID, const FString& DataID)
+{
+    
 }
