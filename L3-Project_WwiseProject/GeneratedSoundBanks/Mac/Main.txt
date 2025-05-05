@@ -1,0 +1,10 @@
+Event	ID	Name			Wwise Object Path	Notes
+	7265457	SpellFireTest			\Default Work Unit\SpellFireTest	
+	136155997	DashTest			\Default Work Unit\DashTest	
+	3987506369	AttackDistTest			\Default Work Unit\AttackDistTest	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	28388860	spell_fire_test	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Mac\SFX\fire_spell_1_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\spell_fire_test		111550
+	434028665	Iprojectile	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Mac\SFX\auto_attack_dist_temp_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Iprojectile		42976
+	660533776	dash_test	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Mac\SFX\auto_attack_cac_3_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\dash_test		93408
+
