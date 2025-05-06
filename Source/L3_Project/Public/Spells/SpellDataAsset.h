@@ -2,6 +2,7 @@
 
 #include "SpellDataAsset.generated.h"
 
+enum class EEffectImpact : uint8;
 class UEffectDataAsset;
 class USpellAimerParams;
 class ASpellAimer;
@@ -42,10 +43,13 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UTexture2D* Icon;
-
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float Cooldown;
-
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	EEffectImpact SpellImpact;
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool CanMove;
 
