@@ -13,6 +13,9 @@ class L3_PROJECT_API USpellDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	uint8 AssetID;
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<ASpellAimer> Aimer;
 	

@@ -7,6 +7,7 @@
 #include "Effects/EffectType.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Spells/SpellDataAsset.h"
+#include "Spells/SpellDatabase.h"
 #include "Stats/StatsContainer.h"
 #include "Vitals/VitalsContainer.h"
 
@@ -15,9 +16,9 @@ ASpell::ASpell()
 	PrimaryActorTick.bCanEverTick = UKismetSystemLibrary::IsServer(this);
 }
 
-void ASpell::Init(USpellDataAsset* SpellData, AActor* SpellCaster, UAimResultHolder* Result)
+void ASpell::Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHolder* Result)
 {
-	Data = SpellData;
+	Data = DataAsset;
 	Caster = SpellCaster;
 	CasterController = Cast<AController>(SpellCaster->GetOwner());
 	AimResult = Result;
@@ -96,6 +97,29 @@ void ASpell::SrvUnApply(AActor* Target)
 		Effectable->SrvRemoveEffects(Container->Instances);
 
 		AppliedEffectsInstances[Target]->Instances.Empty();
+	}
+}
+
+void ASpell::OnSerializeNewActor(class FOutBunch& OutBunch)
+{
+	Super::OnSerializeNewActor(OutBunch);
+	
+	OutBunch << Data->AssetID;
+}
+
+void ASpell::OnActorChannelOpen(class FInBunch& InBunch, class UNetConnection* Connection)
+{
+	Super::OnActorChannelOpen(InBunch, Connection);
+
+	uint8 ID{};
+	InBunch << ID;
+
+	const auto Database = GetGameInstance()->GetSubsystem<USpellDatabase>();
+	Data = Database->DataAssets.FindRef(ID);
+
+	if(!IsValid(Data))
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::OnActorChannelOpen Failed to load spell data asset!"));
 	}
 }
 
