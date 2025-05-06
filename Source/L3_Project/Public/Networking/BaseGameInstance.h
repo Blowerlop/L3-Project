@@ -40,7 +40,7 @@ public:
 	static const FString UUIDConnectOptionsKey;
 	static const FString UserNameConnectOptionsKey;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	FClientData SelfClientData;
 
 	UPROPERTY(BlueprintReadWrite)
