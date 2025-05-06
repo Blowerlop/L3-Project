@@ -25,11 +25,24 @@ public:
 	static void RegisterRequest(const FString& UserName, const FString& Email, const FString& Password, const FAuthSuccess& OnSuccess, const FAuthFailed& OnFailure);
 
 public:
+	// Set Post Register User Data
+	UFUNCTION(BlueprintCallable, Category = "Firebase")
+	static void SetPostRegisterData(const FString& UserName, const FString& IdToken, const FAuthSuccess& OnSuccess, const FAuthFailed& OnFailure);
+
+public:
 	// Get User Data
 	UFUNCTION(BlueprintCallable, Category = "Firebase")
 	static void GetData(const FString& UserID, const FString& DataID);
 
+public:
+	// Set User Data
+	static void SetData(const FString& Path, const TSharedPtr<FJsonObject> Data, const FString& IdToken, const FAuthSuccess& OnSuccess, const FAuthFailed& OnFailure);
+
 private:
 	// Get API Key
 	static FString LoadFirebaseApiKey();
+	
+private:
+	// Check User Availability
+	static void CheckUserAvailability(const FString& Username, const TFunction<void(bool)>& Callback);
 };
