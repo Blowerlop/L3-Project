@@ -9,6 +9,7 @@
 #include "Spells/SpellDataAsset.h"
 #include "Spells/SpellDatabase.h"
 #include "Stats/StatsContainer.h"
+#include "Vitals/IAliveState.h"
 #include "Vitals/VitalsContainer.h"
 
 ASpell::ASpell()
@@ -32,6 +33,14 @@ bool ASpell::SrvApply(AActor* Target)
 		return false;
 	}
 
+	if (const auto AliveState = Cast<IAliveState>(Target); AliveState != nullptr)
+	{
+		if (!IAliveState::Execute_GetIsAlive(Target))
+		{
+			return false;
+		}
+	}
+	
 	bool IsValid = false;
 	
 	if (const auto Vitals = Target->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
