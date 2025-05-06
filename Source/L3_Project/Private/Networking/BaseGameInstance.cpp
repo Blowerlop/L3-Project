@@ -112,7 +112,7 @@ void UBaseGameInstance::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful,
 	{
 		UE_LOG(LogTemp, Log, TEXT("Login successful! UserId: %s"), *UserId.ToString());
 
-		SelfClientData = FClientData(UserId.ToString(), UserName);
+		//SelfClientData = FClientData(UserId.ToString(), UserName);
 	}
 	else
 	{
