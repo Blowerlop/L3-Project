@@ -22,7 +22,7 @@ public:
 	ASpell();
 	
 	UFUNCTION(BlueprintCallable)
-	void Init(USpellDataAsset* SpellData, AActor* SpellCaster, UAimResultHolder* Result);
+	void Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHolder* Result);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<EObjectTypeQuery> ApplyObjectType;
@@ -53,5 +53,12 @@ protected:
 	void SrvUnApply(AActor* Target);
 
 private:
+	UPROPERTY()
+	FPrimaryAssetId SpellAssetId;
+
+	virtual void OnSerializeNewActor(class FOutBunch& OutBunch) override;
+
+	virtual void OnActorChannelOpen(class FInBunch& InBunch, class UNetConnection* Connection) override;
+	
 	void HandleSpellActions(UEffectable* Effectable) const;
 };
