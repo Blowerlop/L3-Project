@@ -13,10 +13,10 @@ struct FClientData
 	FClientData(const FString& InUUID, const FString& InName)
 		: UUID(InUUID), Name(InName) {}
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	FString UUID{};
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	FString Name{};
 };
 
