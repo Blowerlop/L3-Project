@@ -47,8 +47,7 @@ void UDatabaseFunctions::CheckUserAvailability(const FString& Username, const TF
 {
      FString Url = FString::Printf(
         TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/Players/%s.json"),
-        *Username
-    );
+        *Username);
 
      TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
      Request->SetURL(Url);
@@ -74,7 +73,12 @@ void UDatabaseFunctions::CheckUserAvailability(const FString& Username, const TF
      Request->ProcessRequest();
 }
 
-void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Password, const FAuthSuccess& OnSuccess, const FAuthFailed& OnFailure)
+FString UDatabaseFunctions::HashString(const FString& target)
+{
+     return  FMD5::HashAnsiString(*target);
+}
+
+void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Password, const FSuccess& OnSuccess, const FFailed& OnFailure)
  {
      FString FirebaseApiKey = LoadFirebaseApiKey();
 
@@ -127,7 +131,7 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
                  return;
              }
              
-             FString IdToken = JsonResponse->GetStringField("idToken");
+             FString IdToken = JsonResponse->GetStringField("localId");
              UE_LOG(LogTemp, Log, TEXT("Firebase idToken: %s"), *IdToken);
              OnSuccess.Execute(IdToken);
          }
@@ -141,7 +145,7 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
      Request->ProcessRequest();
  }
  
- void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString& Email, const FString& Password, const FAuthSuccess& OnSuccess, const FAuthFailed& OnFailure)
+ void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString& Email, const FString& Password, const FSuccess& OnSuccess, const FFailed& OnFailure)
  {
 	FString FirebaseApiKey = LoadFirebaseApiKey();
 
@@ -203,7 +207,7 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
                      return;
                  }
                  
-                 FString IdToken = JsonResponse->GetStringField("idToken");
+                 FString IdToken = JsonResponse->GetStringField("localId");
                  UE_LOG(LogTemp, Log, TEXT("Firebase idToken: %s"), *IdToken);
                  OnSuccess.Execute(IdToken);
              }
@@ -218,8 +222,8 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
      });
  }
 
-void UDatabaseFunctions::SetPostRegisterData(const FString& UserName, const FString& IdToken, const FAuthSuccess& OnSuccess, const FAuthFailed& OnFailure)
-{
+void UDatabaseFunctions::SetPostRegisterData(const FString& UserName, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
+ {
      TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
      Json->SetStringField("username", UserName);
      Json->SetNumberField("LVL", 1);
@@ -230,13 +234,49 @@ void UDatabaseFunctions::SetPostRegisterData(const FString& UserName, const FStr
      FString Path = FString::Printf(TEXT("Players/%s"), *UserName);
      
      SetData(Path, Json, IdToken, OnSuccess, OnFailure);
-}
-
-void UDatabaseFunctions::GetData(const FString& UserID, const FString& DataID)
- {
  }
 
-void UDatabaseFunctions::SetData(const FString& Path, const TSharedPtr<FJsonObject> Data, const FString& IdToken, const FAuthSuccess& OnSuccess, const FAuthFailed& OnFailure)
+void UDatabaseFunctions::LinkUserIDAndName(const FString& UserName, const FString& IdToken, const FString& UserId, const FSuccess& OnSuccess, const FFailed& OnFailure)
+{
+     TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
+     Json->SetStringField("Name", UserName);
+
+     FString SafeUserId = FMD5::HashAnsiString(*UserId);
+     
+     FString Path = FString::Printf(TEXT("UserNames/%s"), *SafeUserId);
+     
+     SetData(Path, Json, IdToken, OnSuccess, OnFailure);
+}
+
+void UDatabaseFunctions::GetData(const FString& Path, const FString& DataID, const FSuccess& OnSuccess, const FFailed& OnFailure)
+{
+     FString Url = FString::Printf(
+        TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/%s/%s.json"),
+        *Path, *DataID);
+
+     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+     Request->SetURL(Url);
+     Request->SetVerb("GET");
+     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+     Request->OnProcessRequestComplete().BindLambda([OnSuccess, OnFailure](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+     {
+         if (!bWasSuccessful || !Response.IsValid())
+         {
+             UE_LOG(LogTemp, Error, TEXT("Get Data failed"));
+             OnFailure.Execute("Get Data failed");
+             return;
+         }
+
+         FString ResponseStr = Response->GetContentAsString();
+         UE_LOG(LogTemp, Log, TEXT("Get Data response: %s"), *ResponseStr);
+         OnSuccess.Execute(ResponseStr);
+     });
+
+     Request->ProcessRequest();
+}
+
+void UDatabaseFunctions::SetData(const FString& Path, const TSharedPtr<FJsonObject> Data, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
     FString FirebaseDatabaseUrl = TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/"); // <-- remplace par ton projet
 
