@@ -90,7 +90,7 @@ ESpellRequestValidity ASpellManager::GetSpellRequestValidity(int SpellIndex, USp
 	return Normal;
 }
 
-ASpell* ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result)
+ASpell* ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result, float Duration)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -118,7 +118,7 @@ ASpell* ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, 
 
 	if (const auto SpellInstance = Cast<ASpell>(MySpawningActor))
 	{
-		SpellInstance->Init(SpellData, Caster, Result);
+		SpellInstance->Init(SpellData, Caster, Result, Duration);
 		
 		SpellInstance->Owner = Caster;
 		SpellInstance->SetInstigator(Cast<APawn>(Caster));
