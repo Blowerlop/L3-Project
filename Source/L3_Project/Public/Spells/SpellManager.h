@@ -38,7 +38,7 @@ public:
 	static ESpellRequestValidity GetSpellRequestValidity(int SpellIndex, USpellController* SpellController, const double Time);
 	
 	UFUNCTION(BlueprintCallable)
-	ASpell* TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result);
+	ASpell* TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, UAimResultHolder* Result, float Duration);
 
 	static bool IsInComboWindow(const USpellDataAsset* Spell, double ClientTime, double StartTime, double EndTime);
 

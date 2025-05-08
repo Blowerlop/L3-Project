@@ -72,14 +72,14 @@ void USpellController::InvalidSpellCastResponseOwnerRpc_Implementation()
 	OnInvalidCastResponse();
 }
 
-void USpellController::SrvOnAnimationCastSpellNotify()
+void USpellController::SrvOnAnimationCastSpellNotify(float Duration)
 {
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
 	const auto InSceneManagers = GetWorld()->GetGameInstance()->GetSubsystem<UInSceneManagersRefs>();
 	const auto SpellManager = InSceneManagers->GetManager<ASpellManager>();
 	
-	SpellManager->TryCastSpell(CastState->Spell, GetOwner(), CastState->AimResult);
+	SpellManager->TryCastSpell(CastState->Spell, GetOwner(), CastState->AimResult, Duration);
 }
 
 void USpellController::OnAnimationEndedNotify()

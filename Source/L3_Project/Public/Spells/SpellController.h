@@ -104,7 +104,7 @@ public:
 	void InvalidSpellCastResponseOwnerRpc();
 	
 	UFUNCTION(BlueprintCallable)
-	void SrvOnAnimationCastSpellNotify();
+	void SrvOnAnimationCastSpellNotify(float Duration);
 	
 	UFUNCTION(BlueprintCallable)
 	void OnAnimationEndedNotify();

@@ -22,7 +22,13 @@ public:
 	ASpell();
 	
 	UFUNCTION(BlueprintCallable)
-	void Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHolder* Result);
+	void Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHolder* Result, float duration);
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SrvComplete();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintAuthorityOnly)
+	void SrvOnComplete();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<EObjectTypeQuery> ApplyObjectType;
@@ -39,6 +45,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	UAimResultHolder* AimResult;
+
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
+	float Duration;
 
 	UPROPERTY(BlueprintReadOnly)
 	TMap<AActor*, UEffectInstanceContainer*> AppliedEffectsInstances;

@@ -17,12 +17,18 @@ ASpell::ASpell()
 	PrimaryActorTick.bCanEverTick = UKismetSystemLibrary::IsServer(this);
 }
 
-void ASpell::Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHolder* Result)
+void ASpell::Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHolder* Result, float duration)
 {
 	Data = DataAsset;
 	Caster = SpellCaster;
 	CasterController = Cast<AController>(SpellCaster->GetOwner());
 	AimResult = Result;
+	Duration = duration;
+}
+
+void ASpell::SrvComplete()
+{
+	SrvOnComplete();
 }
 
 bool ASpell::SrvApply(AActor* Target)
