@@ -23,7 +23,7 @@
 				<Bus Id="3803692087" Name="Master Audio Bus" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus" GUID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"/>
 			</Busses>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{7A27BA51-EC43-BB50-61B9-1930253D2ABA}">
+		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{016A4BD4-818F-8F7F-A5F5-F6EBB4032AB4}">
 			<ObjectPath>\SoundBanks\Default Work Unit\Main</ObjectPath>
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
@@ -40,6 +40,18 @@
 					<ShortName>auto_attack_cac_3.wav</ShortName>
 					<CachePath>SFX/auto_attack_cac_3_818F3B66.wem</CachePath>
 				</File>
+				<File Id="718667253" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>heal_self.wav</ShortName>
+					<CachePath>SFX/heal_self_818F3B66.wem</CachePath>
+				</File>
+				<File Id="817219065" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>player_death_test.wav</ShortName>
+					<CachePath>SFX/player_death_test_818F3B66.wem</CachePath>
+				</File>
+				<File Id="982106308" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>playerdown_test.wav</ShortName>
+					<CachePath>SFX/playerdown_test_818F3B66.wem</CachePath>
+				</File>
 			</Media>
 			<Events>
 				<Event Id="3987506369" Name="AttackDistTest" ObjectPath="\Events\Default Work Unit\AttackDistTest" GUID="{CD759F51-5E65-482F-8D8E-5541A2C00105}" DurationType="OneShot" DurationMin="0.48898414" DurationMax="0.48898414">
@@ -52,6 +64,21 @@
 						<MediaRef Id="660533776"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="333827014" Name="DeathPlayer" ObjectPath="\Events\Default Work Unit\DeathPlayer" GUID="{4F262321-8371-41D2-8222-07E9E6DC3886}" DurationType="OneShot" DurationMin="1.24285" DurationMax="1.24285">
+					<MediaRefs>
+						<MediaRef Id="817219065"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1548476382" Name="DownPlayer" ObjectPath="\Events\Default Work Unit\DownPlayer" GUID="{15009986-3A77-428B-99BB-229D96B12B16}" DurationType="OneShot" DurationMin="1.6696163" DurationMax="1.6696163">
+					<MediaRefs>
+						<MediaRef Id="982106308"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3646695146" Name="ResPlayer" ObjectPath="\Events\Default Work Unit\ResPlayer" GUID="{9A8F2280-56E9-4046-9B6C-F827C1BD9C87}" DurationType="OneShot" DurationMin="4.758595" DurationMax="4.758595">
+					<MediaRefs>
+						<MediaRef Id="718667253"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="7265457" Name="SpellFireTest" ObjectPath="\Events\Default Work Unit\SpellFireTest" GUID="{65B0CA31-3B0A-4C9C-9066-CE13E3C0CD72}" DurationType="OneShot" DurationMin="1.1677234" DurationMax="1.1677234">
 					<MediaRefs>
 						<MediaRef Id="28388860"/>
@@ -60,5 +87,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{90E71A8E-5998-121F-9610-6D3AA639F82E}</FileHash>
+	<FileHash>{CC5E52DA-7913-5A99-A447-72C63E260C93}</FileHash>
 </SoundBanksInfo>

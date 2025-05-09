@@ -36,6 +36,28 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="DownPlayer" ID="{15009986-3A77-428B-99BB-229D96B12B16}">
+					<ChildrenList>
+						<Action Name="" ID="{4A4A7B2E-7DEE-4605-8391-66F1E43AC046}" ShortID="564048180">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="down_player" ID="{A6C28842-BDB7-4D73-A985-60DF9406E81C}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="DeathPlayer" ID="{4F262321-8371-41D2-8222-07E9E6DC3886}">
+					<ChildrenList>
+						<Action Name="" ID="{64CD275B-E3E8-438C-958B-50EC01DECE45}" ShortID="126278848">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="death_player" ID="{0440A7FE-903A-46B7-8F78-BF5EAE19EB9A}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

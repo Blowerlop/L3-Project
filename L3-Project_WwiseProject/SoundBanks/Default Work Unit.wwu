@@ -5,6 +5,7 @@
 			<ChildrenList>
 				<SoundBank Name="Main" ID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}">
 					<ObjectInclusionList>
+						<ObjectRef Name="DownPlayer" ID="{15009986-3A77-428B-99BB-229D96B12B16}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="AttackDistTest" ID="{CD759F51-5E65-482F-8D8E-5541A2C00105}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="DashTest" ID="{45A5FD2E-1CEA-48BF-A665-9E9F70F04441}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="SpellFireTest" ID="{65B0CA31-3B0A-4C9C-9066-CE13E3C0CD72}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>

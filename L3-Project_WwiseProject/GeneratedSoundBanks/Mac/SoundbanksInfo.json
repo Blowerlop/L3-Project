@@ -56,7 +56,7 @@
     "Type": "User",
     "GUID": "{629FAB7B-C345-4463-854D-D8C6F1A181C2}",
     "Language": "SFX",
-    "Hash": "{7A27BA51-EC43-BB50-61B9-1930253D2ABA}",
+    "Hash": "{016A4BD4-818F-8F7F-A5F5-F6EBB4032AB4}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main",
     "ShortName": "Main",
     "Path": "Main.bnk",
@@ -84,6 +84,30 @@
       "Location": "Memory",
       "ShortName": "auto_attack_cac_3.wav",
       "CachePath": "SFX/auto_attack_cac_3_818F3B66.wem"
+     },
+     {
+      "Id": "718667253",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "heal_self.wav",
+      "CachePath": "SFX/heal_self_818F3B66.wem"
+     },
+     {
+      "Id": "817219065",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "player_death_test.wav",
+      "CachePath": "SFX/player_death_test_818F3B66.wem"
+     },
+     {
+      "Id": "982106308",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "playerdown_test.wav",
+      "CachePath": "SFX/playerdown_test_818F3B66.wem"
      }
     ],
     "Events": [
@@ -116,6 +140,48 @@
       ]
      },
      {
+      "Id": "333827014",
+      "Name": "DeathPlayer",
+      "ObjectPath": "\\Events\\Default Work Unit\\DeathPlayer",
+      "GUID": "{4F262321-8371-41D2-8222-07E9E6DC3886}",
+      "DurationType": "OneShot",
+      "DurationMin": "1.24285",
+      "DurationMax": "1.24285",
+      "MediaRefs": [
+       {
+        "Id": "817219065"
+       }
+      ]
+     },
+     {
+      "Id": "1548476382",
+      "Name": "DownPlayer",
+      "ObjectPath": "\\Events\\Default Work Unit\\DownPlayer",
+      "GUID": "{15009986-3A77-428B-99BB-229D96B12B16}",
+      "DurationType": "OneShot",
+      "DurationMin": "1.6696163",
+      "DurationMax": "1.6696163",
+      "MediaRefs": [
+       {
+        "Id": "982106308"
+       }
+      ]
+     },
+     {
+      "Id": "3646695146",
+      "Name": "ResPlayer",
+      "ObjectPath": "\\Events\\Default Work Unit\\ResPlayer",
+      "GUID": "{9A8F2280-56E9-4046-9B6C-F827C1BD9C87}",
+      "DurationType": "OneShot",
+      "DurationMin": "4.758595",
+      "DurationMax": "4.758595",
+      "MediaRefs": [
+       {
+        "Id": "718667253"
+       }
+      ]
+     },
+     {
       "Id": "7265457",
       "Name": "SpellFireTest",
       "ObjectPath": "\\Events\\Default Work Unit\\SpellFireTest",
@@ -132,6 +198,6 @@
     ]
    }
   ],
-  "FileHash": "{2F0E9A61-19AD-2940-0CDB-43BF62050B6F}"
+  "FileHash": "{10BB2B18-2814-EB5A-211E-74A9C9009565}"
  }
 }

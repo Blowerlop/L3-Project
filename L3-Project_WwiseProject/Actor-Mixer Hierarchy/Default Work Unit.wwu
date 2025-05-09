@@ -146,6 +146,133 @@
 						<ActiveSource Name="auto_attack_cac_3" ID="{A206AD80-39BA-4D80-B0C5-007CEBB64110}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
+				<Sound Name="down_player" ID="{A6C28842-BDB7-4D73-A985-60DF9406E81C}" ShortID="911343792">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{81F4FE6D-3A39-4EB0-BB57-6300B8B56129}"/>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-8</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="auto_attack_dist_temp" ID="{33C75EFF-3E0E-4F86-A8EE-B1356B453C9A}">
+							<Language>SFX</Language>
+							<AudioFile>auto_attack_dist_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="434028665"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="fire_spell_1" ID="{48302F34-8326-4C46-A44E-95CA01D4A011}">
+							<Language>SFX</Language>
+							<AudioFile>fire_spell_1.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="28388860"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="death_test" ID="{54D2718F-84C5-401D-829D-859CDAD7F3EE}">
+							<Language>SFX</Language>
+							<AudioFile>death_test.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="770285667"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="playerdown_test" ID="{DBE111D6-F700-4A97-8498-881924E6D5BF}">
+							<Language>SFX</Language>
+							<AudioFile>playerdown_test.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="982106308"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="playerdown_test" ID="{DBE111D6-F700-4A97-8498-881924E6D5BF}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+				<Sound Name="death_player" ID="{0440A7FE-903A-46B7-8F78-BF5EAE19EB9A}" ShortID="1061832521">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{1BF8876A-D9B9-444C-9452-BFAD639A2961}"/>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-6</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="auto_attack_dist_temp" ID="{83A82B27-87BA-4352-B0A2-F0A2648EFAFF}">
+							<Language>SFX</Language>
+							<AudioFile>auto_attack_dist_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="434028665"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="fire_spell_1" ID="{D4BB465C-27EA-4833-874E-231DE6D2BCFF}">
+							<Language>SFX</Language>
+							<AudioFile>fire_spell_1.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="28388860"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="death_test" ID="{3D6335EE-781D-4808-A93E-0B626E0208CA}">
+							<Language>SFX</Language>
+							<AudioFile>death_test.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="770285667"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="playerdown_test" ID="{33020770-4E98-4507-9041-8D1EECEA822F}">
+							<Language>SFX</Language>
+							<AudioFile>playerdown_test.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="982106308"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="player_death_test" ID="{B8089E55-D76B-4250-BA6F-C3080B7E36FF}">
+							<Language>SFX</Language>
+							<AudioFile>player_death_test.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="817219065"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="player_death_test" ID="{B8089E55-D76B-4250-BA6F-C3080B7E36FF}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>
