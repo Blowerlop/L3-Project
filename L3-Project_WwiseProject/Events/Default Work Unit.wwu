@@ -58,6 +58,28 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="ResPlayer" ID="{9A8F2280-56E9-4046-9B6C-F827C1BD9C87}">
+					<ChildrenList>
+						<Action Name="" ID="{332B5543-E5BA-4CB2-91E2-60C3378AAE06}" ShortID="809006236">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="res_player" ID="{FF62F315-5872-462A-A253-19370CF3633C}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="BossFightMusic" ID="{BF2B2F0E-5D22-42EC-80C7-FD1F853C1D48}">
+					<ChildrenList>
+						<Action Name="" ID="{611B0567-A316-441E-A434-06D5ADE49D7E}" ShortID="760949488">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_fight_test" ID="{32E2050E-69FE-45EB-A918-C32B8D732FF4}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

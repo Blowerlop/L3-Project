@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{629FAB7B-C345-4463-854D-D8C6F1A181C2}",
     "Language": "SFX",
-    "Hash": "{016A4BD4-818F-8F7F-A5F5-F6EBB4032AB4}",
+    "Hash": "{B8194CF7-9D2D-4BBB-6309-F1E563530493}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main",
     "ShortName": "Main",
     "Path": "Main.bnk",
@@ -22,6 +22,14 @@
       "Location": "Memory",
       "ShortName": "fire_spell_1.wav",
       "CachePath": "SFX/fire_spell_1_818F3B66.wem"
+     },
+     {
+      "Id": "337396457",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "boss_fight_TBD.wav",
+      "CachePath": "SFX/boss_fight_TBD_FBC78EF0.wem"
      },
      {
       "Id": "434028665",
@@ -76,6 +84,18 @@
       "MediaRefs": [
        {
         "Id": "434028665"
+       }
+      ]
+     },
+     {
+      "Id": "2890401025",
+      "Name": "BossFightMusic",
+      "ObjectPath": "\\Events\\Default Work Unit\\BossFightMusic",
+      "GUID": "{BF2B2F0E-5D22-42EC-80C7-FD1F853C1D48}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "337396457"
        }
       ]
      },
@@ -152,6 +172,6 @@
     ]
    }
   ],
-  "FileHash": "{1077E60B-A160-4830-0C9F-7D14C2C82681}"
+  "FileHash": "{4CFFE20D-7168-4B2B-8517-B88C33C49D4A}"
  }
 }

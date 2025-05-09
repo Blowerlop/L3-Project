@@ -3,11 +3,13 @@ Event	ID	Name			Wwise Object Path	Notes
 	136155997	DashTest			\Default Work Unit\DashTest	
 	333827014	DeathPlayer			\Default Work Unit\DeathPlayer	
 	1548476382	DownPlayer			\Default Work Unit\DownPlayer	
+	2890401025	BossFightMusic			\Default Work Unit\BossFightMusic	
 	3646695146	ResPlayer			\Default Work Unit\ResPlayer	
 	3987506369	AttackDistTest			\Default Work Unit\AttackDistTest	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	28388860	spell_fire_test	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Mac\SFX\fire_spell_1_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\spell_fire_test		111550
+	337396457	boss_fight_test	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Mac\SFX\boss_fight_TBD_FBC78EF0.wem		\Actor-Mixer Hierarchy\Default Work Unit\boss_fight_test		36383724
 	434028665	Iprojectile	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Mac\SFX\auto_attack_dist_temp_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Iprojectile		42976
 	660533776	dash_test	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Mac\SFX\auto_attack_cac_3_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\dash_test		93408
 	718667253	res_player	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Mac\SFX\heal_self_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\res_player		908484

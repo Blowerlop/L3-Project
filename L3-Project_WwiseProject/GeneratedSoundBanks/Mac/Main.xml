@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SoundBanksInfo Platform="Mac" BasePlatform="Mac" SchemaVersion="16" SoundBankVersion="150">
 	<SoundBanks>
-		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{016A4BD4-818F-8F7F-A5F5-F6EBB4032AB4}">
+		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{B8194CF7-9D2D-4BBB-6309-F1E563530493}">
 			<ObjectPath>\SoundBanks\Default Work Unit\Main</ObjectPath>
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
@@ -9,6 +9,10 @@
 				<File Id="28388860" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>fire_spell_1.wav</ShortName>
 					<CachePath>SFX/fire_spell_1_818F3B66.wem</CachePath>
+				</File>
+				<File Id="337396457" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_fight_TBD.wav</ShortName>
+					<CachePath>SFX/boss_fight_TBD_FBC78EF0.wem</CachePath>
 				</File>
 				<File Id="434028665" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>auto_attack_dist_temp.wav</ShortName>
@@ -35,6 +39,11 @@
 				<Event Id="3987506369" Name="AttackDistTest" ObjectPath="\Events\Default Work Unit\AttackDistTest" GUID="{CD759F51-5E65-482F-8D8E-5541A2C00105}" DurationType="OneShot" DurationMin="0.48898414" DurationMax="0.48898414">
 					<MediaRefs>
 						<MediaRef Id="434028665"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2890401025" Name="BossFightMusic" ObjectPath="\Events\Default Work Unit\BossFightMusic" GUID="{BF2B2F0E-5D22-42EC-80C7-FD1F853C1D48}" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="337396457"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="136155997" Name="DashTest" ObjectPath="\Events\Default Work Unit\DashTest" GUID="{45A5FD2E-1CEA-48BF-A665-9E9F70F04441}" DurationType="OneShot" DurationMin="1.064088" DurationMax="1.064088">
@@ -65,5 +74,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{BC0CEA5F-7133-09E6-3043-9B4813D87127}</FileHash>
+	<FileHash>{415DBD7A-4F61-3DF3-824D-BBF9E4C18CC4}</FileHash>
 </SoundBanksInfo>

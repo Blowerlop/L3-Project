@@ -273,6 +273,106 @@
 						<ActiveSource Name="player_death_test" ID="{B8089E55-D76B-4250-BA6F-C3080B7E36FF}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
+				<Sound Name="res_player" ID="{FF62F315-5872-462A-A253-19370CF3633C}" ShortID="902491087">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{BCEFD1EA-3CA4-4C1B-89CD-FBAD7E9224A9}"/>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-8</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="auto_attack_dist_temp" ID="{EFB7AD7A-71A1-44A0-AE62-1631615CFB94}">
+							<Language>SFX</Language>
+							<AudioFile>auto_attack_dist_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="434028665"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="fire_spell_1" ID="{1D6B0293-7255-45FA-98A1-9D5486AC8B40}">
+							<Language>SFX</Language>
+							<AudioFile>fire_spell_1.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="28388860"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="death_test" ID="{7181D6F8-A7FE-4E33-8862-71219F94E9A0}">
+							<Language>SFX</Language>
+							<AudioFile>death_test.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="770285667"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="playerdown_test" ID="{6153EB7B-17EF-48CA-A7D8-43C10FAE86C2}">
+							<Language>SFX</Language>
+							<AudioFile>playerdown_test.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="982106308"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="heal_self" ID="{EAF7311B-48BD-4B53-891E-B72F8123B9DD}">
+							<Language>SFX</Language>
+							<AudioFile>heal_self.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="718667253"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="heal_self" ID="{EAF7311B-48BD-4B53-891E-B72F8123B9DD}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+				<Sound Name="boss_fight_test" ID="{32E2050E-69FE-45EB-A918-C32B8D732FF4}" ShortID="753903193">
+					<PropertyList>
+						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<SourcePlugin Name="Audio Input" ID="{FD73E31F-AD68-4270-A76B-4D94951430BD}" ShortID="1066875109" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
+							<Language>SFX</Language>
+						</SourcePlugin>
+						<AudioFileSource Name="boss_fight_TBD" ID="{CFA02F24-776C-4D60-8D7B-E6EF6969301D}">
+							<Language>SFX</Language>
+							<AudioFile>boss_fight_TBD.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="337396457"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="boss_fight_TBD" ID="{CFA02F24-776C-4D60-8D7B-E6EF6969301D}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>
