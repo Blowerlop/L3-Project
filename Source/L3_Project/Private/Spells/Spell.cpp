@@ -9,6 +9,7 @@
 #include "Spells/SpellDataAsset.h"
 #include "Spells/SpellDatabase.h"
 #include "Stats/StatsContainer.h"
+#include "Vitals/IAliveState.h"
 #include "Vitals/VitalsContainer.h"
 
 ASpell::ASpell()
@@ -16,12 +17,18 @@ ASpell::ASpell()
 	PrimaryActorTick.bCanEverTick = UKismetSystemLibrary::IsServer(this);
 }
 
-void ASpell::Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHolder* Result)
+void ASpell::Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHolder* Result, float duration)
 {
 	Data = DataAsset;
 	Caster = SpellCaster;
 	CasterController = Cast<AController>(SpellCaster->GetOwner());
 	AimResult = Result;
+	Duration = duration;
+}
+
+void ASpell::SrvComplete()
+{
+	SrvOnComplete();
 }
 
 bool ASpell::SrvApply(AActor* Target)
@@ -32,6 +39,14 @@ bool ASpell::SrvApply(AActor* Target)
 		return false;
 	}
 
+	if (const auto AliveState = Cast<IAliveState>(Target); AliveState != nullptr)
+	{
+		if (!IAliveState::Execute_GetIsAlive(Target))
+		{
+			return false;
+		}
+	}
+	
 	bool IsValid = false;
 	
 	if (const auto Vitals = Target->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
