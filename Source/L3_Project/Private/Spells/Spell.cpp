@@ -6,6 +6,7 @@
 #include "Effects/Effectable.h"
 #include "Effects/EffectType.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Net/UnrealNetwork.h"
 #include "Spells/SpellDataAsset.h"
 #include "Spells/SpellDatabase.h"
 #include "Stats/StatsContainer.h"
@@ -29,6 +30,13 @@ void ASpell::Init(USpellDataAsset* DataAsset, AActor* SpellCaster, UAimResultHol
 void ASpell::SrvComplete()
 {
 	SrvOnComplete();
+}
+
+void ASpell::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ASpell, Duration);
 }
 
 bool ASpell::SrvApply(AActor* Target)
@@ -152,4 +160,3 @@ void ASpell::HandleSpellActions(UEffectable* Effectable) const
 		Effectable->Debuff();
 	}
 }
-

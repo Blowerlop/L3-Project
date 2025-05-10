@@ -29,6 +29,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintAuthorityOnly)
 	void SrvOnComplete();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<EObjectTypeQuery> ApplyObjectType;
@@ -46,7 +48,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	UAimResultHolder* AimResult;
 
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"), Replicated)
 	float Duration;
 
 	UPROPERTY(BlueprintReadOnly)
