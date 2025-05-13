@@ -102,12 +102,133 @@
 						</Action>
 					</ChildrenList>
 				</Event>
-				<Event Name="BossFightMusic_04" ID="{4387F31F-25BB-4BB3-8533-4F19CD42B645}">
+				<Event Name="SearchGroupInstance" ID="{4387F31F-25BB-4BB3-8533-4F19CD42B645}">
 					<ChildrenList>
 						<Action Name="" ID="{CFEF52B1-6BF0-46E1-8E47-7493C72B8848}" ShortID="710514064">
 							<ReferenceList>
 								<Reference Name="Target">
 									<ObjectRef Name="search_group_instance" ID="{CDEAEBF6-68C0-47E9-9093-FD6ECE621B0A}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="BossJumpAttack" ID="{D7BCBF96-D764-42E2-822C-576EBA9AFFC4}">
+					<ChildrenList>
+						<Action Name="" ID="{A46EBCE3-7EA2-403B-A2C0-56DC61E6A350}" ShortID="885533946">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_jump_attack" ID="{0468407D-00E6-403A-974B-E3AEA78BA1AA}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="BossAutoAttack" ID="{BDAEE0E8-7DE6-4443-BE78-D5DB56C24277}">
+					<ChildrenList>
+						<Action Name="" ID="{1654AD80-5290-4893-B4C3-DB6589CB45FC}" ShortID="65779709">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_auto_attack" ID="{01D2F3A3-4554-4468-9D5A-9C2494B81CF5}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_cast_blastingground_end" ID="{A301DF21-087B-4219-988D-3EE09B57A65A}">
+					<ChildrenList>
+						<Action Name="" ID="{B50C0B4A-78E6-49D0-B16F-44A89C683FE1}" ShortID="892708666">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_cast_blastingground_end" ID="{2463A594-6BFC-4E22-975D-9F6D46D3BEEE}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_cast_blastingground_start" ID="{3F98E2B1-11CE-4803-8500-0C48C320074C}">
+					<ChildrenList>
+						<Action Name="" ID="{71C36147-3C03-4393-A3B8-32D27E136566}" ShortID="518801459">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_cast_blastingground_start" ID="{5A3E9E42-962C-4834-8702-54F35AEEF294}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_casting_spell1_end" ID="{83C2462A-8C24-47ED-B31A-7E460D168AC1}">
+					<ChildrenList>
+						<Action Name="" ID="{205A21F9-4993-4477-8558-8386C025E0CD}" ShortID="848316413">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_casting_spell1_end" ID="{1EB248D1-EA68-421E-836E-A7162A072331}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_casting_spell2_end" ID="{98F27235-AD85-40B5-9B9B-84E664D09518}">
+					<ChildrenList>
+						<Action Name="" ID="{6EACCFCE-4A3A-41C5-A01A-FCACDE06FE36}" ShortID="1017892361">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_casting_spell2_end" ID="{3FD0D9C5-644A-4BE8-9320-14BDF3B58440}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_casting_spell_start" ID="{5BCFB3E5-9FE4-4D1B-8E95-F669301EE65A}">
+					<ChildrenList>
+						<Action Name="" ID="{2C29CF64-D139-40C0-AE00-F61700F089D5}" ShortID="314383000">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_casting_spell_start" ID="{31CDE82E-2F59-4C11-8BBF-6364332F4BD5}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_fast_tourbillon_loop" ID="{065DE443-FDEC-4EDE-8BC0-01EB082410F5}">
+					<ChildrenList>
+						<Action Name="" ID="{35478890-B607-495F-B9B4-62934D0879B8}" ShortID="562969352">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_fast_tourbillon_loop" ID="{127FF20D-D64F-4005-8C57-2E269D78BB94}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_charge_dash_start" ID="{DA5E1326-85BE-4F35-982E-6A85900FBBC8}">
+					<ChildrenList>
+						<Action Name="" ID="{4DB5F27D-DC32-4D79-AB21-0EA5A33BC699}" ShortID="903491364">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_charge_dash_start" ID="{318C3A72-39F9-4349-9977-618DEFAC93CD}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_charge_dash_fire" ID="{71A87A57-4FE5-4E37-B36B-1CBB0423D29A}">
+					<ChildrenList>
+						<Action Name="" ID="{8C80B853-AEE3-49BE-940A-FE07EBA0E2BD}" ShortID="189650292">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_charge_dash_fire" ID="{237887A5-1C1C-4EC8-ACF4-9D7BA1B95695}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="boss_charge_dash" ID="{F673A496-402F-4C5D-A71E-9A70AD4B3989}">
+					<ChildrenList>
+						<Action Name="" ID="{096FC8B8-4D0D-4C22-AA84-57FB04C5F4D6}" ShortID="139537220">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_charge_dash" ID="{2167773B-879A-457F-AA22-1B1DF1B9F3EE}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>

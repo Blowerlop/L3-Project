@@ -23,7 +23,7 @@
 				<Bus Id="3803692087" Name="Master Audio Bus" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus" GUID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"/>
 			</Busses>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{777701DD-5D2B-0BC5-5C16-131CF16B581B}">
+		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{F3472AF8-EDE8-8DAB-E9CD-B199C1510CA8}">
 			<ObjectPath>\SoundBanks\Default Work Unit\Main</ObjectPath>
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
@@ -32,9 +32,25 @@
 					<ShortName>fire_spell_1.wav</ShortName>
 					<CachePath>SFX/fire_spell_1_818F3B66.wem</CachePath>
 				</File>
+				<File Id="85351887" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_charge_dash.wav</ShortName>
+					<CachePath>SFX/boss_charge_dash_818F3B66.wem</CachePath>
+				</File>
+				<File Id="132691995" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_fast_tourbillon_loop_def.wav</ShortName>
+					<CachePath>SFX/boss_fast_tourbillon_loop_def_818F3B66.wem</CachePath>
+				</File>
+				<File Id="164337811" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_casting_spell_start.wav</ShortName>
+					<CachePath>SFX/boss_casting_spell_start_818F3B66.wem</CachePath>
+				</File>
 				<File Id="237094145" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_theme_2_temp.wav</ShortName>
 					<CachePath>SFX/boss_theme_2_temp_FBC78EF0.wem</CachePath>
+				</File>
+				<File Id="261784381" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_casting_spell1_end.wav</ShortName>
+					<CachePath>SFX/boss_casting_spell1_end_818F3B66.wem</CachePath>
 				</File>
 				<File Id="350655962" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_theme_1_temp.wav</ShortName>
@@ -44,6 +60,10 @@
 					<ShortName>auto_attack_dist_temp.wav</ShortName>
 					<CachePath>SFX/auto_attack_dist_temp_818F3B66.wem</CachePath>
 				</File>
+				<File Id="435117214" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_jump_attack.wav</ShortName>
+					<CachePath>SFX/boss_jump_attack_818F3B66.wem</CachePath>
+				</File>
 				<File Id="660533776" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>auto_attack_cac_3.wav</ShortName>
 					<CachePath>SFX/auto_attack_cac_3_818F3B66.wem</CachePath>
@@ -52,13 +72,33 @@
 					<ShortName>heal_self.wav</ShortName>
 					<CachePath>SFX/heal_self_818F3B66.wem</CachePath>
 				</File>
+				<File Id="735611602" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_auto_attack.wav</ShortName>
+					<CachePath>SFX/boss_auto_attack_818F3B66.wem</CachePath>
+				</File>
+				<File Id="780880141" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_blastingground2_end.wav</ShortName>
+					<CachePath>SFX/boss_blastingground2_end_818F3B66.wem</CachePath>
+				</File>
+				<File Id="805001484" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_charge_dash_fire.wav</ShortName>
+					<CachePath>SFX/boss_charge_dash_fire_818F3B66.wem</CachePath>
+				</File>
 				<File Id="817219065" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>player_death_test.wav</ShortName>
 					<CachePath>SFX/player_death_test_818F3B66.wem</CachePath>
 				</File>
+				<File Id="855277088" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_charge_dash_start.wav</ShortName>
+					<CachePath>SFX/boss_charge_dash_start_818F3B66.wem</CachePath>
+				</File>
 				<File Id="860829887" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_theme_3_temp.wav</ShortName>
 					<CachePath>SFX/boss_theme_3_temp_FBC78EF0.wem</CachePath>
+				</File>
+				<File Id="878580162" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_blastingground2_start.wav</ShortName>
+					<CachePath>SFX/boss_blastingground2_start_818F3B66.wem</CachePath>
 				</File>
 				<File Id="945017671" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>ambient_search_group_1.wav</ShortName>
@@ -75,6 +115,56 @@
 						<MediaRef Id="434028665"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="3472135626" Name="boss_cast_blastingground_end" ObjectPath="\Events\Default Work Unit\boss_cast_blastingground_end" GUID="{A301DF21-087B-4219-988D-3EE09B57A65A}" DurationType="OneShot" DurationMin="2.5003877" DurationMax="2.5003877">
+					<MediaRefs>
+						<MediaRef Id="780880141"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3384459193" Name="boss_cast_blastingground_start" ObjectPath="\Events\Default Work Unit\boss_cast_blastingground_start" GUID="{3F98E2B1-11CE-4803-8500-0C48C320074C}" DurationType="OneShot" DurationMin="1.1837795" DurationMax="1.1837795">
+					<MediaRefs>
+						<MediaRef Id="878580162"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2984868890" Name="boss_casting_spell1_end" ObjectPath="\Events\Default Work Unit\boss_casting_spell1_end" GUID="{83C2462A-8C24-47ED-B31A-7E460D168AC1}" DurationType="OneShot" DurationMin="2.561693" DurationMax="2.561693">
+					<MediaRefs>
+						<MediaRef Id="261784381"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2187720521" Name="boss_casting_spell2_end" ObjectPath="\Events\Default Work Unit\boss_casting_spell2_end" GUID="{98F27235-AD85-40B5-9B9B-84E664D09518}" DurationType="OneShot" DurationMin="2.5003877" DurationMax="2.5003877">
+					<MediaRefs>
+						<MediaRef Id="780880141"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2671164378" Name="boss_casting_spell_start" ObjectPath="\Events\Default Work Unit\boss_casting_spell_start" GUID="{5BCFB3E5-9FE4-4D1B-8E95-F669301EE65A}" DurationType="OneShot" DurationMin="2.1092002" DurationMax="2.1092002">
+					<MediaRefs>
+						<MediaRef Id="164337811"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1709418992" Name="boss_charge_dash" ObjectPath="\Events\Default Work Unit\boss_charge_dash" GUID="{F673A496-402F-4C5D-A71E-9A70AD4B3989}" DurationType="OneShot" DurationMin="3.005428" DurationMax="3.005428">
+					<MediaRefs>
+						<MediaRef Id="85351887"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2515939835" Name="boss_charge_dash_fire" ObjectPath="\Events\Default Work Unit\boss_charge_dash_fire" GUID="{71A87A57-4FE5-4E37-B36B-1CBB0423D29A}" DurationType="OneShot" DurationMin="2.9937508" DurationMax="2.9937508">
+					<MediaRefs>
+						<MediaRef Id="855277088"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4220471421" Name="boss_charge_dash_start" ObjectPath="\Events\Default Work Unit\boss_charge_dash_start" GUID="{DA5E1326-85BE-4F35-982E-6A85900FBBC8}" DurationType="OneShot" DurationMin="2.4828718" DurationMax="2.4828718">
+					<MediaRefs>
+						<MediaRef Id="805001484"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3681979577" Name="boss_fast_tourbillon_loop" ObjectPath="\Events\Default Work Unit\boss_fast_tourbillon_loop" GUID="{065DE443-FDEC-4EDE-8BC0-01EB082410F5}" DurationType="OneShot" DurationMin="3.3499064" DurationMax="3.3499064">
+					<MediaRefs>
+						<MediaRef Id="132691995"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4285125499" Name="BossAutoAttack" ObjectPath="\Events\Default Work Unit\BossAutoAttack" GUID="{BDAEE0E8-7DE6-4443-BE78-D5DB56C24277}" DurationType="OneShot" DurationMin="1.9282031" DurationMax="1.9282031">
+					<MediaRefs>
+						<MediaRef Id="735611602"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="4161557069" Name="BossFightMusic_01" ObjectPath="\Events\Default Work Unit\BossFightMusic_01" GUID="{1529DCFC-CE35-4C19-8E25-854D601ECD2C}" DurationType="Infinite">
 					<MediaRefs>
 						<MediaRef Id="350655962"/>
@@ -88,6 +178,11 @@
 				<Event Id="4161557071" Name="BossFightMusic_03" ObjectPath="\Events\Default Work Unit\BossFightMusic_03" GUID="{E51424E9-D89A-48C2-A6C0-10E3962A1C56}" DurationType="Infinite">
 					<MediaRefs>
 						<MediaRef Id="860829887"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="954396558" Name="BossJumpAttack" ObjectPath="\Events\Default Work Unit\BossJumpAttack" GUID="{D7BCBF96-D764-42E2-822C-576EBA9AFFC4}" DurationType="OneShot" DurationMin="0.6729006" DurationMax="0.6729006">
+					<MediaRefs>
+						<MediaRef Id="435117214"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="136155997" Name="DashTest" ObjectPath="\Events\Default Work Unit\DashTest" GUID="{45A5FD2E-1CEA-48BF-A665-9E9F70F04441}" DurationType="OneShot" DurationMin="1.064088" DurationMax="1.064088">
@@ -123,5 +218,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{573F79D8-7CAD-FDAB-1F0E-45D7C0866956}</FileHash>
+	<FileHash>{55905BDC-5A06-F3DD-1BC9-F5B621D1B241}</FileHash>
 </SoundBanksInfo>

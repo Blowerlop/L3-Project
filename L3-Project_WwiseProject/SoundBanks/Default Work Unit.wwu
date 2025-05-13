@@ -6,14 +6,25 @@
 				<SoundBank Name="Main" ID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}">
 					<ObjectInclusionList>
 						<ObjectRef Name="ResPlayer" ID="{9A8F2280-56E9-4046-9B6C-F827C1BD9C87}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="boss_casting_spell2_end" ID="{98F27235-AD85-40B5-9B9B-84E664D09518}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="DeathPlayer" ID="{4F262321-8371-41D2-8222-07E9E6DC3886}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="boss_cast_blastingground_end" ID="{A301DF21-087B-4219-988D-3EE09B57A65A}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="DownPlayer" ID="{15009986-3A77-428B-99BB-229D96B12B16}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BossJumpAttack" ID="{D7BCBF96-D764-42E2-822C-576EBA9AFFC4}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="BossFightMusic_02" ID="{D5420CAB-25F4-4376-805A-59BD72D30808}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BossAutoAttack" ID="{BDAEE0E8-7DE6-4443-BE78-D5DB56C24277}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="boss_casting_spell1_end" ID="{83C2462A-8C24-47ED-B31A-7E460D168AC1}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="boss_cast_blastingground_start" ID="{3F98E2B1-11CE-4803-8500-0C48C320074C}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="AttackDistTest" ID="{CD759F51-5E65-482F-8D8E-5541A2C00105}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="DashTest" ID="{45A5FD2E-1CEA-48BF-A665-9E9F70F04441}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="BossFightMusic_03" ID="{E51424E9-D89A-48C2-A6C0-10E3962A1C56}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="SearchGroupInstance" ID="{4387F31F-25BB-4BB3-8533-4F19CD42B645}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="BossFightMusic_01" ID="{1529DCFC-CE35-4C19-8E25-854D601ECD2C}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="SpellFireTest" ID="{65B0CA31-3B0A-4C9C-9066-CE13E3C0CD72}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="boss_casting_spell_start" ID="{5BCFB3E5-9FE4-4D1B-8E95-F669301EE65A}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="boss_charge_dash_fire" ID="{71A87A57-4FE5-4E37-B36B-1CBB0423D29A}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="boss_fast_tourbillon_loop" ID="{065DE443-FDEC-4EDE-8BC0-01EB082410F5}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="boss_charge_dash_start" ID="{DA5E1326-85BE-4F35-982E-6A85900FBBC8}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
