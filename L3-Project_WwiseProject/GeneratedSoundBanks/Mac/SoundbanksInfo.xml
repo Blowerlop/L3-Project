@@ -23,7 +23,7 @@
 				<Bus Id="3803692087" Name="Master Audio Bus" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus" GUID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"/>
 			</Busses>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{F6AAC8E7-CA23-F9B5-E2EF-9D53F9BD1CA8}">
+		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{777701DD-5D2B-0BC5-5C16-131CF16B581B}">
 			<ObjectPath>\SoundBanks\Default Work Unit\Main</ObjectPath>
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
@@ -59,6 +59,10 @@
 				<File Id="860829887" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_theme_3_temp.wav</ShortName>
 					<CachePath>SFX/boss_theme_3_temp_FBC78EF0.wem</CachePath>
+				</File>
+				<File Id="945017671" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>ambient_search_group_1.wav</ShortName>
+					<CachePath>SFX/ambient_search_group_1_FBC78EF0.wem</CachePath>
 				</File>
 				<File Id="982106308" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>playerdown_test.wav</ShortName>
@@ -106,6 +110,11 @@
 						<MediaRef Id="718667253"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="1077198763" Name="SearchGroupInstance" ObjectPath="\Events\Default Work Unit\SearchGroupInstance" GUID="{4387F31F-25BB-4BB3-8533-4F19CD42B645}" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="945017671"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="7265457" Name="SpellFireTest" ObjectPath="\Events\Default Work Unit\SpellFireTest" GUID="{65B0CA31-3B0A-4C9C-9066-CE13E3C0CD72}" DurationType="OneShot" DurationMin="1.1677234" DurationMax="1.1677234">
 					<MediaRefs>
 						<MediaRef Id="28388860"/>
@@ -114,5 +123,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{88B80C3C-5EE4-ED91-7810-E72B67D6F75A}</FileHash>
+	<FileHash>{573F79D8-7CAD-FDAB-1F0E-45D7C0866956}</FileHash>
 </SoundBanksInfo>

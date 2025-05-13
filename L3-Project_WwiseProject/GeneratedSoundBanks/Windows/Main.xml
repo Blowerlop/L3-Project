@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="16" SoundBankVersion="150">
 	<SoundBanks>
-		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{F6AAC8E7-CA23-F9B5-E2EF-9D53F9BD1CA8}">
+		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{777701DD-5D2B-0BC5-5C16-131CF16B581B}">
 			<ObjectPath>\SoundBanks\Default Work Unit\Main</ObjectPath>
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
@@ -37,6 +37,10 @@
 				<File Id="860829887" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_theme_3_temp.wav</ShortName>
 					<CachePath>SFX/boss_theme_3_temp_FBC78EF0.wem</CachePath>
+				</File>
+				<File Id="945017671" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>ambient_search_group_1.wav</ShortName>
+					<CachePath>SFX/ambient_search_group_1_FBC78EF0.wem</CachePath>
 				</File>
 				<File Id="982106308" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>playerdown_test.wav</ShortName>
@@ -84,6 +88,11 @@
 						<MediaRef Id="718667253"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="1077198763" Name="SearchGroupInstance" ObjectPath="\Events\Default Work Unit\SearchGroupInstance" GUID="{4387F31F-25BB-4BB3-8533-4F19CD42B645}" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="945017671"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="7265457" Name="SpellFireTest" ObjectPath="\Events\Default Work Unit\SpellFireTest" GUID="{65B0CA31-3B0A-4C9C-9066-CE13E3C0CD72}" DurationType="OneShot" DurationMin="1.1677234" DurationMax="1.1677234">
 					<MediaRefs>
 						<MediaRef Id="28388860"/>
@@ -92,5 +101,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{94736FE4-44B0-AFF1-8988-C696FBF63678}</FileHash>
+	<FileHash>{AF9CF54D-06B7-BF27-A8AA-27CD1398FC60}</FileHash>
 </SoundBanksInfo>

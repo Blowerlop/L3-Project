@@ -2,6 +2,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	7265457	SpellFireTest			\Default Work Unit\SpellFireTest	
 	136155997	DashTest			\Default Work Unit\DashTest	
 	333827014	DeathPlayer			\Default Work Unit\DeathPlayer	
+	1077198763	SearchGroupInstance			\Default Work Unit\SearchGroupInstance	
 	1548476382	DownPlayer			\Default Work Unit\DownPlayer	
 	3646695146	ResPlayer			\Default Work Unit\ResPlayer	
 	3987506369	AttackDistTest			\Default Work Unit\AttackDistTest	
@@ -18,5 +19,6 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	718667253	res_player	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Windows\SFX\heal_self_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\res_player		908484
 	817219065	death_player	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Windows\SFX\player_death_test_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\death_player		218072
 	860829887	boss_theme_3_temp	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Windows\SFX\boss_theme_3_temp_FBC78EF0.wem		\Actor-Mixer Hierarchy\Default Work Unit\boss_theme_3_temp		36742452
+	945017671	search_group_instance	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Windows\SFX\ambient_search_group_1_FBC78EF0.wem		\Actor-Mixer Hierarchy\Default Work Unit\search_group_instance		17920100
 	982106308	down_player	C:\Users\99leo\Documents\GIT\L3-Project\L3-Project_WwiseProject\.cache\Windows\SFX\playerdown_test_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\down_player		292920
 

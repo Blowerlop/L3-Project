@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{629FAB7B-C345-4463-854D-D8C6F1A181C2}",
     "Language": "SFX",
-    "Hash": "{F6AAC8E7-CA23-F9B5-E2EF-9D53F9BD1CA8}",
+    "Hash": "{777701DD-5D2B-0BC5-5C16-131CF16B581B}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main",
     "ShortName": "Main",
     "Path": "Main.bnk",
@@ -78,6 +78,14 @@
       "Location": "Memory",
       "ShortName": "boss_theme_3_temp.wav",
       "CachePath": "SFX/boss_theme_3_temp_FBC78EF0.wem"
+     },
+     {
+      "Id": "945017671",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "ambient_search_group_1.wav",
+      "CachePath": "SFX/ambient_search_group_1_FBC78EF0.wem"
      },
      {
       "Id": "982106308",
@@ -196,6 +204,18 @@
       ]
      },
      {
+      "Id": "1077198763",
+      "Name": "SearchGroupInstance",
+      "ObjectPath": "\\Events\\Default Work Unit\\SearchGroupInstance",
+      "GUID": "{4387F31F-25BB-4BB3-8533-4F19CD42B645}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "945017671"
+       }
+      ]
+     },
+     {
       "Id": "7265457",
       "Name": "SpellFireTest",
       "ObjectPath": "\\Events\\Default Work Unit\\SpellFireTest",
@@ -212,6 +232,6 @@
     ]
    }
   ],
-  "FileHash": "{ECC014CF-7596-15AA-AE3A-D50803C9C4C9}"
+  "FileHash": "{7C8FE99C-FF0F-D858-B9DE-96DC1872B522}"
  }
 }
