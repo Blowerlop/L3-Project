@@ -69,12 +69,34 @@
 						</Action>
 					</ChildrenList>
 				</Event>
-				<Event Name="BossFightMusic" ID="{BF2B2F0E-5D22-42EC-80C7-FD1F853C1D48}">
+				<Event Name="BossFightMusic_01" ID="{1529DCFC-CE35-4C19-8E25-854D601ECD2C}">
 					<ChildrenList>
-						<Action Name="" ID="{611B0567-A316-441E-A434-06D5ADE49D7E}" ShortID="760949488">
+						<Action Name="" ID="{A1551BD6-FF8F-42A0-A772-68DCE6F24FE5}" ShortID="512624578">
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="boss_fight_test" ID="{32E2050E-69FE-45EB-A918-C32B8D732FF4}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+									<ObjectRef Name="boss_theme_1_temp" ID="{D0FC758E-5401-4C5E-A20A-A1360B6978F4}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="BossFightMusic_02" ID="{D5420CAB-25F4-4376-805A-59BD72D30808}">
+					<ChildrenList>
+						<Action Name="" ID="{4AEE893C-5202-4460-AEF1-F34E2BA1A8BB}" ShortID="609402265">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_theme_2_temp" ID="{5B36370B-9BC1-4DF7-9163-553E162F27DC}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="BossFightMusic_03" ID="{E51424E9-D89A-48C2-A6C0-10E3962A1C56}">
+					<ChildrenList>
+						<Action Name="" ID="{D39760D2-EA9B-4B40-8031-A946362BF28E}" ShortID="853946812">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="boss_theme_3_temp" ID="{98EDA96F-2D0D-4297-84C1-E2E6CDD7D086}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>

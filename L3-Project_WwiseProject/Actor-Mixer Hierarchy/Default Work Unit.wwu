@@ -373,6 +373,140 @@
 						<ActiveSource Name="boss_fight_TBD" ID="{CFA02F24-776C-4D60-8D7B-E6EF6969301D}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
+				<Sound Name="boss_theme_1_temp" ID="{D0FC758E-5401-4C5E-A20A-A1360B6978F4}" ShortID="717306383">
+					<PropertyList>
+						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<SourcePlugin Name="Audio Input" ID="{95E88322-6CAD-47E0-8A87-78FE794AF479}" ShortID="269701243" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
+							<Language>SFX</Language>
+						</SourcePlugin>
+						<AudioFileSource Name="boss_fight_TBD" ID="{F052B3D7-22C6-4A9A-A6D5-0E8844D8856E}">
+							<Language>SFX</Language>
+							<AudioFile>boss_fight_TBD.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="337396457"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="boss_theme_1_temp" ID="{689B0F1D-5678-430D-A15F-EB7C486316CD}">
+							<Language>SFX</Language>
+							<AudioFile>boss_theme_1_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="350655962"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="boss_theme_1_temp" ID="{689B0F1D-5678-430D-A15F-EB7C486316CD}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+				<Sound Name="boss_theme_2_temp" ID="{5B36370B-9BC1-4DF7-9163-553E162F27DC}" ShortID="900607227">
+					<PropertyList>
+						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<SourcePlugin Name="Audio Input" ID="{F2307EC7-4E8A-4739-81B4-35A610E27400}" ShortID="933486728" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
+							<Language>SFX</Language>
+						</SourcePlugin>
+						<AudioFileSource Name="boss_fight_TBD" ID="{909A6696-00EB-4A70-87F4-E4B5048EA783}">
+							<Language>SFX</Language>
+							<AudioFile>boss_fight_TBD.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="337396457"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="boss_theme_1_temp" ID="{6D45F2A4-A4CD-4D92-BE17-42B94EA20B37}">
+							<Language>SFX</Language>
+							<AudioFile>boss_theme_1_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="350655962"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="boss_theme_2_temp" ID="{3691B8D6-9A16-4054-824B-67046C80E361}">
+							<Language>SFX</Language>
+							<AudioFile>boss_theme_2_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="237094145"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="boss_theme_2_temp" ID="{3691B8D6-9A16-4054-824B-67046C80E361}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+				<Sound Name="boss_theme_3_temp" ID="{98EDA96F-2D0D-4297-84C1-E2E6CDD7D086}" ShortID="1030374078">
+					<PropertyList>
+						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-10</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{294B467E-5B11-4E44-953C-882FF67A4360}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{C4DB2BB0-1A61-4E19-840C-DE8F9532EE84}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<SourcePlugin Name="Audio Input" ID="{5BF4AC56-DA1D-4023-A296-4C364438A0D1}" ShortID="741243747" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
+							<Language>SFX</Language>
+						</SourcePlugin>
+						<AudioFileSource Name="boss_fight_TBD" ID="{DE9932C9-0FCD-4E39-B45A-D59B3E830712}">
+							<Language>SFX</Language>
+							<AudioFile>boss_fight_TBD.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="337396457"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="boss_theme_1_temp" ID="{44A30F38-6C15-4B5C-B405-E31AB2632D21}">
+							<Language>SFX</Language>
+							<AudioFile>boss_theme_1_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="350655962"/>
+							</MediaIDList>
+						</AudioFileSource>
+						<AudioFileSource Name="boss_theme_3_temp" ID="{E6BC0408-CA7C-44F5-9F0A-A773997ACC54}">
+							<Language>SFX</Language>
+							<AudioFile>boss_theme_3_temp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="860829887"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="boss_theme_3_temp" ID="{E6BC0408-CA7C-44F5-9F0A-A773997ACC54}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

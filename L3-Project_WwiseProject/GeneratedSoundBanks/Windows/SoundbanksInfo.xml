@@ -23,7 +23,7 @@
 				<Bus Id="3803692087" Name="Master Audio Bus" ObjectPath="\Master-Mixer Hierarchy\Default Work Unit\Master Audio Bus" GUID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"/>
 			</Busses>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{B8194CF7-9D2D-4BBB-6309-F1E563530493}">
+		<SoundBank Id="3161908922" Type="User" GUID="{629FAB7B-C345-4463-854D-D8C6F1A181C2}" Language="SFX" Hash="{F6AAC8E7-CA23-F9B5-E2EF-9D53F9BD1CA8}">
 			<ObjectPath>\SoundBanks\Default Work Unit\Main</ObjectPath>
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
@@ -32,9 +32,13 @@
 					<ShortName>fire_spell_1.wav</ShortName>
 					<CachePath>SFX/fire_spell_1_818F3B66.wem</CachePath>
 				</File>
-				<File Id="337396457" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>boss_fight_TBD.wav</ShortName>
-					<CachePath>SFX/boss_fight_TBD_FBC78EF0.wem</CachePath>
+				<File Id="237094145" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_theme_2_temp.wav</ShortName>
+					<CachePath>SFX/boss_theme_2_temp_FBC78EF0.wem</CachePath>
+				</File>
+				<File Id="350655962" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_theme_1_temp.wav</ShortName>
+					<CachePath>SFX/boss_theme_1_temp_FBC78EF0.wem</CachePath>
 				</File>
 				<File Id="434028665" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>auto_attack_dist_temp.wav</ShortName>
@@ -52,6 +56,10 @@
 					<ShortName>player_death_test.wav</ShortName>
 					<CachePath>SFX/player_death_test_818F3B66.wem</CachePath>
 				</File>
+				<File Id="860829887" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_theme_3_temp.wav</ShortName>
+					<CachePath>SFX/boss_theme_3_temp_FBC78EF0.wem</CachePath>
+				</File>
 				<File Id="982106308" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>playerdown_test.wav</ShortName>
 					<CachePath>SFX/playerdown_test_818F3B66.wem</CachePath>
@@ -63,9 +71,19 @@
 						<MediaRef Id="434028665"/>
 					</MediaRefs>
 				</Event>
-				<Event Id="2890401025" Name="BossFightMusic" ObjectPath="\Events\Default Work Unit\BossFightMusic" GUID="{BF2B2F0E-5D22-42EC-80C7-FD1F853C1D48}" DurationType="Infinite">
+				<Event Id="4161557069" Name="BossFightMusic_01" ObjectPath="\Events\Default Work Unit\BossFightMusic_01" GUID="{1529DCFC-CE35-4C19-8E25-854D601ECD2C}" DurationType="Infinite">
 					<MediaRefs>
-						<MediaRef Id="337396457"/>
+						<MediaRef Id="350655962"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4161557070" Name="BossFightMusic_02" ObjectPath="\Events\Default Work Unit\BossFightMusic_02" GUID="{D5420CAB-25F4-4376-805A-59BD72D30808}" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="237094145"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4161557071" Name="BossFightMusic_03" ObjectPath="\Events\Default Work Unit\BossFightMusic_03" GUID="{E51424E9-D89A-48C2-A6C0-10E3962A1C56}" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="860829887"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="136155997" Name="DashTest" ObjectPath="\Events\Default Work Unit\DashTest" GUID="{45A5FD2E-1CEA-48BF-A665-9E9F70F04441}" DurationType="OneShot" DurationMin="1.064088" DurationMax="1.064088">
@@ -96,5 +114,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{C827E027-B9FD-48CF-4234-D648580995FD}</FileHash>
+	<FileHash>{73FB30FA-72A2-62C1-66F4-8B9675A09E37}</FileHash>
 </SoundBanksInfo>

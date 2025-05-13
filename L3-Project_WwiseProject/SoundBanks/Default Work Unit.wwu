@@ -8,9 +8,11 @@
 						<ObjectRef Name="ResPlayer" ID="{9A8F2280-56E9-4046-9B6C-F827C1BD9C87}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="DeathPlayer" ID="{4F262321-8371-41D2-8222-07E9E6DC3886}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="DownPlayer" ID="{15009986-3A77-428B-99BB-229D96B12B16}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="BossFightMusic" ID="{BF2B2F0E-5D22-42EC-80C7-FD1F853C1D48}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BossFightMusic_02" ID="{D5420CAB-25F4-4376-805A-59BD72D30808}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="AttackDistTest" ID="{CD759F51-5E65-482F-8D8E-5541A2C00105}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="DashTest" ID="{45A5FD2E-1CEA-48BF-A665-9E9F70F04441}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BossFightMusic_03" ID="{E51424E9-D89A-48C2-A6C0-10E3962A1C56}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BossFightMusic_01" ID="{1529DCFC-CE35-4C19-8E25-854D601ECD2C}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="SpellFireTest" ID="{65B0CA31-3B0A-4C9C-9066-CE13E3C0CD72}" WorkUnitID="{5392F119-A326-4250-AF8C-199E9EECF0A6}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
