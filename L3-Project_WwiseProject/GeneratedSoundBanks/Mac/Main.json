@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{629FAB7B-C345-4463-854D-D8C6F1A181C2}",
     "Language": "SFX",
-    "Hash": "{C197A95E-4885-343F-B0AB-9CFD84420E0E}",
+    "Hash": "{E068EF6B-E688-3644-6415-D432230B2B67}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main",
     "ShortName": "Main",
     "Path": "Main.bnk",
@@ -48,12 +48,28 @@
       "CachePath": "SFX/boss_casting_spell_start_818F3B66.wem"
      },
      {
+      "Id": "237094145",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "boss_theme_2_temp.wav",
+      "CachePath": "SFX/boss_theme_2_temp_FBC78EF0.wem"
+     },
+     {
       "Id": "261784381",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "boss_casting_spell1_end.wav",
       "CachePath": "SFX/boss_casting_spell1_end_818F3B66.wem"
+     },
+     {
+      "Id": "350655962",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "boss_theme_1_temp.wav",
+      "CachePath": "SFX/boss_theme_1_temp_FBC78EF0.wem"
      },
      {
       "Id": "434028665",
@@ -126,6 +142,14 @@
       "Location": "Memory",
       "ShortName": "boss_charge_dash_start.wav",
       "CachePath": "SFX/boss_charge_dash_start_818F3B66.wem"
+     },
+     {
+      "Id": "860829887",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "boss_theme_3_temp.wav",
+      "CachePath": "SFX/boss_theme_3_temp_FBC78EF0.wem"
      },
      {
       "Id": "878580162",
@@ -308,6 +332,42 @@
       ]
      },
      {
+      "Id": "4161557069",
+      "Name": "BossFightMusic_01",
+      "ObjectPath": "\\Events\\Default Work Unit\\BossFightMusic_01",
+      "GUID": "{1529DCFC-CE35-4C19-8E25-854D601ECD2C}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "350655962"
+       }
+      ]
+     },
+     {
+      "Id": "4161557070",
+      "Name": "BossFightMusic_02",
+      "ObjectPath": "\\Events\\Default Work Unit\\BossFightMusic_02",
+      "GUID": "{D5420CAB-25F4-4376-805A-59BD72D30808}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "237094145"
+       }
+      ]
+     },
+     {
+      "Id": "4161557071",
+      "Name": "BossFightMusic_03",
+      "ObjectPath": "\\Events\\Default Work Unit\\BossFightMusic_03",
+      "GUID": "{E51424E9-D89A-48C2-A6C0-10E3962A1C56}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "860829887"
+       }
+      ]
+     },
+     {
       "Id": "954396558",
       "Name": "BossJumpAttack",
       "ObjectPath": "\\Events\\Default Work Unit\\BossJumpAttack",
@@ -406,6 +466,6 @@
     ]
    }
   ],
-  "FileHash": "{99C03A23-55AD-1DE7-BCEE-988DC45FC3DC}"
+  "FileHash": "{1D9FFC2C-E91A-A7BE-7F08-C8CB67E3C482}"
  }
 }

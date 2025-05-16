@@ -364,7 +364,7 @@
 						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 						<Property Name="Volume" Type="Real64">
 							<ValueList>
-								<Value>-10</Value>
+								<Value>-19</Value>
 							</ValueList>
 						</Property>
 					</PropertyList>
@@ -380,14 +380,7 @@
 						<SourcePlugin Name="Audio Input" ID="{95E88322-6CAD-47E0-8A87-78FE794AF479}" ShortID="269701243" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
 							<Language>SFX</Language>
 						</SourcePlugin>
-						<AudioFileSource Name="boss_fight_TBD" ID="{F052B3D7-22C6-4A9A-A6D5-0E8844D8856E}">
-							<Language>SFX</Language>
-							<AudioFile>boss_fight_TBD.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="337396457"/>
-							</MediaIDList>
-						</AudioFileSource>
-						<AudioFileSource Name="boss_theme_1_temp" ID="{689B0F1D-5678-430D-A15F-EB7C486316CD}">
+						<AudioFileSource Name="boss_theme_1_temp" ID="{E57402AE-1F8F-4A0E-8124-24379453B0B1}">
 							<Language>SFX</Language>
 							<AudioFile>boss_theme_1_temp.wav</AudioFile>
 							<MediaIDList>
@@ -396,7 +389,7 @@
 						</AudioFileSource>
 					</ChildrenList>
 					<ActiveSourceList>
-						<ActiveSource Name="boss_theme_1_temp" ID="{689B0F1D-5678-430D-A15F-EB7C486316CD}" Platform="Linked"/>
+						<ActiveSource Name="boss_theme_1_temp" ID="{E57402AE-1F8F-4A0E-8124-24379453B0B1}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 				<Sound Name="boss_theme_2_temp" ID="{5B36370B-9BC1-4DF7-9163-553E162F27DC}" ShortID="900607227">
@@ -404,7 +397,7 @@
 						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 						<Property Name="Volume" Type="Real64">
 							<ValueList>
-								<Value>-10</Value>
+								<Value>-15</Value>
 							</ValueList>
 						</Property>
 					</PropertyList>
@@ -420,21 +413,7 @@
 						<SourcePlugin Name="Audio Input" ID="{F2307EC7-4E8A-4739-81B4-35A610E27400}" ShortID="933486728" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
 							<Language>SFX</Language>
 						</SourcePlugin>
-						<AudioFileSource Name="boss_fight_TBD" ID="{909A6696-00EB-4A70-87F4-E4B5048EA783}">
-							<Language>SFX</Language>
-							<AudioFile>boss_fight_TBD.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="337396457"/>
-							</MediaIDList>
-						</AudioFileSource>
-						<AudioFileSource Name="boss_theme_1_temp" ID="{6D45F2A4-A4CD-4D92-BE17-42B94EA20B37}">
-							<Language>SFX</Language>
-							<AudioFile>boss_theme_1_temp.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="350655962"/>
-							</MediaIDList>
-						</AudioFileSource>
-						<AudioFileSource Name="boss_theme_2_temp" ID="{3691B8D6-9A16-4054-824B-67046C80E361}">
+						<AudioFileSource Name="boss_theme_2_temp" ID="{3F5DAD3B-ACD2-4975-8306-36714250CE37}">
 							<Language>SFX</Language>
 							<AudioFile>boss_theme_2_temp.wav</AudioFile>
 							<MediaIDList>
@@ -443,7 +422,7 @@
 						</AudioFileSource>
 					</ChildrenList>
 					<ActiveSourceList>
-						<ActiveSource Name="boss_theme_2_temp" ID="{3691B8D6-9A16-4054-824B-67046C80E361}" Platform="Linked"/>
+						<ActiveSource Name="boss_theme_2_temp" ID="{3F5DAD3B-ACD2-4975-8306-36714250CE37}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 				<Sound Name="boss_theme_3_temp" ID="{98EDA96F-2D0D-4297-84C1-E2E6CDD7D086}" ShortID="1030374078">
@@ -451,7 +430,7 @@
 						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 						<Property Name="Volume" Type="Real64">
 							<ValueList>
-								<Value>-10</Value>
+								<Value>-18</Value>
 							</ValueList>
 						</Property>
 					</PropertyList>
@@ -467,21 +446,7 @@
 						<SourcePlugin Name="Audio Input" ID="{5BF4AC56-DA1D-4023-A296-4C364438A0D1}" ShortID="741243747" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
 							<Language>SFX</Language>
 						</SourcePlugin>
-						<AudioFileSource Name="boss_fight_TBD" ID="{DE9932C9-0FCD-4E39-B45A-D59B3E830712}">
-							<Language>SFX</Language>
-							<AudioFile>boss_fight_TBD.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="337396457"/>
-							</MediaIDList>
-						</AudioFileSource>
-						<AudioFileSource Name="boss_theme_1_temp" ID="{44A30F38-6C15-4B5C-B405-E31AB2632D21}">
-							<Language>SFX</Language>
-							<AudioFile>boss_theme_1_temp.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="350655962"/>
-							</MediaIDList>
-						</AudioFileSource>
-						<AudioFileSource Name="boss_theme_3_temp" ID="{E6BC0408-CA7C-44F5-9F0A-A773997ACC54}">
+						<AudioFileSource Name="boss_theme_3_temp" ID="{D2C26A4C-641C-4B60-A7A0-939C226EDBA2}">
 							<Language>SFX</Language>
 							<AudioFile>boss_theme_3_temp.wav</AudioFile>
 							<MediaIDList>
@@ -490,7 +455,7 @@
 						</AudioFileSource>
 					</ChildrenList>
 					<ActiveSourceList>
-						<ActiveSource Name="boss_theme_3_temp" ID="{E6BC0408-CA7C-44F5-9F0A-A773997ACC54}" Platform="Linked"/>
+						<ActiveSource Name="boss_theme_3_temp" ID="{D2C26A4C-641C-4B60-A7A0-939C226EDBA2}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 				<Sound Name="search_group_instance" ID="{CDEAEBF6-68C0-47E9-9093-FD6ECE621B0A}" ShortID="683282755">
@@ -514,28 +479,7 @@
 						<SourcePlugin Name="Audio Input" ID="{116DC47C-5DE5-4407-85FC-9CC09FCCE8C8}" ShortID="500772222" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
 							<Language>SFX</Language>
 						</SourcePlugin>
-						<AudioFileSource Name="boss_fight_TBD" ID="{393ECBB5-1214-4691-9718-868826A8D3D8}">
-							<Language>SFX</Language>
-							<AudioFile>boss_fight_TBD.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="337396457"/>
-							</MediaIDList>
-						</AudioFileSource>
-						<AudioFileSource Name="boss_theme_1_temp" ID="{83FE386F-C768-451C-9C71-6DA2A3C1E8D4}">
-							<Language>SFX</Language>
-							<AudioFile>boss_theme_1_temp.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="350655962"/>
-							</MediaIDList>
-						</AudioFileSource>
-						<AudioFileSource Name="boss_theme_3_temp" ID="{7380A2C8-5CDC-4461-A7C0-5A779AC8E9EB}">
-							<Language>SFX</Language>
-							<AudioFile>boss_theme_3_temp.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="860829887"/>
-							</MediaIDList>
-						</AudioFileSource>
-						<AudioFileSource Name="ambient_search_group_1" ID="{2FE5F393-CC1B-4697-A972-3446B2BB789F}">
+						<AudioFileSource Name="ambient_search_group_1" ID="{592E7769-1E51-46D6-8AE2-15DA61C00419}">
 							<Language>SFX</Language>
 							<AudioFile>ambient_search_group_1.wav</AudioFile>
 							<MediaIDList>
@@ -544,7 +488,7 @@
 						</AudioFileSource>
 					</ChildrenList>
 					<ActiveSourceList>
-						<ActiveSource Name="ambient_search_group_1" ID="{2FE5F393-CC1B-4697-A972-3446B2BB789F}" Platform="Linked"/>
+						<ActiveSource Name="ambient_search_group_1" ID="{592E7769-1E51-46D6-8AE2-15DA61C00419}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 				<Sound Name="boss_auto_attack" ID="{01D2F3A3-4554-4468-9D5A-9C2494B81CF5}" ShortID="598004527">
