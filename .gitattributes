@@ -28,3 +28,8 @@
 *.icns lfs
 # Movies
 *.bk2 lfs
+# Wwise
+*.wproj text
+*.wwu text
+*.txt text
+*.xml text

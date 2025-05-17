@@ -234,6 +234,17 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="EventTest" ID="{2FD70518-4C39-46CC-B4D5-50FCA9A74DDB}">
+					<ChildrenList>
+						<Action Name="" ID="{4CE554C4-31B9-4268-8E29-F2C5479290FB}" ShortID="736111771">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="spell_fire_test" ID="{2E874BA7-3F7F-4F91-9B02-42B247D0E1DD}" WorkUnitID="{5215FE16-3319-4176-B87F-09B41F18E92E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>
