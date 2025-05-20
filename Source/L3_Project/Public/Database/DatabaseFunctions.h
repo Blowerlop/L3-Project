@@ -32,7 +32,7 @@ public:
 public:
 	// Bind UID to UserName
 	UFUNCTION(BlueprintCallable, Category = "Firebase")
-	static void LinkUserIDAndName(const FString& UserName, const FString& IdToken, const FString& UserId, const FSuccess& OnSuccess, const FFailed& OnFailure);
+	static void LinkUserIDAndName(const FString& UserName, const FString& UserId, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
 public:
 	// Get User Data

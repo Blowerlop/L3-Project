@@ -236,7 +236,7 @@ void UDatabaseFunctions::SetPostRegisterData(const FString& UserName, const FStr
      SetData(Path, Json, IdToken, OnSuccess, OnFailure);
  }
 
-void UDatabaseFunctions::LinkUserIDAndName(const FString& UserName, const FString& IdToken, const FString& UserId, const FSuccess& OnSuccess, const FFailed& OnFailure)
+void UDatabaseFunctions::LinkUserIDAndName(const FString& UserName, const FString& UserId, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
      TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
      Json->SetStringField("Name", UserName);
@@ -245,7 +245,7 @@ void UDatabaseFunctions::LinkUserIDAndName(const FString& UserName, const FStrin
      
      FString Path = FString::Printf(TEXT("UserNames/%s"), *SafeUserId);
      
-     SetData(Path, Json, IdToken, OnSuccess, OnFailure);
+     SetData(Path, Json, UserId, OnSuccess, OnFailure);
 }
 
 void UDatabaseFunctions::GetData(const FString& Path, const FString& DataID, const FSuccess& OnSuccess, const FFailed& OnFailure)
