@@ -64,3 +64,8 @@ void UCharacterManagerSubsystem::DeleteCharacter(const FString CharacterUUID, FD
 	
 	OnCharactersChanged.Broadcast();
 }
+
+void UCharacterManagerSubsystem::SelectCharacter(UCharacterData* Character)
+{
+	SelectedCharacter = Character;
+}

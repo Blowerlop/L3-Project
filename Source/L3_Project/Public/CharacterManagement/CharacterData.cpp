@@ -10,18 +10,13 @@ void UCharacterData::SetName(FString NewName)
 	Name = NewName;
 }
 
-void UCharacterData::SelectWeapon(const USpellDataAsset* WeaponSpell)
+void UCharacterData::SelectWeapon(USpellDataAsset* WeaponSpell)
 {
-	if (WeaponSpell == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("FCharacterData::SelectWeapon: WeaponSpell is null!"));
-		return;
-	}
-	
-	SelectedWeaponID = WeaponSpell->AssetID;
+	SelectedWeaponID = IsValid(WeaponSpell) ? WeaponSpell->AssetID : 0;
+	OnWeaponChanged.Broadcast(WeaponSpell);
 }
 
-void UCharacterData::SelectSpell(const USpellDataAsset* SpellDataAsset, const uint8 Index)
+void UCharacterData::SelectSpell(USpellDataAsset* SpellDataAsset, const uint8 Index)
 {
 	if (Index < 0 || Index > 3)
 	{
@@ -35,8 +30,13 @@ void UCharacterData::SelectSpell(const USpellDataAsset* SpellDataAsset, const ui
 	// Clear the bits at given index
 	SelectedSpellsID &= ~(GBit_Mask_8 << ShiftAmount);
 
-	// Assign new id at given index
-	SelectedSpellsID |= (SpellDataAsset->AssetID << ShiftAmount);
+	if (IsValid(SpellDataAsset))
+	{
+		// Assign new id at given index
+		SelectedSpellsID |= (SpellDataAsset->AssetID << ShiftAmount);
+	}
+
+	OnSpellChanged.Broadcast(SpellDataAsset, Index);
 }
 
 USpellDataAsset* UCharacterData::GetSpellAt(UObject* WorldContext, const uint8 Index)

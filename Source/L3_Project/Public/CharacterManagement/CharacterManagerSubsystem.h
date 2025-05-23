@@ -22,6 +22,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TMap<FString, UCharacterData*> CharactersData;
 
+	UPROPERTY(BlueprintReadOnly)
+	UCharacterData* SelectedCharacter;
+
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 	UFUNCTION(BlueprintCallable)
@@ -35,4 +38,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DeleteCharacter(FString CharacterUUID, FDeleteCharacterDelegate Callback);
+
+	UFUNCTION(BlueprintCallable)
+	void SelectCharacter(UCharacterData* Character);
 };
