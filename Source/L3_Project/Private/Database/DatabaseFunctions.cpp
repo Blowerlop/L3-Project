@@ -372,11 +372,11 @@ void UDatabaseFunctions::CreateCharacter(const FString& UserName, const FString&
      SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
  }
 
-void UDatabaseFunctions::GetAllCharacters(const FString& UserName, const FSuccess& OnSuccess, const FFailed& OnFailure)
+void UDatabaseFunctions::GetAllCharacters(const FString& UID, const FSuccess& OnSuccess, const FFailed& OnFailure)
  {
      FString Url = FString::Printf(
          TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/Players/%s/Characters.json"),
-         *UserName);
+         *UID);
 
      TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
      Request->SetURL(Url);

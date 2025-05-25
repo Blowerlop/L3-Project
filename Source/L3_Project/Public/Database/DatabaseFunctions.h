@@ -49,7 +49,7 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Firebase")
-	static void GetAllCharacters(const FString& UserName, const FSuccess& OnSuccess, const FFailed& OnFailure);
+	static void GetAllCharacters(const FString& UID, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
 
 private:
