@@ -53,4 +53,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	USpellDataAsset* GetWeapon(UObject* WorldContext);
+
+	UFUNCTION(BlueprintCallable)
+	bool IsCharacterValid(UObject* WorldContext);
+
+	UFUNCTION(BlueprintCallable)
+	bool HasSpell(USpellDataAsset* Spell);
 };

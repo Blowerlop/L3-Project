@@ -31,7 +31,7 @@ public:
 	void LoadCharacters();
 
 	UFUNCTION(BlueprintCallable)
-	void SaveCharacter(uint8 CharacterIndex, FSaveCharacterDelegate Callback);
+	void SaveCharacter(UCharacterData* TempCharacter, FSaveCharacterDelegate Callback);
 	
 	UFUNCTION(BlueprintCallable)
 	void CreateCharacter(FString Name, FCreateCharacterDelegate Callback);

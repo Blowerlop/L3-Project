@@ -22,8 +22,25 @@ void UCharacterManagerSubsystem::LoadCharacters()
 	OnCharactersChanged.Broadcast();
 }
 
-void UCharacterManagerSubsystem::SaveCharacter(uint8 CharacterIndex, FSaveCharacterDelegate Callback)
+void UCharacterManagerSubsystem::SaveCharacter(UCharacterData* TempCharacter, FSaveCharacterDelegate Callback)
 {
+	if (!IsValid(TempCharacter))
+	{
+		Callback.ExecuteIfBound("Character data is invalid. Cannot save character.");
+		return;
+	}
+	
+	const auto Character = CharactersData.FindRef(TempCharacter->UUID);
+	if (!IsValid(Character))
+	{
+		Callback.ExecuteIfBound("Character with UUID " + TempCharacter->UUID + " not found locally.");
+		return;
+	}
+
+	// Do it after firebase response
+	Character->SelectedSpellsID = TempCharacter->SelectedSpellsID;
+	Character->SelectedWeaponID = TempCharacter->SelectedWeaponID;
+	
 	// todo: call firebase function to save character data
 	Callback.ExecuteIfBound("");
 }
