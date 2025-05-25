@@ -43,6 +43,15 @@ public:
 	// Set User Data
 	static void SetData(const FString& Path, const TSharedPtr<FJsonObject> Data, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
+public:
+	UFUNCTION(BlueprintCallable, Category = "Firebase")
+	static void CreateCharacter(const FString& UserName, const FString& IdToken, const FString& CharacterName, int WeaponID, int SelectedSpells, const FSuccess& OnSuccess, const FFailed& OnFailure);
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Firebase")
+	static void GetAllCharacters(const FString& UserName, const FSuccess& OnSuccess, const FFailed& OnFailure);
+
+
 private:
 	// Get API Key
 	static FString LoadFirebaseApiKey();
@@ -50,6 +59,9 @@ private:
 private:
 	// Check User Availability
 	static void CheckUserAvailability(const FString& Username, const TFunction<void(bool)>& Callback);
+
+private:
+	static void CheckCharacterNameAvailability(const FString& UserName, const FString& CharacterName, const TFunction<void(bool)>& Callback);
 
 public:
 	// Hash

@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
- 
- 
  #include "Database/DatabaseFunctions.h"
 
 #include "Templates/SharedPointer.h"
@@ -72,6 +69,46 @@ void UDatabaseFunctions::CheckUserAvailability(const FString& Username, const TF
 
      Request->ProcessRequest();
 }
+
+void UDatabaseFunctions::CheckCharacterNameAvailability(const FString& UserName, const FString& CharacterName, const TFunction<void(bool)>& Callback)
+ {
+     FString Url = FString::Printf(
+         TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/Players/%s/Character.json"),
+         *UserName);
+
+     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+     Request->SetURL(Url);
+     Request->SetVerb("GET");
+     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+     Request->OnProcessRequestComplete().BindLambda([Callback, CharacterName](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+     {
+         if (!bWasSuccessful || !Response.IsValid())
+         {
+             Callback(true);
+             return;
+         }
+
+         FString ResponseStr = Response->GetContentAsString();
+
+         TSharedPtr<FJsonObject> JsonResponse;
+         TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseStr);
+         if (FJsonSerializer::Deserialize(Reader, JsonResponse) && JsonResponse.IsValid())
+         {
+             FString ExistingName;
+             if (JsonResponse->TryGetStringField("Name", ExistingName))
+             {
+                 bool bIsAvailable = !ExistingName.Equals(CharacterName, ESearchCase::IgnoreCase);
+                 Callback(bIsAvailable);
+                 return;
+             }
+         }
+
+         Callback(true);
+     });
+
+     Request->ProcessRequest();
+ }
 
 FString UDatabaseFunctions::HashString(const FString& target)
 {
@@ -223,18 +260,22 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
  }
 
 void UDatabaseFunctions::SetPostRegisterData(const FString& UserName, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
- {
-     TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
-     Json->SetStringField("username", UserName);
-     Json->SetNumberField("LVL", 1);
-     Json->SetNumberField("Death", 0);
-     Json->SetNumberField("Win", 0);
-     Json->SetNumberField("Lose", 0);
+{
+     FString CharacterID = FGuid::NewGuid().ToString();
 
-     FString Path = FString::Printf(TEXT("Players/%s"), *UserName);
-     
-     SetData(Path, Json, IdToken, OnSuccess, OnFailure);
- }
+     TSharedPtr<FJsonObject> CharacterJson = MakeShareable(new FJsonObject);
+     CharacterJson->SetStringField("Name", UserName);
+     CharacterJson->SetNumberField("WeaponID", 0);
+     CharacterJson->SetNumberField("SelectedSpells", 0);
+     CharacterJson->SetNumberField("LVL", 1);
+     CharacterJson->SetNumberField("Death", 0);
+     CharacterJson->SetNumberField("Win", 0);
+     CharacterJson->SetNumberField("Lose", 0);
+
+     FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserName, *CharacterID);
+
+     SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
+}
 
 void UDatabaseFunctions::LinkUserIDAndName(const FString& UserName, const FString& UserId, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
@@ -280,7 +321,6 @@ void UDatabaseFunctions::SetData(const FString& Path, const TSharedPtr<FJsonObje
 {
     FString FirebaseDatabaseUrl = TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/"); // <-- remplace par ton projet
 
-    // Construction de l'URL complète
     FString Url = FString::Printf(TEXT("%s/%s.json?auth=%s"), *FirebaseDatabaseUrl, *Path, *IdToken);
 
     FString RequestBody;
@@ -289,7 +329,7 @@ void UDatabaseFunctions::SetData(const FString& Path, const TSharedPtr<FJsonObje
 
     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
     Request->SetURL(Url);
-    Request->SetVerb(TEXT("PUT")); // ou POST si tu veux ajouter plutôt qu’écraser
+    Request->SetVerb(TEXT("PUT"));
     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
     Request->SetContentAsString(RequestBody);
 
@@ -314,3 +354,46 @@ void UDatabaseFunctions::SetData(const FString& Path, const TSharedPtr<FJsonObje
 
     Request->ProcessRequest();
 }
+
+void UDatabaseFunctions::CreateCharacter(const FString& UserName, const FString& IdToken, const FString& CharacterName, int WeaponID, int SelectedSpells, const FSuccess& OnSuccess, const FFailed& OnFailure)
+ {
+     FString CharacterID = FGuid::NewGuid().ToString();
+
+     TSharedPtr<FJsonObject> CharacterJson = MakeShareable(new FJsonObject);
+     CharacterJson->SetStringField("Name", CharacterName);
+     CharacterJson->SetNumberField("WeaponID", WeaponID);
+     CharacterJson->SetNumberField("SelectedSpells", SelectedSpells);
+     CharacterJson->SetNumberField("Death", 0);
+     CharacterJson->SetNumberField("Win", 0);
+     CharacterJson->SetNumberField("Lose", 0);
+
+     FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserName, *CharacterID);
+
+     SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
+ }
+
+void UDatabaseFunctions::GetAllCharacters(const FString& UserName, const FSuccess& OnSuccess, const FFailed& OnFailure)
+ {
+     FString Url = FString::Printf(
+         TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/Players/%s/Characters.json"),
+         *UserName);
+
+     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+     Request->SetURL(Url);
+     Request->SetVerb("GET");
+     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+     Request->OnProcessRequestComplete().BindLambda([OnSuccess, OnFailure](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+     {
+         if (!bWasSuccessful || !Response.IsValid())
+         {
+             OnFailure.Execute("Failed to fetch characters");
+             return;
+         }
+
+         FString ResponseStr = Response->GetContentAsString();
+         OnSuccess.Execute(ResponseStr);
+     });
+
+     Request->ProcessRequest();
+ }
