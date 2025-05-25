@@ -16,6 +16,9 @@ class L3_PROJECT_API USpellDataAsset : public UPrimaryDataAsset
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 AssetID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USpellDataAsset* WeaponSpellCondition;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<ASpellAimer> Aimer;
@@ -41,6 +44,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText Name;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FText Desc;
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UTexture2D* Icon;
 	
