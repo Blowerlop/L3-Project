@@ -47,6 +47,18 @@ bool ASpell::SrvApply(AActor* Target)
 		return false;
 	}
 
+	if (!Target)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvApply - Target is null!"));
+		return false;
+	}
+
+	if (!Data)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvApply - Data is null!"));
+		return false;
+	}
+
 	if (const auto AliveState = Cast<IAliveState>(Target); AliveState != nullptr)
 	{
 		if (!IAliveState::Execute_GetIsAlive(Target))
