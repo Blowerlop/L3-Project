@@ -40,6 +40,8 @@ public:
 	static const FString UUIDConnectOptionsKey;
 	static const FString UserNameConnectOptionsKey;
 	
+	static FString FirebaseIdToken;
+	
 	UPROPERTY(BlueprintReadWrite)
 	FClientData SelfClientData;
 

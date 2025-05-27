@@ -45,12 +45,15 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Firebase")
     static FString HashString(const FString& target);
 
+    UFUNCTION(BlueprintCallable, Category = "Firebase", BlueprintPure)
+    static FString GetIdToken();
+    
 private:
     // API KEY
     static FString LoadFirebaseApiKey();
 
     // Check if the username is available
-    static void CheckUserAvailability(const FString& Username, const FString& IdToken, const TFunction<void(bool)>& Callback);
+    static void CheckUserAvailability(const FString& Username, const TFunction<void(bool)>& Callback);
 
     // Check if the Chara name is available
     static void CheckCharacterNameAvailability(const FString& UserName, const FString& CharacterName, const FString& IdToken, const TFunction<void(bool)>& Callback);

@@ -11,6 +11,7 @@
 #include "Misc/Base64.h"
 #include "Misc/Guid.h"
 #include "HAL/PlatformFilemanager.h"
+#include "Networking/BaseGameInstance.h"
 
 FString UDatabaseFunctions::LoadFirebaseApiKey()
 {
@@ -50,11 +51,16 @@ FString UDatabaseFunctions::HashString(const FString& Target)
     return FMD5::HashAnsiString(*Target);
 }
 
-void UDatabaseFunctions::CheckUserAvailability(const FString& Username, const FString& IdToken, const TFunction<void(bool)>& Callback)
+FString UDatabaseFunctions::GetIdToken()
+{
+    return UBaseGameInstance::FirebaseIdToken;
+}
+
+void UDatabaseFunctions::CheckUserAvailability(const FString& Username, const TFunction<void(bool)>& Callback)
 {
     const FString Url = FString::Printf(
-        TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/Users/%s.json?auth=%s"),
-        *Username, *IdToken);
+        TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/UserNames/%s.json?auth=null"),
+        *Username);
 
     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
     Request->SetURL(Url);
@@ -154,6 +160,8 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
             }
 
             FString localId = JsonResponse->GetStringField("localId");
+            UBaseGameInstance::FirebaseIdToken = JsonResponse->GetStringField("idToken");
+
             OnSuccess.Execute(localId);
         }
         else
@@ -193,7 +201,7 @@ void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString&
 
     Request->SetContentAsString(RequestBody);
 
-    CheckUserAvailability(UserName, FirebaseApiKey, [Request, OnFailure, OnSuccess](bool bAvailable)
+    CheckUserAvailability(UserName, [Request, OnFailure, OnSuccess](bool bAvailable)
     {
         if (!bAvailable)
         {
@@ -223,6 +231,8 @@ void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString&
                 }
 
                 FString localId = JsonResponse->GetStringField("localId");
+                UBaseGameInstance::FirebaseIdToken = JsonResponse->GetStringField("idToken");
+
                 OnSuccess.Execute(localId);
             }
             else

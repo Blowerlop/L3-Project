@@ -10,6 +10,7 @@
 
 const FString UBaseGameInstance::UUIDConnectOptionsKey = "UUID";
 const FString UBaseGameInstance::UserNameConnectOptionsKey = "UserName";
+FString UBaseGameInstance::FirebaseIdToken = TEXT("");
 
 #pragma region Login/out
 
