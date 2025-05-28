@@ -335,6 +335,104 @@ void UDatabaseFunctions::SetData(const FString& Path, const TSharedPtr<FJsonObje
     Request->ProcessRequest();
 }
 
+void UDatabaseFunctions::SetPlayerData(const FString& UserName, const FString& FieldName, const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
+{
+    // Prépare le JSON pour une mise à jour partielle
+    TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+    JsonObject->SetStringField(FieldName, NewValue);
+
+    // Construit le chemin complet du joueur et personnage
+    const FString Path = FString::Printf(TEXT("Players/%s"), *UserName);
+
+    // Construit l'URL Firebase
+    const FString Url = FString::Printf(
+        TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/%s.json?auth=%s"),
+        *Path, *IdToken);
+
+    // Sérialise le JSON
+    FString RequestBody;
+    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&RequestBody);
+    FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
+
+    // Prépare la requête PATCH
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+    Request->SetURL(Url);
+    Request->SetVerb("PATCH");
+    Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+    Request->SetContentAsString(RequestBody);
+
+    // Gère la réponse
+    Request->OnProcessRequestComplete().BindLambda([OnSuccess, OnFailure](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+    {
+        if (!bWasSuccessful || !Response.IsValid())
+        {
+            OnFailure.Execute("SetPlayerData: Firebase PATCH request failed");
+            return;
+        }
+
+        if (Response->GetResponseCode() == 200)
+        {
+            OnSuccess.Execute(Response->GetContentAsString());
+        }
+        else
+        {
+            FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
+            OnFailure.Execute(ErrorMsg);
+        }
+    });
+
+    Request->ProcessRequest();
+}
+
+void UDatabaseFunctions::SetPlayerData(const FString& UserName, const FString& CharacterID, const FString& FieldName, const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
+{
+    // Prépare le JSON pour une mise à jour partielle
+    TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+    JsonObject->SetStringField(FieldName, NewValue);
+
+    // Construit le chemin complet du joueur et personnage
+    const FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserName, *CharacterID);
+
+    // Construit l'URL Firebase
+    const FString Url = FString::Printf(
+        TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/%s.json?auth=%s"),
+        *Path, *IdToken);
+
+    // Sérialise le JSON
+    FString RequestBody;
+    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&RequestBody);
+    FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
+
+    // Prépare la requête PATCH
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+    Request->SetURL(Url);
+    Request->SetVerb("PATCH");
+    Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+    Request->SetContentAsString(RequestBody);
+
+    // Gère la réponse
+    Request->OnProcessRequestComplete().BindLambda([OnSuccess, OnFailure](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+    {
+        if (!bWasSuccessful || !Response.IsValid())
+        {
+            OnFailure.Execute("SetPlayerData: Firebase PATCH request failed");
+            return;
+        }
+
+        if (Response->GetResponseCode() == 200)
+        {
+            OnSuccess.Execute(Response->GetContentAsString());
+        }
+        else
+        {
+            FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
+            OnFailure.Execute(ErrorMsg);
+        }
+    });
+
+    Request->ProcessRequest();
+}
+
 void UDatabaseFunctions::CreateCharacter(const FString& UserName, const FString& IdToken, const FString& CharacterName, int WeaponID, int SelectedSpells, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
     FString CharacterID = FGuid::NewGuid().ToString();

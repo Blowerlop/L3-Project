@@ -60,4 +60,13 @@ private:
 
     // Set Data to firebase
     static void SetData(const FString& Path, const TSharedPtr<FJsonObject> Data, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
+
+    //Set Player data
+    static void SetPlayerData(const FString& UserName, const FString& FieldName,
+                       const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess,
+                       const FFailed& OnFailure);
+	//Set Player data (character specific)
+    static void SetPlayerData(const FString& UserName, const FString& CharacterID, const FString& FieldName,
+                       const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess,
+                       const FFailed& OnFailure);
 };
