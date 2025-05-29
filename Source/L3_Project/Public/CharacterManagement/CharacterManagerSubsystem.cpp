@@ -1,6 +1,8 @@
 #include "CharacterManagerSubsystem.h"
 
 #include "CharacterData.h"
+#include "Database/DatabaseFunctions.h"
+#include "Networking/BaseGameInstance.h"
 
 void UCharacterManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -9,17 +11,66 @@ void UCharacterManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection
 	CharactersData = {};
 }
 
-void UCharacterManagerSubsystem::LoadCharacters()
+void UCharacterManagerSubsystem::LoadCharacters(FCharactersLoadedDelegate Callback)
 {
-	const auto CharacterUUID = FString::Printf(TEXT("C:%d"), CharactersData.Num());
-
-	const auto DefaultCharacter = NewObject<UCharacterData>();
-	DefaultCharacter->SetUUID(CharacterUUID);
-	DefaultCharacter->SetName("Default Character");
+	const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	const auto ClientData = GameInstance->SelfClientData;
 	
-	CharactersData.Add(CharacterUUID, DefaultCharacter);
+	SuccessCallback.BindUFunction(this, "LoadCharactersSuccess");
+	
+	FailedCallback.BindUFunction(this, "LoadCharactersFailed");
 
-	OnCharactersChanged.Broadcast();
+	CharactersLoadedCallback = Callback;
+	UDatabaseFunctions::GetAllCharacters(ClientData.UUID, UDatabaseFunctions::GetIdToken(), SuccessCallback, FailedCallback);
+}
+
+void UCharacterManagerSubsystem::LoadCharactersSuccess(const FString& Data)
+{
+	SuccessCallback.Clear();
+	FailedCallback.Clear();
+
+	const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Data);
+	if (TSharedPtr<FJsonObject> JsonResponse; FJsonSerializer::Deserialize(Reader, JsonResponse) && JsonResponse.IsValid())
+	{
+		for (TTuple<FString, TSharedPtr<FJsonValue>> Value : JsonResponse->Values)
+		{
+			auto CharacterData = NewObject<UCharacterData>();
+			CharacterData->SetUUID(Value.Key);
+
+			const auto JsonObj = Value.Value->AsObject();
+			if (JsonObj == nullptr)
+			{
+				UE_LOG(LogTemp, Error, TEXT("Character data for UUID %s is not valid."), *Value.Key);
+				continue;
+			}
+			
+			const auto Name = JsonObj->GetStringField(TEXT("Name"));
+			const auto SelectedWeaponID = static_cast<uint8>(JsonObj->GetIntegerField(TEXT("WeaponID")));
+			const auto SelectedSpellsID = JsonObj->GetIntegerField(TEXT("SelectedSpells"));
+
+			CharacterData->SetName(Name);
+			CharacterData->SelectedWeaponID = SelectedWeaponID;
+			CharacterData->SelectedSpellsID = SelectedSpellsID;
+
+			CharactersData.Add(Value.Key, CharacterData);
+		}
+
+		bCharactersLoaded = true;
+		CharactersLoadedCallback.ExecuteIfBound("");
+		OnCharactersChanged.Broadcast();
+		return;
+	}
+	
+	CharactersLoadedCallback.ExecuteIfBound("Reponse not valid!");
+}
+
+void UCharacterManagerSubsystem::LoadCharactersFailed(const FString& ErrorMessage)
+{
+	SuccessCallback.Clear();
+	FailedCallback.Clear();
+	
+	UE_LOG(LogTemp, Error, TEXT("Characters loading failed: %s"), *ErrorMessage);
+	CharactersLoadedCallback.ExecuteIfBound(ErrorMessage);
 }
 
 void UCharacterManagerSubsystem::SaveCharacter(UCharacterData* TempCharacter, FSaveCharacterDelegate Callback)
@@ -37,34 +88,120 @@ void UCharacterManagerSubsystem::SaveCharacter(UCharacterData* TempCharacter, FS
 		return;
 	}
 
-	// Do it after firebase response
-	Character->SelectedSpellsID = TempCharacter->SelectedSpellsID;
-	Character->SelectedWeaponID = TempCharacter->SelectedWeaponID;
+	const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	if (!IsValid(GameInstance))
+	{
+		Callback.ExecuteIfBound("SaveCharacter: GameInstance is not valid.");
+		return;
+	}
+
+	const auto ClientData = GameInstance->SelfClientData;
+
+	auto FieldArray = TArray<FString>();
+	FieldArray.Add("WeaponID");
+	FieldArray.Add("SelectedSpells");
 	
-	// todo: call firebase function to save character data
-	Callback.ExecuteIfBound("");
+	auto ValuesArray = TArray<int>();
+	ValuesArray.Add(TempCharacter->SelectedWeaponID);
+	ValuesArray.Add(TempCharacter->SelectedSpellsID);
+
+	SuccessCallback.BindUFunction(this, "SaveCharacterSuccess");
+	FailedCallback.BindUFunction(this, "SaveCharacterFailed");
+
+	SaveCharacterCallback = Callback;
+	
+	UDatabaseFunctions::SetCharacterData_Int(ClientData.UUID, TempCharacter->UUID, FieldArray,
+		ValuesArray, UDatabaseFunctions::GetIdToken(), SuccessCallback, FailedCallback);
+}
+
+void UCharacterManagerSubsystem::SaveCharacterSuccess(const FString& Result)
+{
+	SuccessCallback.Clear();
+	FailedCallback.Clear();
+
+	TSharedPtr<FJsonObject> JsonResponse;
+	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Result);
+	if (FJsonSerializer::Deserialize(Reader, JsonResponse) && JsonResponse.IsValid())
+	{
+		SelectedCharacter->SelectedWeaponID = JsonResponse->GetIntegerField(TEXT("WeaponID"));
+		SelectedCharacter->SelectedSpellsID = JsonResponse->GetIntegerField(TEXT("SelectedSpells"));
+
+		SaveCharacterCallback.ExecuteIfBound("");
+		OnCharactersChanged.Broadcast();
+		return;
+	}
+	
+	SaveCharacterCallback.ExecuteIfBound("Response is not valid!");
+}
+
+void UCharacterManagerSubsystem::SaveCharacterFailed(const FString& ErrorMessage)
+{
+	SuccessCallback.Clear();
+	FailedCallback.Clear();
+
+	SaveCharacterCallback.ExecuteIfBound(ErrorMessage);
 }
 
 void UCharacterManagerSubsystem::CreateCharacter(const FString Name, FCreateCharacterDelegate Callback)
 {
-	// todo: call firebase function to create character data
-
 	if (Name.IsEmpty())
 	{
 		Callback.ExecuteIfBound("Character name is invalid. Name cannot be empty.", nullptr);
 		return;
 	}
+
+	const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	if (!IsValid(GameInstance))
+	{
+		Callback.ExecuteIfBound("GameInstance is not valid.", nullptr);
+		return;
+	}
+
+	const auto ClientData = GameInstance->SelfClientData;
+
+	SuccessCallback.BindUFunction(this, "CreateCharacterSuccess");
+	FailedCallback.BindUFunction(this, "CreateCharacterFailed");
 	
-	const auto CharacterUUID = FString::Printf(TEXT("C:%d"), FMath::RandRange(0, 9999999));
+	CreateCharacterCallback = Callback;
+	CreatingCharacterId = UDatabaseFunctions::CreateCharacter(ClientData.UUID, UDatabaseFunctions::GetIdToken(), Name,
+		0, 0, SuccessCallback, FailedCallback);
+}
+
+void UCharacterManagerSubsystem::CreateCharacterSuccess(const FString& Result)
+{
+	SuccessCallback.Clear();
+	FailedCallback.Clear();
+
+	UE_LOG(LogTemp, Error, TEXT("Character created successfully: %s"), *Result);
 
 	const auto CharacterData = NewObject<UCharacterData>();
-	CharacterData->SetUUID(CharacterUUID);
-	CharacterData->SetName(Name);
-	
-	CharactersData.Add(CharacterUUID, CharacterData);
-	Callback.ExecuteIfBound("", CharacterData);
+	CharacterData->SetUUID(CreatingCharacterId);
 
-	OnCharactersChanged.Broadcast();
+	const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Result);
+	if (TSharedPtr<FJsonObject> JsonResponse; FJsonSerializer::Deserialize(Reader, JsonResponse) && JsonResponse.IsValid())
+	{
+		CharacterData->SetName(JsonResponse->GetStringField(TEXT("Name")));
+
+		CharactersData.Add(CreatingCharacterId, CharacterData);
+	
+		CreateCharacterCallback.ExecuteIfBound("", CharacterData);
+		OnCharactersChanged.Broadcast();
+
+		CreatingCharacterId = "";
+		return;
+	}
+	
+	CreatingCharacterId = "";
+	CreateCharacterCallback.ExecuteIfBound("Response not valid!", nullptr);
+}
+
+void UCharacterManagerSubsystem::CreateCharacterFailed(const FString& ErrorMessage)
+{
+	SuccessCallback.Clear();
+	FailedCallback.Clear();
+
+	CreatingCharacterId = "";
+	CreateCharacterCallback.ExecuteIfBound(ErrorMessage, nullptr);
 }
 
 void UCharacterManagerSubsystem::DeleteCharacter(const FString CharacterUUID, FDeleteCharacterDelegate Callback)
@@ -75,11 +212,39 @@ void UCharacterManagerSubsystem::DeleteCharacter(const FString CharacterUUID, FD
 		return;
 	}
 
-	// todo: call firebase function to delete character data
-	CharactersData.Remove(CharacterUUID);
-	Callback.ExecuteIfBound("");
+	const auto GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	const auto ClientData = GameInstance->SelfClientData;
+
+	SuccessCallback.BindUFunction(this, "DeleteCharacterSuccess");
+	FailedCallback.BindUFunction(this, "DeleteCharacterFailed");
+
+	DeleteCharacterCallback = Callback;
+
+	DeletingCharacterId = CharacterUUID;
+	UDatabaseFunctions::DeleteCharacter(ClientData.UUID, CharacterUUID, UDatabaseFunctions::GetIdToken(), SuccessCallback, FailedCallback);
+}
+
+void UCharacterManagerSubsystem::DeleteCharacterSuccess(const FString& Result)
+{
+	SuccessCallback.Clear();
+	FailedCallback.Clear();
 	
+	CharactersData.Remove(DeletingCharacterId);
+	
+	DeleteCharacterCallback.ExecuteIfBound("");
 	OnCharactersChanged.Broadcast();
+
+	DeletingCharacterId = "";
+}
+
+void UCharacterManagerSubsystem::DeleteCharacterFailed(const FString& ErrorMessage)
+{
+	SuccessCallback.Clear();
+	FailedCallback.Clear();
+	
+	DeleteCharacterCallback.ExecuteIfBound(ErrorMessage);
+
+	DeletingCharacterId = "";
 }
 
 void UCharacterManagerSubsystem::SelectCharacter(UCharacterData* Character)
