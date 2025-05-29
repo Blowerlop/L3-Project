@@ -46,6 +46,37 @@ FString UDatabaseFunctions::LoadFirebaseApiKey()
     return FString();
 }
 
+bool UDatabaseFunctions::LoadFirebaseAdminConfig(FString& OutAdminID, FString& OutAdminPassword)
+{
+    FString JsonRaw;
+    const FString FilePath = FPaths::ProjectContentDir() / TEXT("Keys.json");
+
+    if (!FFileHelper::LoadFileToString(JsonRaw, *FilePath))
+    {
+        UE_LOG(LogTemp, Error, TEXT("Loading Keys.json failed"));
+        return false;
+    }
+
+    TSharedPtr<FJsonObject> RootObject;
+    TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonRaw);
+
+    if (FJsonSerializer::Deserialize(Reader, RootObject) && RootObject.IsValid())
+    {
+        TSharedPtr<FJsonObject> ApiKeysObject = RootObject->GetObjectField(TEXT("ServerInfos"));
+        if (ApiKeysObject.IsValid())
+        {
+            if (ApiKeysObject->TryGetStringField(TEXT("Email"), OutAdminID) && 
+                ApiKeysObject->TryGetStringField(TEXT("Password"), OutAdminPassword))
+            {
+                return true;
+            }
+        }
+    }
+    
+    UE_LOG(LogTemp, Error, TEXT("can't find ServerInfos in Keys.json"));
+    return false;
+}
+
 FString UDatabaseFunctions::HashString(const FString& Target)
 {
     return FMD5::HashAnsiString(*Target);
@@ -259,7 +290,7 @@ void UDatabaseFunctions::SetPostRegisterData(const FString& UserName, const FStr
     CharacterJson->SetNumberField("Lose", 0);
 
     FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserName, *CharacterID);
-    SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
+    //SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
 }
 
 void UDatabaseFunctions::LinkUserIDAndName(const FString& UserName, const FString& UserId, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
@@ -550,6 +581,42 @@ void UDatabaseFunctions::DeleteCharacter(const FString& UserID, const FString& C
 {
     FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserID, *CharacterID);
     DeleteData(Path, IdToken, OnSuccess, OnFailure);
+}
+
+void UDatabaseFunctions::GetCharacterData(APlayerController* PlayerController, const FString& UserID, const FString& CharacterID, const FString& IdToken,
+    const FGetCharacterCallback& Callback)
+{
+    FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserID, *CharacterID);
+
+    FString Url = FString::Printf(
+        TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/%s.json?auth=%s"),
+        *Path, *IdToken);
+
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+    Request->SetURL(Url);
+    Request->SetVerb("GET");
+    Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+    Request->OnProcessRequestComplete().BindLambda([PlayerController, Callback](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+    {
+        if (!bWasSuccessful || !Response.IsValid())
+        {
+            Callback.ExecuteIfBound(false, "Failed to fetch character data", PlayerController);
+            return;
+        }
+
+        FString ResponseStr = Response->GetContentAsString();
+
+        if (ResponseStr == "null")
+        {
+            Callback.ExecuteIfBound(false, "Character or User not found", PlayerController);
+            return;
+        }
+        
+        Callback.ExecuteIfBound(true, ResponseStr, PlayerController);
+    });
+
+    Request->ProcessRequest();
 }
 
 void UDatabaseFunctions::GetAllCharacters(const FString& UID, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)

@@ -18,22 +18,22 @@ public:
 	UCharacterData(FString InUUID, FString InName) : UUID(InUUID), Name(InName), SelectedWeaponID(0), SelectedSpellsID(0){}
 	
 	UPROPERTY(BlueprintReadWrite)
-	FString UUID;
+	FString UUID{};
 	
 	UPROPERTY(BlueprintReadWrite)
-	FString Name;
+	FString Name{};
 
 	UPROPERTY(BlueprintReadWrite)
-	uint8 SelectedWeaponID;
+	uint8 SelectedWeaponID{};
 	
 	UPROPERTY(BlueprintReadWrite)
-	int32 SelectedSpellsID;
+	int32 SelectedSpellsID{};
 
 	UPROPERTY(BlueprintAssignable)
-	FOnSpellChanged OnSpellChanged;
+	FOnSpellChanged OnSpellChanged{};
 
 	UPROPERTY(BlueprintAssignable)
-	FOnWeaponChanged OnWeaponChanged;
+	FOnWeaponChanged OnWeaponChanged{};
 	
 	void SetUUID(FString NewUUID)
 	{
@@ -59,4 +59,21 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool HasSpell(USpellDataAsset* Spell);
+};
+
+// Used to transmit infos between lobby server that load the characters and instance servers that use them.
+USTRUCT(BlueprintType)
+struct FSerializableCharacterData
+{
+	GENERATED_BODY()
+
+	FSerializableCharacterData() = default;
+	FSerializableCharacterData(const uint8 InSelectedWeaponID, const int32 InSelectedSpellsID)
+		: SelectedWeaponID(InSelectedWeaponID), SelectedSpellsID(InSelectedSpellsID) {}
+
+	UPROPERTY(BlueprintReadWrite)
+	uint8 SelectedWeaponID{};
+	
+	UPROPERTY(BlueprintReadWrite)
+	int32 SelectedSpellsID{};
 };

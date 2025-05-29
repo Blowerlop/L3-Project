@@ -2,10 +2,12 @@
 
 #include "Networking/SessionsManagerSubsystem.h"
 #include "OnlineSubsystemUtils.h"
+#include "CharacterManagement/CharacterManagerSubsystem.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/GameSession.h"
 #include "Networking/BaseGameInstance.h"
 
+class UCharacterManagerSubsystem;
 bool USessionsManagerSubsystem::IsSessionHost{};
 bool USessionsManagerSubsystem::HasRunningSession{};
 	
@@ -255,12 +257,17 @@ void USessionsManagerSubsystem::HandleJoinSessionCompleted(FName SessionName, EO
 					UE_LOG(LogTemp, Error, TEXT("Can't client travel: GameInstance is not a UBaseGameInstance."));
 					return;
 				}
+
+				const auto CharacterManager = GameInstance->GetSubsystem<UCharacterManagerSubsystem>();
 				
 				ConnectInfos.Append(FString::Printf(TEXT("?%s=%s"), *UBaseGameInstance::UUIDConnectOptionsKey,
 					*GameInstance->SelfClientData.UUID));
 				
 				ConnectInfos.Append(FString::Printf(TEXT("?%s=%s"), *UBaseGameInstance::UserNameConnectOptionsKey,
 					*GameInstance->SelfClientData.Name));
+				
+				ConnectInfos.Append(FString::Printf(TEXT("?%s=%s"), *UBaseGameInstance::CharacterUUIDConnectOptionsKey,
+					*CharacterManager->SelectedCharacter->UUID));
 				
 				UE_LOG(LogTemp, Error, TEXT("Client travel to %s"), *ConnectInfos);
 				PlayerController->ClientTravel(ConnectInfos, TRAVEL_Absolute);
