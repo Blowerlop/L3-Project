@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InstanceSettings.h"
+#include "Database/DatabaseFunctions.h"
 #include "GameFramework/GameModeBase.h"
 #include "ZodiaqGameMode.generated.h"
 
@@ -31,4 +32,11 @@ public:
 	
 protected:
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal) override;
+	static void DisconnectPlayer(APlayerController* PlayerController);
+
+	UFUNCTION()
+	void GetCharacterCallback(bool CharacterValid, const FString& Response, APlayerController* PlayerController);
+
+private:
+	FGetCharacterCallback GetCharacterCallbackDelegate;
 };
