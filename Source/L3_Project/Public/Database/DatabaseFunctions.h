@@ -35,8 +35,10 @@ public:
 
     // New Chara
     UFUNCTION(BlueprintCallable, Category = "Firebase")
-    static void CreateCharacter(const FString& UserName, const FString& IdToken, const FString& CharacterName, int WeaponID, int SelectedSpells, const FSuccess& OnSuccess, const FFailed& OnFailure);
+    static FString CreateCharacter(const FString& UserName, const FString& IdToken, const FString& CharacterName, int WeaponID, int SelectedSpells, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
+    static void DeleteCharacter(const FString& UserID, const FString& CharacterID, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
+    
     // Get all chara
     UFUNCTION(BlueprintCallable, Category = "Firebase")
     static void GetAllCharacters(const FString& UID, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
@@ -61,12 +63,22 @@ private:
     // Set Data to firebase
     static void SetData(const FString& Path, const TSharedPtr<FJsonObject> Data, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
+public:
+    static void DeleteData(const FString& Path, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
+    
+
     //Set Player data
     static void SetPlayerData(const FString& UserName, const FString& FieldName,
                        const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess,
                        const FFailed& OnFailure);
+	
 	//Set Player data (character specific)
-    static void SetPlayerData(const FString& UserName, const FString& CharacterID, const FString& FieldName,
+    static void SetCharacterData_String(const FString& UserName, const FString& CharacterID, const FString& FieldName,
                        const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess,
+                       const FFailed& OnFailure);
+	
+    //Set Player data (character specific)
+    static void SetCharacterData_Int(const FString& UserName, const FString& CharacterID, const TArray<FString>& FieldName,
+                       const TArray<int>& NewValue, const FString& IdToken, const FSuccess& OnSuccess,
                        const FFailed& OnFailure);
 };

@@ -335,6 +335,40 @@ void UDatabaseFunctions::SetData(const FString& Path, const TSharedPtr<FJsonObje
     Request->ProcessRequest();
 }
 
+void UDatabaseFunctions::DeleteData(const FString& Path, const FString& IdToken, const FSuccess& OnSuccess,
+    const FFailed& OnFailure)
+{
+    const FString Url = FString::Printf(
+    TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/%s.json?auth=%s"),
+    *Path, *IdToken);
+
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+    Request->SetURL(Url);
+    Request->SetVerb("DELETE");
+    Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+    Request->OnProcessRequestComplete().BindLambda([OnSuccess, OnFailure](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+    {
+        if (!bWasSuccessful || !Response.IsValid())
+        {
+            OnFailure.Execute("Failed to send request to Firebase");
+            return;
+        }
+
+        if (Response->GetResponseCode() == 200)
+        {
+            OnSuccess.Execute(Response->GetContentAsString());
+        }
+        else
+        {
+            FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
+            OnFailure.Execute(ErrorMsg);
+        }
+    });
+
+    Request->ProcessRequest();
+}
+
 void UDatabaseFunctions::SetPlayerData(const FString& UserName, const FString& FieldName, const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
     // Prépare le JSON pour une mise à jour partielle
@@ -384,7 +418,7 @@ void UDatabaseFunctions::SetPlayerData(const FString& UserName, const FString& F
     Request->ProcessRequest();
 }
 
-void UDatabaseFunctions::SetPlayerData(const FString& UserName, const FString& CharacterID, const FString& FieldName, const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
+void UDatabaseFunctions::SetCharacterData_String(const FString& UserName, const FString& CharacterID, const FString& FieldName, const FString& NewValue, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
     // Prépare le JSON pour une mise à jour partielle
     TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
@@ -433,7 +467,68 @@ void UDatabaseFunctions::SetPlayerData(const FString& UserName, const FString& C
     Request->ProcessRequest();
 }
 
-void UDatabaseFunctions::CreateCharacter(const FString& UserName, const FString& IdToken, const FString& CharacterName, int WeaponID, int SelectedSpells, const FSuccess& OnSuccess, const FFailed& OnFailure)
+void UDatabaseFunctions::SetCharacterData_Int(const FString& UserName, const FString& CharacterID, const TArray<FString>& FieldName,
+    const TArray<int>& NewValue, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
+{
+    // Prépare le JSON pour une mise à jour partielle
+    TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+
+    for(auto i = 0; i < FieldName.Num(); i++)
+    {
+        if (i < NewValue.Num())
+        {
+            JsonObject->SetNumberField(FieldName[i], NewValue[i]);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("SetCharacterData_Int: FieldName and NewValue arrays have different lengths"));
+        }
+    }
+
+    // Construit le chemin complet du joueur et personnage
+    const FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserName, *CharacterID);
+
+    // Construit l'URL Firebase
+    const FString Url = FString::Printf(
+        TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/%s.json?auth=%s"),
+        *Path, *IdToken);
+
+    // Sérialise le JSON
+    FString RequestBody;
+    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&RequestBody);
+    FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
+
+    // Prépare la requête PATCH
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+    Request->SetURL(Url);
+    Request->SetVerb("PATCH");
+    Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+    Request->SetContentAsString(RequestBody);
+
+    // Gère la réponse
+    Request->OnProcessRequestComplete().BindLambda([OnSuccess, OnFailure](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+    {
+        if (!bWasSuccessful || !Response.IsValid())
+        {
+            OnFailure.Execute("SetPlayerData: Firebase PATCH request failed");
+            return;
+        }
+
+        if (Response->GetResponseCode() == 200)
+        {
+            OnSuccess.Execute(Response->GetContentAsString());
+        }
+        else
+        {
+            FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
+            OnFailure.Execute(ErrorMsg);
+        }
+    });
+
+    Request->ProcessRequest();
+}
+
+FString UDatabaseFunctions::CreateCharacter(const FString& UserName, const FString& IdToken, const FString& CharacterName, int WeaponID, int SelectedSpells, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
     FString CharacterID = FGuid::NewGuid().ToString();
 
@@ -447,6 +542,14 @@ void UDatabaseFunctions::CreateCharacter(const FString& UserName, const FString&
 
     FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserName, *CharacterID);
     SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
+    return CharacterID;
+}
+
+void UDatabaseFunctions::DeleteCharacter(const FString& UserID, const FString& CharacterID, const FString& IdToken,
+    const FSuccess& OnSuccess, const FFailed& OnFailure)
+{
+    FString Path = FString::Printf(TEXT("Players/%s/Characters/%s"), *UserID, *CharacterID);
+    DeleteData(Path, IdToken, OnSuccess, OnFailure);
 }
 
 void UDatabaseFunctions::GetAllCharacters(const FString& UID, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
