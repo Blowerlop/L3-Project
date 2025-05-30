@@ -138,7 +138,20 @@ void ASpell::SrvUnApply(AActor* Target)
 void ASpell::OnSerializeNewActor(class FOutBunch& OutBunch)
 {
 	Super::OnSerializeNewActor(OutBunch);
-	
+
+	// This actor is map placed and not instantiated. This is not something we managed
+	if (bNetStartup)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell:: Map placed ! Remove it from the map and only instantiate it"));
+		return;
+	}
+
+	if (!Data)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::OnSerializeNewActor - Data is null!"));
+		return;
+	}
+
 	OutBunch << Data->AssetID;
 }
 
