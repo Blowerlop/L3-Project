@@ -1,4 +1,5 @@
 #pragma once
+#include "CharacterManagement/CharacterData.h"
 
 #include "InstanceSettings.generated.h"
 
@@ -18,6 +19,9 @@ struct FClientData
 
 	UPROPERTY(BlueprintReadWrite)
 	FString Name{};
+
+	UPROPERTY(BlueprintReadOnly)
+	FSerializableCharacterData CharacterData{};
 };
 
 USTRUCT(BlueprintType)

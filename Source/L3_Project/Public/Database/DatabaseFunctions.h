@@ -7,6 +7,8 @@
 DECLARE_DYNAMIC_DELEGATE_OneParam(FSuccess, FString, Data);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FFailed, FString, ErrorMessage);
 
+DECLARE_DYNAMIC_DELEGATE_ThreeParams(FGetCharacterCallback, bool, IsValid, FString, Response, APlayerController*, PlayerController);
+
 UCLASS()
 class L3_PROJECT_API UDatabaseFunctions : public UBlueprintAsyncActionBase
 {
@@ -33,6 +35,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Firebase")
     static void GetData(const FString& Path, const FString& DataID, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
+    static void GetCharacterData(APlayerController* PlayerController, const FString& UserID, const FString& CharacterID, const FString& IdToken, const FGetCharacterCallback& Callback);
+    
     // New Chara
     UFUNCTION(BlueprintCallable, Category = "Firebase")
     static FString CreateCharacter(const FString& UserName, const FString& IdToken, const FString& CharacterName, int WeaponID, int SelectedSpells, const FSuccess& OnSuccess, const FFailed& OnFailure);
@@ -50,10 +54,13 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Firebase", BlueprintPure)
     static FString GetIdToken();
     
-private:
+
     // API KEY
     static FString LoadFirebaseApiKey();
 
+    static bool LoadFirebaseAdminConfig(FString& OutAdminID, FString& OutAdminPassword);
+    
+private:
     // Check if the username is available
     static void CheckUserAvailability(const FString& Username, const TFunction<void(bool)>& Callback);
 

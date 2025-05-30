@@ -39,15 +39,13 @@ class L3_PROJECT_API UBaseGameInstance : public UGameInstance
 public:
 	static const FString UUIDConnectOptionsKey;
 	static const FString UserNameConnectOptionsKey;
+	static const FString CharacterUUIDConnectOptionsKey;
 	
 	static FString FirebaseIdToken;
 	
 	UPROPERTY(BlueprintReadWrite)
 	FClientData SelfClientData;
 
-	UPROPERTY(BlueprintReadWrite)
-	FString UserName;
-	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
 	void Login(bool bUseDevTool, FString AuthToolId = "");
 
@@ -73,6 +71,11 @@ private:
 	
 	virtual void Init() override;
 	virtual void Shutdown() override;
+
+	UFUNCTION()
+	void OnServerAuthSuccess(const FString& Message);
+	UFUNCTION()
+	void OnServerAuthFailure(const FString& ErrorMessage);
 	
 	void OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type Arg, const FString& String);
 

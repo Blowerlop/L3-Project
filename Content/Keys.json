@@ -1,5 +1,10 @@
 {
     "APIKeys": {
         "FirebaseKey": "QUl6YVN5RFpIR0I1VmpFWktzVTY5eHlRUDdtM205a3hCRnRWMWxn"
+    },
+    "ServerInfos": {
+	"Email": "Y1koBgnWz0@CuidsO4TdG.zHM1HvkAuCf5",
+	"Password": "qBLfa7qYJybw3J9IUmAfgkP98f6CSXGY",
+      "__comment": "This should be removed for a game build, and present in a server build."
     }
 }

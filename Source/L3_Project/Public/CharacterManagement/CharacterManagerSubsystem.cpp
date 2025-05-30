@@ -29,6 +29,8 @@ void UCharacterManagerSubsystem::LoadCharactersSuccess(const FString& Data)
 	SuccessCallback.Clear();
 	FailedCallback.Clear();
 
+	UE_LOG(LogTemp, Error, TEXT("Loaded characters: %s"), *Data);
+	
 	const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Data);
 	if (TSharedPtr<FJsonObject> JsonResponse; FJsonSerializer::Deserialize(Reader, JsonResponse) && JsonResponse.IsValid())
 	{
@@ -47,7 +49,7 @@ void UCharacterManagerSubsystem::LoadCharactersSuccess(const FString& Data)
 			const auto Name = JsonObj->GetStringField(TEXT("Name"));
 			const auto SelectedWeaponID = static_cast<uint8>(JsonObj->GetIntegerField(TEXT("WeaponID")));
 			const auto SelectedSpellsID = JsonObj->GetIntegerField(TEXT("SelectedSpells"));
-
+			
 			CharacterData->SetName(Name);
 			CharacterData->SelectedWeaponID = SelectedWeaponID;
 			CharacterData->SelectedSpellsID = SelectedSpellsID;
@@ -61,7 +63,7 @@ void UCharacterManagerSubsystem::LoadCharactersSuccess(const FString& Data)
 		return;
 	}
 	
-	CharactersLoadedCallback.ExecuteIfBound("Reponse not valid!");
+	CharactersLoadedCallback.ExecuteIfBound("");
 }
 
 void UCharacterManagerSubsystem::LoadCharactersFailed(const FString& ErrorMessage)

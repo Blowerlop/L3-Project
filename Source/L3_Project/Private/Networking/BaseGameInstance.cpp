@@ -4,12 +4,14 @@
 #include "Networking/BaseGameInstance.h"
 
 #include "OnlineSubsystemUtils.h"
+#include "Database/DatabaseFunctions.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "Networking/InstancesManagerSubsystem.h"
 #include "Networking/SessionsManagerSubsystem.h"
 
 const FString UBaseGameInstance::UUIDConnectOptionsKey = "UUID";
 const FString UBaseGameInstance::UserNameConnectOptionsKey = "UserName";
+const FString UBaseGameInstance::CharacterUUIDConnectOptionsKey = "CUUID";
 FString UBaseGameInstance::FirebaseIdToken = TEXT("");
 
 #pragma region Login/out
@@ -68,14 +70,49 @@ void UBaseGameInstance::Init()
 {
 	Super::Init();
 
+	FirebaseIdToken = TEXT("");
+	
 	if(GEngine)
 	{
 		GEngine->OnNetworkFailure().AddUObject(this, &UBaseGameInstance::OnNetworkFailure);
 	}
 
-	// todo: temp
-	UserName = FPlatformProcess::ComputerName();
-	UserName += FString::Printf(TEXT("%d"), FMath::RandRange(0, 1000));
+	if (IsRunningDedicatedServer())
+	{
+		FString Email{};
+		FString Password{};
+		if (!UDatabaseFunctions::LoadFirebaseAdminConfig(Email, Password))
+		{
+#if WITH_EDITOR
+			UE_LOG(LogTemp, Error, TEXT("Failed to load Firebase Admin config from Keys.json. Server will not run correctly."));
+#else
+			UE_LOG(LogTemp, Fatal, TEXT("Failed to load Firebase Admin config from Keys.json. Server will not run correctly."));
+#endif
+			return;
+		}
+
+		FSuccess SuccessCallback{};
+		SuccessCallback.BindUFunction(this, "OnServerAuthSuccess");
+		
+		FFailed FailedCallback{};
+		FailedCallback.BindUFunction(this, "OnServerAuthFailure");
+		
+		UDatabaseFunctions::AuthRequest(Email, Password, SuccessCallback, FailedCallback);
+	}
+}
+
+void UBaseGameInstance::OnServerAuthSuccess(const FString& Message)
+{
+	UE_LOG(LogTemp, Log, TEXT("Server auth success: %s"), *Message);
+}
+
+void UBaseGameInstance::OnServerAuthFailure(const FString& ErrorMessage)
+{
+#if WITH_EDITOR
+	UE_LOG(LogTemp, Error, TEXT("Server auth failed: %s"), *ErrorMessage);
+#else
+	UE_LOG(LogTemp, Fatal, TEXT("Server auth failed: %s"), *ErrorMessage);
+#endif
 }
 
 void UBaseGameInstance::Shutdown()
@@ -98,7 +135,7 @@ void UBaseGameInstance::Shutdown()
 }
 
 void UBaseGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type Arg,
-	const FString& String)
+                                         const FString& String)
 {
 	UE_LOG(LogTemp, Error, TEXT("Network failure. %s %d"), *String, Arg);
 
