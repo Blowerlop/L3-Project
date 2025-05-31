@@ -35,7 +35,8 @@ void ASpell::SrvComplete()
 void ASpell::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
+
+	DOREPLIFETIME(ASpell, Caster);
 	DOREPLIFETIME(ASpell, Duration);
 }
 
