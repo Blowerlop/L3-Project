@@ -644,3 +644,19 @@ void UDatabaseFunctions::GetAllCharacters(const FString& UID, const FString& IdT
 
     Request->ProcessRequest();
 }
+
+void UDatabaseFunctions::AddDeathData(const FString& UserName, const FString& IdToken, const FString& SpellId, const int PosX, const int PosY, const FSuccess& OnSuccess, const FFailed& OnFailure)
+{
+    TSharedPtr<FJsonObject> CharacterJson = MakeShareable(new FJsonObject);
+    
+    TSharedPtr<FJsonObject> PositionJson = MakeShareable(new FJsonObject);
+    
+    CharacterJson->SetStringField("PlayerName", UserName);
+    CharacterJson->SetStringField("KillSource", SpellId);
+    PositionJson->SetNumberField("PosX", PosX);
+    PositionJson->SetNumberField("PosY", PosY);
+    CharacterJson->SetObjectField("Position", PositionJson);
+
+    FString Path = "Analytics/Death";
+    SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
+}
