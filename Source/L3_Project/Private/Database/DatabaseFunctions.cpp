@@ -657,6 +657,9 @@ void UDatabaseFunctions::AddDeathData(const FString& UserName, const FString& Id
     PositionJson->SetNumberField("PosY", PosY);
     CharacterJson->SetObjectField("Position", PositionJson);
 
-    FString Path = "Analytics/Death";
+    // code gen
+    FString DeathId = FString::Printf(TEXT("death_%lld_%04X"), FDateTime::UtcNow().ToUnixTimestamp(), FMath::RandHelper(0xFFFF));
+    
+    FString Path = "Analytics/Death/" + DeathId;
     SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
 }
