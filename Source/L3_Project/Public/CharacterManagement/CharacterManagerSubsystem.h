@@ -37,6 +37,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void LoadCharacters(FCharactersLoadedDelegate Callback);
+
+	void OnFirebaseLogout();
 private:
 	FCharactersLoadedDelegate CharactersLoadedCallback;
 	

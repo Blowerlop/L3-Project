@@ -203,6 +203,12 @@ void UBaseGameInstance::OnTransitionEntered()
 	TransitionDelegate.Unbind();
 }
 
+void UBaseGameInstance::OnFirebaseLogout()
+{
+	FirebaseIdToken = TEXT("");
+	SelfClientData = FClientData();
+}
+
 #pragma endregion
 
 #pragma region Debug

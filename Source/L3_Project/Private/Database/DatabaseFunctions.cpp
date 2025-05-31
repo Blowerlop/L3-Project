@@ -2,6 +2,7 @@
 
 #include "Dom/JsonObject.h"
 #include "HttpModule.h"
+#include "CharacterManagement/CharacterManagerSubsystem.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
@@ -77,6 +78,30 @@ bool UDatabaseFunctions::LoadFirebaseAdminConfig(FString& OutAdminID, FString& O
     return false;
 }
 
+void UDatabaseFunctions::Logout(UObject* WorldContext)
+{
+    if (!IsValid(WorldContext))
+    {
+        UE_LOG(LogTemp, Error, TEXT("WorldContext is not valid during logout"));
+        return;
+    }
+    
+    const auto GameInstance = Cast<UBaseGameInstance>(WorldContext->GetWorld()->GetGameInstance());
+    if (!IsValid(GameInstance))
+    {
+        UE_LOG(LogTemp, Error, TEXT("GameInstance is not valid during logout"));
+        return;
+    }
+
+    if (const auto CharacterManager = GameInstance->GetSubsystem<UCharacterManagerSubsystem>();
+        IsValid(GameInstance->GetSubsystem<UCharacterManagerSubsystem>()))
+    {
+        CharacterManager->OnFirebaseLogout();
+    }
+    
+    GameInstance->OnFirebaseLogout();
+}
+
 FString UDatabaseFunctions::HashString(const FString& Target)
 {
     return FMD5::HashAnsiString(*Target);
@@ -89,8 +114,10 @@ FString UDatabaseFunctions::GetIdToken()
 
 void UDatabaseFunctions::CheckUserAvailability(const FString& Username, const TFunction<void(bool)>& Callback)
 {
+    // This call doesn't work... Commented one should, but we need .indexOn in UserNames.
     const FString Url = FString::Printf(
         TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/UserNames/%s.json?auth=null"),
+        /*TEXT("https://projet-l3-eb9d5-default-rtdb.europe-west1.firebasedatabase.app/UserNames.json?orderBy=\"Name\"&equalTo=\"%s\"&auth=null"),*/
         *Username);
 
     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
@@ -107,6 +134,8 @@ void UDatabaseFunctions::CheckUserAvailability(const FString& Username, const TF
             return;
         }
 
+        //UE_LOG(LogTemp, Error, TEXT("CheckUserAvailability response: %s"), *Response->GetContentAsString());
+        
         const FString ResponseStr = Response->GetContentAsString();
         Callback(ResponseStr == "null");
     });
@@ -147,7 +176,7 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
 
     if (FirebaseApiKey.IsEmpty())
     {
-        OnFailure.Execute("Missing API Key");
+        OnFailure.ExecuteIfBound("Missing API Key");
         return;
     }
 
@@ -173,7 +202,7 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
     {
         if (!bWasSuccessful || !Response.IsValid())
         {
-            OnFailure.Execute("Firebase auth request failed");
+            OnFailure.ExecuteIfBound("Firebase auth request failed");
             return;
         }
 
@@ -186,18 +215,18 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
             if (JsonResponse->HasField("error"))
             {
                 FString ErrorMessage = JsonResponse->GetObjectField("error")->GetStringField("message");
-                OnFailure.Execute(ErrorMessage);
+                OnFailure.ExecuteIfBound(ErrorMessage);
                 return;
             }
 
             FString localId = JsonResponse->GetStringField("localId");
             UBaseGameInstance::FirebaseIdToken = JsonResponse->GetStringField("idToken");
 
-            OnSuccess.Execute(localId);
+            OnSuccess.ExecuteIfBound(localId);
         }
         else
         {
-            OnFailure.Execute("Could not parse JSON");
+            OnFailure.ExecuteIfBound("Could not parse JSON");
         }
     });
 
@@ -210,7 +239,7 @@ void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString&
 
     if (FirebaseApiKey.IsEmpty())
     {
-        OnFailure.Execute("Missing API Key");
+        OnFailure.ExecuteIfBound("Missing API Key");
         return;
     }
 
@@ -236,7 +265,7 @@ void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString&
     {
         if (!bAvailable)
         {
-            OnFailure.Execute("Name already exists");
+            OnFailure.ExecuteIfBound("Name already exists");
             return;
         }
 
@@ -244,7 +273,7 @@ void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString&
         {
             if (!bWasSuccessful || !Response.IsValid())
             {
-                OnFailure.Execute("Firebase register request failed");
+                OnFailure.ExecuteIfBound("Firebase register request failed");
                 return;
             }
 
@@ -257,18 +286,18 @@ void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString&
                 if (JsonResponse->HasField("error"))
                 {
                     FString ErrorMessage = JsonResponse->GetObjectField("error")->GetStringField("message");
-                    OnFailure.Execute(ErrorMessage);
+                    OnFailure.ExecuteIfBound(ErrorMessage);
                     return;
                 }
 
                 FString localId = JsonResponse->GetStringField("localId");
                 UBaseGameInstance::FirebaseIdToken = JsonResponse->GetStringField("idToken");
 
-                OnSuccess.Execute(localId);
+                OnSuccess.ExecuteIfBound(localId);
             }
             else
             {
-                OnFailure.Execute("Could not parse JSON");
+                OnFailure.ExecuteIfBound("Could not parse JSON");
             }
         });
 
@@ -296,9 +325,9 @@ void UDatabaseFunctions::SetPostRegisterData(const FString& UserName, const FStr
 void UDatabaseFunctions::LinkUserIDAndName(const FString& UserName, const FString& UserId, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
     TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
-    Json->SetStringField("UserId", UserId);
+    Json->SetStringField("Name", UserName);
 
-    FString Path = FString::Printf(TEXT("UserNames/%s"), *UserName);
+    FString Path = FString::Printf(TEXT("UserNames/%s"), *UserId);
     SetData(Path, Json, IdToken, OnSuccess, OnFailure);
 }
 
@@ -317,12 +346,12 @@ void UDatabaseFunctions::GetData(const FString& Path, const FString& DataID, con
     {
         if (!bWasSuccessful || !Response.IsValid())
         {
-            OnFailure.Execute("Get Data failed");
+            OnFailure.ExecuteIfBound("Get Data failed");
             return;
         }
 
         FString ResponseStr = Response->GetContentAsString();
-        OnSuccess.Execute(ResponseStr);
+        OnSuccess.ExecuteIfBound(ResponseStr);
     });
 
     Request->ProcessRequest();
@@ -348,18 +377,18 @@ void UDatabaseFunctions::SetData(const FString& Path, const TSharedPtr<FJsonObje
     {
         if (!bWasSuccessful || !Response.IsValid())
         {
-            OnFailure.Execute("Failed to send request to Firebase");
+            OnFailure.ExecuteIfBound("Failed to send request to Firebase");
             return;
         }
 
         if (Response->GetResponseCode() == 200)
         {
-            OnSuccess.Execute(Response->GetContentAsString());
+            OnSuccess.ExecuteIfBound(Response->GetContentAsString());
         }
         else
         {
             FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
-            OnFailure.Execute(ErrorMsg);
+            OnFailure.ExecuteIfBound(ErrorMsg);
         }
     });
 
@@ -382,18 +411,18 @@ void UDatabaseFunctions::DeleteData(const FString& Path, const FString& IdToken,
     {
         if (!bWasSuccessful || !Response.IsValid())
         {
-            OnFailure.Execute("Failed to send request to Firebase");
+            OnFailure.ExecuteIfBound("Failed to send request to Firebase");
             return;
         }
 
         if (Response->GetResponseCode() == 200)
         {
-            OnSuccess.Execute(Response->GetContentAsString());
+            OnSuccess.ExecuteIfBound(Response->GetContentAsString());
         }
         else
         {
             FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
-            OnFailure.Execute(ErrorMsg);
+            OnFailure.ExecuteIfBound(ErrorMsg);
         }
     });
 
@@ -431,18 +460,18 @@ void UDatabaseFunctions::SetPlayerData(const FString& UserName, const FString& F
     {
         if (!bWasSuccessful || !Response.IsValid())
         {
-            OnFailure.Execute("SetPlayerData: Firebase PATCH request failed");
+            OnFailure.ExecuteIfBound("SetPlayerData: Firebase PATCH request failed");
             return;
         }
 
         if (Response->GetResponseCode() == 200)
         {
-            OnSuccess.Execute(Response->GetContentAsString());
+            OnSuccess.ExecuteIfBound(Response->GetContentAsString());
         }
         else
         {
             FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
-            OnFailure.Execute(ErrorMsg);
+            OnFailure.ExecuteIfBound(ErrorMsg);
         }
     });
 
@@ -480,18 +509,18 @@ void UDatabaseFunctions::SetCharacterData_String(const FString& UserName, const 
     {
         if (!bWasSuccessful || !Response.IsValid())
         {
-            OnFailure.Execute("SetPlayerData: Firebase PATCH request failed");
+            OnFailure.ExecuteIfBound("SetPlayerData: Firebase PATCH request failed");
             return;
         }
 
         if (Response->GetResponseCode() == 200)
         {
-            OnSuccess.Execute(Response->GetContentAsString());
+            OnSuccess.ExecuteIfBound(Response->GetContentAsString());
         }
         else
         {
             FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
-            OnFailure.Execute(ErrorMsg);
+            OnFailure.ExecuteIfBound(ErrorMsg);
         }
     });
 
@@ -541,18 +570,18 @@ void UDatabaseFunctions::SetCharacterData_Int(const FString& UserName, const FSt
     {
         if (!bWasSuccessful || !Response.IsValid())
         {
-            OnFailure.Execute("SetPlayerData: Firebase PATCH request failed");
+            OnFailure.ExecuteIfBound("SetPlayerData: Firebase PATCH request failed");
             return;
         }
 
         if (Response->GetResponseCode() == 200)
         {
-            OnSuccess.Execute(Response->GetContentAsString());
+            OnSuccess.ExecuteIfBound(Response->GetContentAsString());
         }
         else
         {
             FString ErrorMsg = FString::Printf(TEXT("Firebase error: %s"), *Response->GetContentAsString());
-            OnFailure.Execute(ErrorMsg);
+            OnFailure.ExecuteIfBound(ErrorMsg);
         }
     });
 
@@ -634,12 +663,12 @@ void UDatabaseFunctions::GetAllCharacters(const FString& UID, const FString& IdT
     {
         if (!bWasSuccessful || !Response.IsValid())
         {
-            OnFailure.Execute("Failed to fetch characters");
+            OnFailure.ExecuteIfBound("Failed to fetch characters");
             return;
         }
 
         FString ResponseStr = Response->GetContentAsString();
-        OnSuccess.Execute(ResponseStr);
+        OnSuccess.ExecuteIfBound(ResponseStr);
     });
 
     Request->ProcessRequest();

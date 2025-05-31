@@ -54,6 +54,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Firebase", BlueprintPure)
     static FString GetIdToken();
     
+    UFUNCTION(BlueprintCallable, Category = "Firebase")
+    static void Logout(UObject* WorldContext);
 
     // API KEY
     static FString LoadFirebaseApiKey();

@@ -61,6 +61,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Online Session")
 	void OnTransitionEntered();
+
+	void OnFirebaseLogout();
 	
 private:
 	FDelegateHandle LoginDelegateHandle;

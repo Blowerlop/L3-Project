@@ -24,6 +24,11 @@ void UCharacterManagerSubsystem::LoadCharacters(FCharactersLoadedDelegate Callba
 	UDatabaseFunctions::GetAllCharacters(ClientData.UUID, UDatabaseFunctions::GetIdToken(), SuccessCallback, FailedCallback);
 }
 
+void UCharacterManagerSubsystem::OnFirebaseLogout()
+{
+	CharactersData.Empty();
+}
+
 void UCharacterManagerSubsystem::LoadCharactersSuccess(const FString& Data)
 {
 	SuccessCallback.Clear();
