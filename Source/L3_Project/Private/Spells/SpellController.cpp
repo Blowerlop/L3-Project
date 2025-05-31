@@ -248,7 +248,7 @@ void USpellController::UpdateSpellAimers()
 			SpellAimers[i] = GetWorld()->SpawnActor<ASpellAimer>(Data->Aimer);
 		}
 		
-		SpellAimers[i]->Init(Data->AimerParams, AttachSocket);
+		SpellAimers[i]->Init(this, Data->AimerParams, AttachSocket);
 	}
 }
 

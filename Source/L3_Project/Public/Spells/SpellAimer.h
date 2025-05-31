@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "SpellAimer.generated.h"
 
+class USpellController;
 class USpellAimerParams;
 class UAimResultHolder;
 
@@ -20,7 +21,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION(BlueprintCallable)
-	void Init(USpellAimerParams* Params, USceneComponent* Socket);
+	void Init(USpellController* SController, USpellAimerParams* Params, USceneComponent* Socket);
 	
 	UFUNCTION(BlueprintCallable)
 	void Start();
@@ -66,6 +67,9 @@ protected:
 	void Update_Internal();
 
 private:
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpellController* SpellController;
+	
 	UPROPERTY()
 	USpellAimerParams* AimerParams;
 };

@@ -47,6 +47,11 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Firebase")
     static void GetAllCharacters(const FString& UID, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
+    //Add new Death
+    UFUNCTION(BlueprintCallable, Category = "Firebase")
+    static void AddDeathData(const FString& UserName, const FString& IdToken, const FString& SpellId, int PosX, int PosY,
+                      const FSuccess& OnSuccess, const FFailed& OnFailure);
+
     // Hash
     UFUNCTION(BlueprintCallable, Category = "Firebase")
     static FString HashString(const FString& target);

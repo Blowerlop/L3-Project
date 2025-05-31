@@ -39,7 +39,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	AController* CasterController;
 	
-	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
+	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"), Replicated)
 	AActor* Caster;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
