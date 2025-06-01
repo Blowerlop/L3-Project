@@ -137,7 +137,7 @@ bool ASpellManager::IsInComboWindow(const USpellDataAsset* Spell, const double C
 	if (!IsValid(Spell) || !Spell->bHasCombo) return false;
 	if (ClientTime >= EndTime || ClientTime <= StartTime) return false;
 	
-	const auto AnimationLength = Spell->AnimationMontage->GetSectionLength(Spell->ComboIndex);
+	const auto AnimationLength = Spell->GetMontageSectionLength(Spell->ComboIndex);
 
 	const auto DiffWithClient = ClientTime - StartTime;
 

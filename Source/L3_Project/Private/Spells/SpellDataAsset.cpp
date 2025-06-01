@@ -8,6 +8,17 @@ FName USpellDataAsset::GetMontageSectionName() const
 	return FName(*FString::Printf(TEXT("Combo_%d"), ComboIndex));
 }
 
+float USpellDataAsset::GetMontageSectionLength(int Index) const
+{
+	if (!IsValid(AnimationMontage))
+	{
+		UE_LOG(LogTemp, Error, TEXT("AnimationMontage is not valid in %s"), *GetName());
+		return 0;
+	}
+	
+	return AnimationMontage->GetSectionLength(Index);
+}
+
 void USpellDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);

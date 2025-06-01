@@ -3,8 +3,7 @@
 #include "Spells/SpellDataAsset.h"
 #include "Spells/SpellDatabase.h"
 
-constexpr uint8 GBit_Mask_8 = 0xFF /* 255 */;
-constexpr uint8 NumSpells = 4;
+
 
 void UCharacterData::SetName(FString NewName)
 {

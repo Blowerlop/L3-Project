@@ -13,6 +13,9 @@ class L3_PROJECT_API UCharacterData : public UObject
 	GENERATED_BODY()
 
 public:
+	static constexpr uint8 GBit_Mask_8 = 0xFF /* 255 */;
+	static constexpr uint8 NumSpells = 4;
+	
 	UCharacterData() = default;
 	
 	UCharacterData(FString InUUID, FString InName) : UUID(InUUID), Name(InName), SelectedWeaponID(0), SelectedSpellsID(0){}
@@ -61,7 +64,6 @@ public:
 	bool HasSpell(USpellDataAsset* Spell);
 };
 
-// Used to transmit infos between lobby server that load the characters and instance servers that use them.
 USTRUCT(BlueprintType)
 struct FSerializableCharacterData
 {

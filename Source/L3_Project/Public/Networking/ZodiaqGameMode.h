@@ -30,9 +30,10 @@ public:
 	
 	void OnPlayerStateEndPlay(const AZodiaqPlayerState* PlayerState) const;
 	
+	static void DisconnectPlayer(APlayerController* PlayerController);
+	
 protected:
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal) override;
-	static void DisconnectPlayer(APlayerController* PlayerController);
 
 	UFUNCTION()
 	void GetCharacterCallback(bool CharacterValid, const FString& Response, APlayerController* PlayerController);

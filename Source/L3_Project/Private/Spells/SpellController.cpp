@@ -58,7 +58,7 @@ void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int Sp
     const auto StartTime = GetWorld()->GetTimeSeconds();
     	
     CastState->AnimationStartTime = StartTime;
-    CastState->AnimationEndTime = StartTime + CastState->Spell->AnimationMontage->GetSectionLength(CastState->Spell->ComboIndex);
+    CastState->AnimationEndTime = StartTime + CastState->Spell->GetMontageSectionLength(CastState->Spell->ComboIndex);
     
 	OnCastStart.Broadcast(CastState->Spell, CastState->SpellIndex);
 }
@@ -119,6 +119,11 @@ bool USpellController::CanCombo(const int SpellIndex) const
 bool USpellController::IsAiming() const
 {
 	return SpellAimers.ContainsByPredicate([](const ASpellAimer* Aimer) { return Aimer && Aimer->bIsAiming; });
+}
+
+void USpellController::ForceReplicateSpellDatas()
+{
+	ReplicateSpellDatas(SpellDatas);
 }
 
 USpellDataAsset* USpellController::GetSpellData(const int Index) const
@@ -474,11 +479,20 @@ void USpellController::UpdateAttachSocket()
 
 void USpellController::TrySelectSpellRpc_Implementation(const int Index, USpellDataAsset* Spell)
 {
+	SrvSelectSpell(Index, Spell);
+}
+
+void USpellController::SrvSelectSpell(const int Index, USpellDataAsset* Spell, const bool bShouldReplicate)
+{
+	UE_LOG(LogTemp, Warning, TEXT("SrvSelectSpell called with index %d and spell %s"), Index, *Spell->GetName());
 	if (Index < 0 || Index >= SpellDatas.Num()) return;
 
 	SpellDatas[Index] = Spell;
 
-	ReplicateSpellDatas(SpellDatas);
+	if (bShouldReplicate)
+	{
+		ReplicateSpellDatas(SpellDatas);
+	}
 }
 
 void USpellController::RequestSpellCastGenericResultToServer(const int SpellIndex, UAimResultHolder* Result)

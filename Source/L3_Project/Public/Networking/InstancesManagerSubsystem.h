@@ -77,5 +77,7 @@ private:
 	}
 
 public:
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+	
 	static void SetHostingType(const FString& Args);
 };

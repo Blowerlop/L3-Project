@@ -52,7 +52,6 @@ class L3_PROJECT_API USpellController : public UActorComponent
 public:	
 	USpellController();
 	
-
 	UPROPERTY(BlueprintReadOnly)
 	USpellControllerCastState* CastState;
 
@@ -73,6 +72,12 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int MaxSpells = 6;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int WeaponSpellIndex = 0;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int SpellFirstIndex = 2;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnSpellsChanged OnSpellDatasChanged;
@@ -89,6 +94,9 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void TrySelectSpellRpc(int Index, USpellDataAsset* Spell);
 
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+	void SrvSelectSpell(int Index, USpellDataAsset* Spell, bool bShouldReplicate = true);
+	
 	void StartGlobalCooldown();
 	void StartCooldown(int Index);
 
@@ -117,6 +125,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsAiming() const;
 
+	void ForceReplicateSpellDatas();
+	
 protected:
 	UPROPERTY(Blueprintable, EditAnywhere)
 	float GlobalCooldownValue = 0.5f;
