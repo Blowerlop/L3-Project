@@ -71,6 +71,16 @@ void UInstancesManagerSubsystem::StartListenServer(const FString& InstanceMapPat
 	}
 }
 
+void UInstancesManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+
+	InstanceIDCounter = 1;
+	IsInstanceBeingDestroyed = {};
+
+	CurrentInstanceSettings = {};
+}
+
 void UInstancesManagerSubsystem::SetHostingType(const FString& Args)
 {
 	// Those are commented because UWorld::HostingType doesn't exist in regular Unreal Engine code base.

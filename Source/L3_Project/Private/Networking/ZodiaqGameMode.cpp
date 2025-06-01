@@ -2,10 +2,13 @@
 
 #include "Networking/ZodiaqGameMode.h"
 
+#include "CharacterManagement/CharacterManagerSubsystem.h"
 #include "Database/DatabaseFunctions.h"
 #include "Kismet/GameplayStatics.h"
 #include "Networking/BaseGameInstance.h"
+#include "Networking/InstancesManagerSubsystem.h"
 #include "Networking/SessionsManagerSubsystem.h"
+#include "Networking/ZodiaqCharacter.h"
 #include "Networking/ZodiaqPlayerState.h"
 
 void AZodiaqGameMode::OnPlayerStateEndPlay(const AZodiaqPlayerState* PlayerState) const
@@ -18,33 +21,67 @@ FString AZodiaqGameMode::InitNewPlayer(APlayerController* NewPlayerController, c
 {
 	UE_LOG(LogTemp, Warning, TEXT("InitNewPlayer called with Options: %s"), *Options);
 	
-	if (!USessionsManagerSubsystem::HasRunningSession)
+	if (UInstancesManagerSubsystem::CurrentInstanceSettings.SessionID == 0 && !IsRunningDedicatedServer())
 		return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
+
+	AZodiaqPlayerState* PlayerState;
+	FString UUID{};
+	FString CUUID{};
+	FString Name{};
 	
-	const auto UUID = UGameplayStatics::ParseOption(Options, UBaseGameInstance::UUIDConnectOptionsKey);
-	if (UUID.IsEmpty())
-	{
-		return "Given UUID is incorrect. Try to reconnect.";
-	}
+	const auto IsListen = Options.Contains("?Listen", ESearchCase::IgnoreCase);
 
-	const auto CUUID = UGameplayStatics::ParseOption(Options, UBaseGameInstance::CharacterUUIDConnectOptionsKey);
-	if (CUUID.IsEmpty())
+	UE_LOG(LogTemp, Warning, TEXT("ListenOption: %hhd"), IsListen);
+	
+	if (IsListen)
 	{
-		return "Selected Character is invalid. Try to reconnect.";
-	}
+		const auto GameInstance = GetGameInstance<UBaseGameInstance>();
+		if (!IsValid(GameInstance))
+		{
+			return "GameInstance is not UBaseGameInstance. Something is wrong.";
+		}
 
-	const auto Name = UGameplayStatics::ParseOption(Options, UBaseGameInstance::UserNameConnectOptionsKey);
-	if (Name.IsEmpty())
+		PlayerState = NewPlayerController->GetPlayerState<AZodiaqPlayerState>();
+		if (PlayerState == nullptr)
+		{
+			return "PlayerState is null. Either it is not AZodiaqPlayerState or this is Unreal bullshit. Game is going to crash.";
+		}
+		
+		const auto ClientData = GameInstance->SelfClientData;
+
+		UUID = ClientData.UUID;
+		Name = ClientData.Name;
+
+		const auto CharacterManager = GameInstance->GetSubsystem<UCharacterManagerSubsystem>();
+		CUUID = CharacterManager->SelectedCharacter->UUID;
+	}
+	else
 	{
-		return "Given Name is incorrect. Try to reconnect.";
-	}
+		UUID = UGameplayStatics::ParseOption(Options, UBaseGameInstance::UUIDConnectOptionsKey);
+		if (UUID.IsEmpty())
+		{
+			return "Given UUID is incorrect. Try to reconnect.";
+		}
 
-	const auto PlayerState = NewPlayerController->GetPlayerState<AZodiaqPlayerState>();
-	if (PlayerState == nullptr)
-	{
-		return "Server error. Try to reconnect.";
-	}
+		CUUID = UGameplayStatics::ParseOption(Options, UBaseGameInstance::CharacterUUIDConnectOptionsKey);
+		if (CUUID.IsEmpty())
+		{
+			return "Selected Character is invalid. Try to reconnect.";
+		}
 
+		Name = UGameplayStatics::ParseOption(Options, UBaseGameInstance::UserNameConnectOptionsKey);
+		if (Name.IsEmpty())
+		{
+			return "Given Name is incorrect. Try to reconnect.";
+		}
+
+		PlayerState = NewPlayerController->GetPlayerState<AZodiaqPlayerState>();
+		if (PlayerState == nullptr)
+		{
+			return "Server error. Try to reconnect.";
+		}
+	}
+	
 	UE_LOG(LogTemp, Warning, TEXT("Player %s connected with UUID %s"), *Name, *UUID);
 	PlayerState->ClientData = FClientData(UUID, Name);
 
@@ -99,9 +136,17 @@ void AZodiaqGameMode::GetCharacterCallback(const bool CharacterValid, const FStr
 			return;
 		}
 		
-		PlayerState->ClientData.CharacterData = FSerializableCharacterData(SelectedWeapon, SelectedSpells);
+		PlayerState->LoadCharacter(FSerializableCharacterData(SelectedWeapon, SelectedSpells));
+		
 		UE_LOG(LogTemp, Warning, TEXT("Player %s validated with CharacterData: WeaponID: %d, SpellsID: %d"),
 		       *PlayerState->ClientData.Name, PlayerState->ClientData.CharacterData.SelectedWeaponID, PlayerState->ClientData.CharacterData.SelectedSpellsID);
+		
+		const auto Character = PlayerController->GetPawn<AZodiaqCharacter>();
+		// Character can be invalid at this time, it will try to load itself on begin play if it can't load here.
+		if (IsValid(Character))
+		{
+			Character->LoadCharacterFromPlayerState(PlayerState);	
+		}
 		return;
 	}
 

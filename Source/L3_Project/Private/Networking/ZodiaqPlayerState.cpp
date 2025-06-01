@@ -3,6 +3,14 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Networking/ZodiaqGameMode.h"
 
+void AZodiaqPlayerState::LoadCharacter(const FSerializableCharacterData CharacterData)
+{
+	if (bIsCharacterLoaded) return;
+
+	bIsCharacterLoaded = true;
+	ClientData.CharacterData = CharacterData;
+}
+
 void AZodiaqPlayerState::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);

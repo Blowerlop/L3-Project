@@ -83,6 +83,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FName GetMontageSectionName() const;
+
+	float GetMontageSectionLength(int Index) const;
 	
 #if WITH_EDITOR
 protected:
