@@ -15,8 +15,10 @@ class L3_PROJECT_API UProjectCheatManager : public UCheatManager
 	GENERATED_BODY()
 
 	UFUNCTION(exec, Category="Cheat Manager")
-	void AddHealth(const int Amount) const;
+	void Project_AddHealth(const int Amount, int PlayerIndex = 0) const;
 
 	UFUNCTION(exec, Category = "Cheat Manager")
-	void RemoveHealth(const int Amount) const;
+	void Project_RemoveHealth(const int Amount, const int PlayerIndex = 0) const;
+
+	void ModifyHealth(const int Amount, const int PlayerIndex) const;
 };

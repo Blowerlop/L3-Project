@@ -3,69 +3,61 @@
 
 #include "Cheats/ProjectCheatManager.h"
 
-#include "GameFramework/Character.h"
+#include "GameFramework/PlayerState.h"
 #include "Vitals/VitalsContainer.h"
+#include "Kismet/GameplayStatics.h"
 
-void UProjectCheatManager::AddHealth(const int Amount) const
+void UProjectCheatManager::Project_AddHealth(const int Amount, const int PlayerIndex) const
 {
 	if (Amount <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddHealth called with non-positive amount: %d"), Amount);
+		UE_LOG(LogTemp, Warning, TEXT("Non-positive amount is not accepted: %d"), Amount);
 		return;
 	}
 
-	const auto PlayerController = GetPlayerController();
-	if (PlayerController == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AddHealth called but PlayerController is null!"));
-		return;
-	}
-
-	const auto Character = PlayerController->GetCharacter();
-	if (Character == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AddHealth called but PlayerController is null!"));
-		return;
-	}
-
-	const auto VitalsContainer = Character->GetComponentByClass<UVitalsContainer>();
-	if (VitalsContainer == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AddHealth called but VitalsContainer is null!"));
-		return;
-	}
-
-	VitalsContainer->SrvAdd(EVitalType::Health, Amount);
+	ModifyHealth(Amount, PlayerIndex);
 }
 
-void UProjectCheatManager::RemoveHealth(const int Amount) const
+void UProjectCheatManager::Project_RemoveHealth(const int Amount, const int PlayerIndex) const
 {
 	if (Amount <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddHealth called with non-positive amount: %d"), Amount);
+		UE_LOG(LogTemp, Warning, TEXT("Non-positive amount is not accepted: %d"), Amount);
 		return;
 	}
 
-	const auto PlayerController = GetPlayerController();
-	if (PlayerController == nullptr)
+	ModifyHealth(-Amount, PlayerIndex);
+}
+
+void UProjectCheatManager::ModifyHealth(const int Amount, const int PlayerIndex) const
+{
+	const auto PlayerState = UGameplayStatics::GetPlayerState(GetWorld(), PlayerIndex);
+	if (PlayerState == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddHealth called but PlayerController is null!"));
+		UE_LOG(LogTemp, Warning, TEXT("PlayerState is null"));
 		return;
 	}
 
-	const auto Character = PlayerController->GetCharacter();
-	if (Character == nullptr)
+	const auto Pawn = PlayerState->GetPawn();
+	if (Pawn == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddHealth called but PlayerController is null!"));
+		UE_LOG(LogTemp, Warning, TEXT("Pawn is null"));
 		return;
 	}
 
-	const auto VitalsContainer = Character->GetComponentByClass<UVitalsContainer>();
+	const auto VitalsContainer = Pawn->GetComponentByClass<UVitalsContainer>();
 	if (VitalsContainer == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddHealth called but VitalsContainer is null!"));
+		UE_LOG(LogTemp, Warning, TEXT("VitalsContainer is null"));
 		return;
 	}
 
-	VitalsContainer->SrvRemove(EVitalType::Health, Amount);
+	if (Amount > 0)
+	{
+		VitalsContainer->SrvAdd(EVitalType::Health, Amount);
+	}
+	else
+	{
+		VitalsContainer->SrvRemove(EVitalType::Health, -Amount);
+	}
 }
