@@ -13,6 +13,10 @@ class ASpellAimer;
 class USpellDataAsset;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpellsChanged, USpellController*, SpellController);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCooldownsReplicated, const TArray<int>&, NewCooldowns);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGlobalCooldownChanged, bool, IsActive);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCastStartDelegate, USpellDataAsset*, Spell, int, SpellIndex);
 
 UCLASS(Blueprintable)
@@ -61,7 +65,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	UInputAction* CancelInput;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<UInputAction*> SpellInputs;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -78,12 +82,21 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int SpellFirstIndex = 2;
+
+	UPROPERTY(Blueprintable, EditAnywhere, BlueprintReadOnly)
+	float GlobalCooldownValue = 0.5f;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnSpellsChanged OnSpellDatasChanged;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnCastStartDelegate OnCastStart;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnCooldownsReplicated OnCooldownsReplicatedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnGlobalCooldownChanged OnGlobalCooldownChanged;
 	
 	UFUNCTION(BlueprintCallable)
 	USpellDataAsset* GetSpellData(int Index) const;
@@ -127,10 +140,7 @@ public:
 
 	void ForceReplicateSpellDatas();
 	
-protected:
-	UPROPERTY(Blueprintable, EditAnywhere)
-	float GlobalCooldownValue = 0.5f;
-	
+protected:	
 	UFUNCTION(BlueprintCallable)
 	void UpdateAttachSocket();
 

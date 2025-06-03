@@ -212,10 +212,12 @@ void USpellController::OnSpellDataReplicated()
 
 void USpellController::OnCooldownsReplicated()
 {
+	OnCooldownsReplicatedDelegate.Broadcast(RepCooldowns);
 }
 
 void USpellController::OnGlobalCooldownReplicated()
 {
+	OnGlobalCooldownChanged.Broadcast(bIsInGlobalCooldown);
 }
 
 void USpellController::UpdateSpellAimers()
