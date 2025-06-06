@@ -20,6 +20,7 @@ float UEffectDataAsset::GetValue(const EEffectValueType ValueType) const
 	return Values.FindRef(ValueType);
 }
 
+#if WITH_EDITOR
 void UEffectDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -52,3 +53,4 @@ void UEffectDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyCha
 		StackingBehaviour = nullptr;
 	}
 }
+#endif

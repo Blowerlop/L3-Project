@@ -47,7 +47,7 @@ public:
 	FClientData SelfClientData;
 
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void Login(bool bUseDevTool, FString AuthToolId = "");
+	void Login(FString StandardWayType, bool bUseDevTool, FString AuthToolId = "");
 
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
 	void Logout() const;

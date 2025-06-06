@@ -59,6 +59,7 @@ bool UEffectSystemConfiguration::NeedRate(const EEffectType Type)
 	return false;
 }
 
+#if WITH_EDITOR
 void UEffectSystemConfiguration::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -75,3 +76,4 @@ void UEffectSystemConfiguration::PostEditChangeProperty(FPropertyChangedEvent& P
 			Tuple.Value.Params = NewObject<UEffectResolverParams>(this, *ParamsType);
 	}
 }
+#endif

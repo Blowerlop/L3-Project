@@ -19,6 +19,7 @@ float USpellDataAsset::GetMontageSectionLength(int Index) const
 	return AnimationMontage->GetSectionLength(Index);
 }
 
+#if WITH_EDITOR
 void USpellDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -39,3 +40,4 @@ void USpellDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChan
 		AimerParams = NewObject<USpellAimerParams>(this, DefaultObject->AimerParamsClass);
 	}
 }
+#endif

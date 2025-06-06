@@ -16,8 +16,10 @@ FString UBaseGameInstance::FirebaseIdToken = TEXT("");
 
 #pragma region Login/out
 
-void UBaseGameInstance::Login(const bool bUseDevTool, FString AuthToolId)
+void UBaseGameInstance::Login(FString StandardWayType, const bool bUseDevTool, FString AuthToolId)
 {
+	if(StandardWayType.IsEmpty()) StandardWayType = TEXT("deviceID");
+	
 	if (const IOnlineSubsystem* OnlineSubsystem = Online::GetSubsystem(GetWorld(), "EOS"))
 	{
 		if (const IOnlineIdentityPtr IdentityInterface = OnlineSubsystem->GetIdentityInterface(); IdentityInterface.IsValid())
@@ -32,7 +34,7 @@ void UBaseGameInstance::Login(const bool bUseDevTool, FString AuthToolId)
 			}
 			else
 			{
-				Credentials.Type = TEXT("deviceID");
+				Credentials.Type = StandardWayType;
 				Credentials.Id = "";
 				Credentials.Token = "";
 			}
@@ -215,7 +217,13 @@ void UBaseGameInstance::OnFirebaseLogout()
 
 void UBaseGameInstance::DebugLoginWithDevAuthTool(const FString& Args)
 {
-	Login(true, Args);
+	if (Args == TEXT("portal"))
+	{
+		Login(TEXT("accountportal"), false);
+		return;
+	}
+	
+	Login(TEXT(""), true, Args);
 }
 
 void UBaseGameInstance::SetHostingType(const FString& Args)
