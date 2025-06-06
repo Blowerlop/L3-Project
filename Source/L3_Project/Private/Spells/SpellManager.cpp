@@ -132,6 +132,8 @@ ASpell* ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, 
 	return nullptr;
 }
 
+// Checks if the given time is in the window based on animation duration and combo window.
+// Does not handle lag compensation
 bool ASpellManager::IsInComboWindow(const USpellDataAsset* Spell, const double ClientTime, const double StartTime, const double EndTime)
 {
 	if (!IsValid(Spell) || !Spell->bHasCombo) return false;

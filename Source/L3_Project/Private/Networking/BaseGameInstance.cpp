@@ -139,7 +139,7 @@ void UBaseGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, E
 {
 	UE_LOG(LogTemp, Error, TEXT("Network failure. %s %d"), *String, Arg);
 
-	// Try to return to lobby if in instance
+	// todo: Try to return to lobby if in instance
 	// If already in lobby, or can't return to lobby, go back to main menu
 }
 

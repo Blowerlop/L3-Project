@@ -150,16 +150,16 @@ void USpellController::BeginPlay()
 
 	CastState = NewObject<USpellControllerCastState>();
 	CastState->SpellIndex = -1;
+
+	RepCooldowns.SetNum(MaxSpells);
 	
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
 	Cooldowns.SetNum(MaxSpells);
 	
 	SpellDatas.SetNum(MaxSpells);
-	RepCooldowns.SetNum(MaxSpells);
 
 	ReplicateSpellDatas(SpellDatas);
-	ReplicateCooldowns(RepCooldowns);
 }
 
 void USpellController::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -169,17 +169,6 @@ void USpellController::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
 	UpdateCooldowns(DeltaTime);
-}
-
-void USpellController::ReplicateCooldowns(const TArray<int>& NewCooldowns)
-{
-	RepCooldowns = NewCooldowns;
-
-	// For some reasons C++ RepUsing doesn't trigger replication method on listen server, but blueprint RepNotify does
-	if (IsNetMode(NM_ListenServer) && IsOwnerLocallyControlled())
-	{
-		OnCooldownsReplicated();
-	}
 }
 
 void USpellController::ReplicateGlobalCooldown(const bool NewGlobalCooldown)
@@ -210,9 +199,25 @@ void USpellController::OnSpellDataReplicated()
 	OnSpellDatasChanged.Broadcast(this);
 }
 
-void USpellController::OnCooldownsReplicated()
+void USpellController::SrvReplicateCooldown(uint8 Index, float CooldownValue)
 {
-	OnCooldownsReplicatedDelegate.Broadcast(RepCooldowns);
+	if (IsOwnerLocallyControlled())
+	{
+		OnCooldownReplicatedDelegate.Broadcast(Index, CooldownValue);
+	}
+	else
+	{
+		ReplicateCooldownRpc(Index, CooldownValue);
+	}
+}
+
+void USpellController::ReplicateCooldownRpc_Implementation(uint8 Index, float CooldownValue)
+{
+	if (Index < 0 || Index >= RepCooldowns.Num()) return;
+
+	RepCooldowns[Index] = CooldownValue;
+
+	OnCooldownReplicatedDelegate.Broadcast(Index, CooldownValue);
 }
 
 void USpellController::OnGlobalCooldownReplicated()
@@ -376,10 +381,12 @@ void USpellController::StartCooldown(const int Index)
 {
 	if (Index < 0 || Index >= Cooldowns.Num()) return;
 
-	Cooldowns[Index] = GetSpellData(Index)->Cooldown;
-	RepCooldowns[Index] = FMath::CeilToInt(Cooldowns[Index]);
+	const auto Value = GetSpellData(Index)->Cooldown;
 	
-	ReplicateCooldowns(RepCooldowns);
+	Cooldowns[Index] = Value;
+	RepCooldowns[Index] = Value;
+
+	SrvReplicateCooldown(Index, Value);
 }
 
 void USpellController::UpdateCooldowns(float DeltaTime)
@@ -393,27 +400,19 @@ void USpellController::UpdateCooldowns(float DeltaTime)
 		}
 	}
 	
-	bool bCooldownsChanged = false;
-	
 	for (int i = 0; i < Cooldowns.Num(); i++)
 	{
 		if (Cooldowns[i] <= 0.0f) continue;
-		
-		const auto RepCooldown = RepCooldowns[i];
+
 		Cooldowns[i] -= DeltaTime;
-
-		const auto NewValue = FMath::CeilToInt(Cooldowns[i]);
-
-		if (NewValue != RepCooldown)
+		
+		const auto NewValue = Cooldowns[i];
+		if (RepCooldowns[i] - NewValue >= CooldownsReplicationDelay || NewValue <= 0)
 		{
 			RepCooldowns[i] = NewValue;
-			bCooldownsChanged = true;
-		}
-	}
 
-	if (bCooldownsChanged)
-	{
-		ReplicateCooldowns(RepCooldowns);
+			SrvReplicateCooldown(i, NewValue);
+		}
 	}
 }
 
@@ -542,8 +541,7 @@ void USpellController::RequestSpellCastFromControllerRpc_Vector_Implementation(c
 void USpellController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME_CONDITION(USpellController, RepCooldowns, COND_OwnerOnly);
+	
 	DOREPLIFETIME_CONDITION(USpellController, bIsInGlobalCooldown, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(USpellController, SpellDatas, COND_OwnerOnly);
 }

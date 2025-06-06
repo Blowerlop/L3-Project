@@ -14,7 +14,7 @@ class USpellDataAsset;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpellsChanged, USpellController*, SpellController);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCooldownsReplicated, const TArray<int>&, NewCooldowns);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCooldownReplicated, uint8, Index, float, NewCooldown);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGlobalCooldownChanged, bool, IsActive);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCastStartDelegate, USpellDataAsset*, Spell, int, SpellIndex);
@@ -74,6 +74,9 @@ public:
 	UPROPERTY(ReplicatedUsing=OnSpellDataReplicated, EditAnywhere, BlueprintReadWrite)
 	TArray<USpellDataAsset*> SpellDatas;
 
+	UPROPERTY(BlueprintReadOnly)
+	TArray<float> RepCooldowns;
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int MaxSpells = 6;
 
@@ -85,6 +88,9 @@ public:
 
 	UPROPERTY(Blueprintable, EditAnywhere, BlueprintReadOnly)
 	float GlobalCooldownValue = 0.5f;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	float CooldownsReplicationDelay = 1.0f;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnSpellsChanged OnSpellDatasChanged;
@@ -93,7 +99,7 @@ public:
 	FOnCastStartDelegate OnCastStart;
 
 	UPROPERTY(BlueprintAssignable)
-	FOnCooldownsReplicated OnCooldownsReplicatedDelegate;
+	FOnCooldownReplicated OnCooldownReplicatedDelegate;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnGlobalCooldownChanged OnGlobalCooldownChanged;
@@ -143,10 +149,7 @@ public:
 protected:	
 	UFUNCTION(BlueprintCallable)
 	void UpdateAttachSocket();
-
-	UFUNCTION(BlueprintCallable)
-	void ReplicateCooldowns(const TArray<int>& NewCooldowns);
-
+	
 	UFUNCTION(BlueprintCallable)
 	void ReplicateGlobalCooldown(const bool NewGlobalCooldown);
 
@@ -173,9 +176,7 @@ private:
 	
 	UPROPERTY()
 	TArray<float> Cooldowns;
-	UPROPERTY(ReplicatedUsing=OnCooldownsReplicated)
-	TArray<int> RepCooldowns;
-
+	
 	UPROPERTY()
 	TArray<ASpellAimer*> SpellAimers;
 
@@ -204,7 +205,10 @@ private:
 	void OnSpellDataReplicated();
 
 	UFUNCTION()
-	void OnCooldownsReplicated();
+	void SrvReplicateCooldown(uint8 Index, float CooldownValue);
+	
+	UFUNCTION(Client, Reliable)
+	void ReplicateCooldownRpc(uint8 Index, float CooldownValue);
 
 	UFUNCTION()
 	void OnGlobalCooldownReplicated();

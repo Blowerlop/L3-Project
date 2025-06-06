@@ -136,6 +136,7 @@ void ASpell::SrvUnApply(AActor* Target)
 	}
 }
 
+// Serialized on server
 void ASpell::OnSerializeNewActor(class FOutBunch& OutBunch)
 {
 	Super::OnSerializeNewActor(OutBunch);
@@ -156,6 +157,7 @@ void ASpell::OnSerializeNewActor(class FOutBunch& OutBunch)
 	OutBunch << Data->AssetID;
 }
 
+// Deserialized on client, load spell data asset
 void ASpell::OnActorChannelOpen(class FInBunch& InBunch, class UNetConnection* Connection)
 {
 	Super::OnActorChannelOpen(InBunch, Connection);
