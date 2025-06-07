@@ -74,12 +74,12 @@ private:
     // Check if the Chara name is available
     static void CheckCharacterNameAvailability(const FString& UserName, const FString& CharacterName, const FString& IdToken, const TFunction<void(bool)>& Callback);
 
+public:
     // Set Data to firebase
     static void SetData(const FString& Path, const TSharedPtr<FJsonObject> Data, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
-public:
+    //Delete Data
     static void DeleteData(const FString& Path, const FString& IdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
-    
 
     //Set Player data
     static void SetPlayerData(const FString& UserName, const FString& FieldName,
