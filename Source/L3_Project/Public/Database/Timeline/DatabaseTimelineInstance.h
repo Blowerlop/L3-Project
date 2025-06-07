@@ -1,10 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Database/DatabaseFunctions.h"
 #include "Dom/JsonObject.h"
-
-DECLARE_DELEGATE(FSuccess);
-DECLARE_DELEGATE_OneParam(FFailed, const FString&);
+#include "DatabaseTimelineInstance.generated.h"
 
 USTRUCT()
 struct FDynamicCombatEvent
@@ -47,3 +46,50 @@ private:
 
 	static FString GenerateRandomMatchId();
 };
+
+/*Data type (Blib change/update si tu as besoin)
+ *
+ *All events :
+ *
+ *TYPE => Le Type
+ *TIME => Le moment de l'invocation
+ *DATA => Les datas
+ *
+ *	////////////////////////////////////////////////////////////////////////////////////////////////////
+ *
+ *Player Damage:  *dégats qu'un joueur inflige*
+ *
+ *TYPE => "PlayerDamage"
+ *TIME => (?)
+ *DATA =>
+ *	"PlayerID" => id du lanceur
+ *	"SpellID"  => id du sort lancé
+ *	"Damage"   => dégats infligés
+ *	"Type"     => type de spell (Skillshot, Zone, DOT...)
+ *
+ *	////////////////////////////////////////////////////////////////////////////////////////////////////
+ *
+ *Player Buff:  *effet qu'un joueur propage (Positif)*
+ *
+ *TYPE => "PlayerBuff"
+ *TIME => (?)
+ *DATA =>
+ *	"PlayerID" => id du lanceur
+ *	"TargetID" => id du joueur qui reçoit le buff
+ *	"SpellID"  => id du sort lancé
+ *	"BuffType" => type de buff ("health", "damage", "speed", "shield"...)
+ *	"Amount"   => valeur du buff ^
+ *	"Type"     => type de spell (Skillshot, Zone, DOT...)
+ *
+ *	////////////////////////////////////////////////////////////////////////////////////////////////////
+ *
+ *Boss Damage:  *dégat du boss*
+ *
+ *TYPE => "BossDamage"
+ *TIME => (?)
+ *DATA =>
+ *	"TargetID" => id du joueur qui reçoit les dmg
+ *	"SpellID"  => id du sort lancé
+ *	"Damage"   => dégats infligés
+ *	"Type"     => type de spell (Skillshot, Zone, DOT...)
+ */
