@@ -17,6 +17,9 @@ class AZodiaqCharacter : public ACharacter, public IAliveState
 	void InitSpells(APlayerController* PlayerController, AZodiaqPlayerState* ZodiaqPlayerState);
 
 public:
+	UFUNCTION(BlueprintCallable)
+	bool TeleportFromBP(const FVector& Location, const FRotator& Rotation, bool bIsATest = false, bool bNoCheck = false);
+	
 	void LoadCharacterFromPlayerState(AZodiaqPlayerState* ZodiaqPlayerState);
 
 	UFUNCTION(BlueprintImplementableEvent)

@@ -84,3 +84,8 @@ void AZodiaqCharacter::InitSpells(APlayerController* PlayerController, AZodiaqPl
 	UE_LOG(LogTemp, Log, TEXT("Character spells (count %d) initialized for Client %s connected with UUID %s"),
 		   SpellsCount, *ZodiaqPlayerState->ClientData.Name, *ZodiaqPlayerState->ClientData.UUID);
 }
+
+bool AZodiaqCharacter::TeleportFromBP(const FVector& Location, const FRotator& Rotation, const bool bIsATest, const bool bNoCheck)
+{
+	return TeleportTo(Location, Rotation, bIsATest, bNoCheck); 
+}
