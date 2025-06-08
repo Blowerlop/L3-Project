@@ -65,7 +65,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetMaxValue(const EVitalType Type) const;
-
+	
+	UFUNCTION(BlueprintCallable)
+	float GetMaxValue_NotPure(EVitalType Type);
+	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvAdd(const EVitalType Type, float Value);
 

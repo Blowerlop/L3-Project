@@ -29,6 +29,16 @@ float UVitalsContainer::GetMaxValue(const EVitalType Type) const
 	return 0;
 }
 
+float UVitalsContainer::GetMaxValue_NotPure(EVitalType Type)
+{
+	if (const FVital* Vital = Vitals.Find(Type))
+	{
+		return Vital->MaxValue;
+	}
+		
+	return 0;
+}
+
 void UVitalsContainer::SrvAdd(const EVitalType Type, float Value)
 {
 	if (FVital* Vital = Vitals.Find(Type))
