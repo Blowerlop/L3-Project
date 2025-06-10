@@ -212,15 +212,15 @@ void UDatabaseFunctions::AuthRequest(const FString& Email, const FString& Passwo
         TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseStr);
         if (FJsonSerializer::Deserialize(Reader, JsonResponse) && JsonResponse.IsValid())
         {
-            if (JsonResponse->HasField("error"))
+            if (JsonResponse->HasField(TEXT("error")))
             {
-                FString ErrorMessage = JsonResponse->GetObjectField("error")->GetStringField("message");
+                FString ErrorMessage = JsonResponse->GetObjectField(TEXT("error"))->GetStringField(TEXT("message"));
                 OnFailure.ExecuteIfBound(ErrorMessage);
                 return;
             }
 
-            FString localId = JsonResponse->GetStringField("localId");
-            UBaseGameInstance::FirebaseIdToken = JsonResponse->GetStringField("idToken");
+            FString localId = JsonResponse->GetStringField(TEXT("localId"));
+            UBaseGameInstance::FirebaseIdToken = JsonResponse->GetStringField(TEXT("idToken"));
 
             OnSuccess.ExecuteIfBound(localId);
         }
@@ -283,15 +283,15 @@ void UDatabaseFunctions::RegisterRequest(const FString& UserName, const FString&
             TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseStr);
             if (FJsonSerializer::Deserialize(Reader, JsonResponse) && JsonResponse.IsValid())
             {
-                if (JsonResponse->HasField("error"))
+                if (JsonResponse->HasField(TEXT("error")))
                 {
-                    FString ErrorMessage = JsonResponse->GetObjectField("error")->GetStringField("message");
+                    FString ErrorMessage = JsonResponse->GetObjectField(TEXT("error"))->GetStringField(TEXT("message"));
                     OnFailure.ExecuteIfBound(ErrorMessage);
                     return;
                 }
 
-                FString localId = JsonResponse->GetStringField("localId");
-                UBaseGameInstance::FirebaseIdToken = JsonResponse->GetStringField("idToken");
+                FString localId = JsonResponse->GetStringField(TEXT("localId"));
+                UBaseGameInstance::FirebaseIdToken = JsonResponse->GetStringField(TEXT("idToken"));
 
                 OnSuccess.ExecuteIfBound(localId);
             }
