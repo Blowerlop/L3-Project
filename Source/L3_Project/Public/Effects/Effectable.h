@@ -53,6 +53,8 @@ public:
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSrvOnEffectAdded, UEffectDataAsset*, Effect, AActor*, Applier, FGuid, InstanceID); 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSrvOnEffectRemoved, UEffectDataAsset*, Effect, FGuid, InstanceID); 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FSrvOnEffectAdded, UEffectable*, Effectable, UEffectDataAsset*, Effect, AActor*, Applier, FGuid, InstanceID); 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSrvOnEffectRemoved, UEffectable*, Effectable, UEffectDataAsset*, Effect, FGuid, InstanceID); 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class L3_PROJECT_API UEffectable : public UActorComponent
 {
@@ -61,11 +63,8 @@ class L3_PROJECT_API UEffectable : public UActorComponent
 public:
 	UEffectable();
 
-	UPROPERTY(BlueprintAssignable)
-	FSrvOnEffectAdded SrvOnEffectAddedDelegate;
-
-	UPROPERTY(BlueprintAssignable)
-	FSrvOnEffectRemoved SrvOnEffectRemovedDelegate;
+	static FSrvOnEffectAdded SrvOnEffectAddedDelegate;
+	static FSrvOnEffectRemoved SrvOnEffectRemovedDelegate;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UEffectSystemConfiguration* Configuration;
