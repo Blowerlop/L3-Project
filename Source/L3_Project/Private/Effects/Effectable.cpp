@@ -7,6 +7,9 @@
 #include "Effects/EffectType.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+FSrvOnEffectAdded UEffectable::SrvOnEffectAddedDelegate{};
+FSrvOnEffectRemoved UEffectable::SrvOnEffectRemovedDelegate{};
+
 UEffectable::UEffectable()
 {
 	PrimaryComponentTick.bCanEverTick = true;
