@@ -23,7 +23,7 @@ class L3_PROJECT_API UDatabaseTimelineInstance : public UObject
 	GENERATED_BODY()
 
 public:
-	void Init();
+	static void Init();
 
 	/**
 	 * Add event to timeline
@@ -31,20 +31,22 @@ public:
 	 * @param Timestamp - Event time                                                                                                                                                                       What a useless comment
 	 * @param Data - Event JSon Data
 	 */
-	void AddEvent(const FString& Type, int32 Timestamp, const TSharedPtr<FJsonObject>& Data);
+	static void AddEvent(const FString& Type, int32 Timestamp, const TSharedPtr<FJsonObject>& Data);
 
 	/**
 	 * Send data to DB (HOST ONLY) And should be done at the end of the game for pity
 	 */
-	void UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure) const;
+	static void UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
 private:
-	TArray<FDynamicCombatEvent> Events;
-	FString MatchId;
+	static TArray<FDynamicCombatEvent> Events;
+	static FString MatchId;
 
-	TSharedPtr<FJsonObject> ConvertToJson() const;
+	static TSharedPtr<FJsonObject> ConvertToJson() const;
 
 	static FString GenerateRandomMatchId();
+	static void OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, AActor* actor, FGuid guid);
+	static float GetGameTimeSecondsStatic(const UObject* WorldContextObject);
 };
 
 /*Data type (Blib change/update si tu as besoin)
