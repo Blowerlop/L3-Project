@@ -10,6 +10,9 @@
 #include "Networking/ZodiaqPlayerController.h"
 #include "Networking/ZodiaqPlayerState.h"
 
+TArray<FDynamicCombatEvent> UDatabaseTimelineInstance::Events;
+FString UDatabaseTimelineInstance::MatchId;
+
 void UDatabaseTimelineInstance::Init()
 {
 	Events.Empty();
@@ -36,7 +39,7 @@ void UDatabaseTimelineInstance::UploadTimeline(const FString& PlayerIdToken, con
 	UDatabaseFunctions::SetData(Path, Payload, PlayerIdToken, OnSuccess, OnFailure);
 }
 
-TSharedPtr<FJsonObject> UDatabaseTimelineInstance::ConvertToJson() const
+TSharedPtr<FJsonObject> UDatabaseTimelineInstance::ConvertToJson()
 {
 	TSharedPtr<FJsonObject> Root = MakeShareable(new FJsonObject);
 	TArray<TSharedPtr<FJsonValue>> JsonArray;
@@ -67,7 +70,8 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 	//TODO c'est pas encore fini
 	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
 
-	if (auto Character = Cast<AZodiaqCharacter>(effectable->GetOwner()) && Character != nullptr) //Player
+	AZodiaqCharacter* CharacterTarget = Cast<AZodiaqCharacter>(effectable->GetOwner());
+	if (CharacterTarget != nullptr) //Player
 	{
 		const FString Id = Cast<AZodiaqPlayerController>(effectable->GetOwner())->GetPlayerState<AZodiaqPlayerState>()->ClientData.UUID;
 	
@@ -78,7 +82,8 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 		EffectJson->SetStringField(TEXT("Target"), "Boss"); //Not beau but osef
 	}
 
-	if (auto Character = Cast<AZodiaqCharacter>(actor->GetOwner()) && Character != nullptr) //Player
+	AZodiaqCharacter* CharacterCaster = Cast<AZodiaqCharacter>(actor->GetOwner());
+	if (CharacterCaster != nullptr) //Player
 	{
 		const FString Id = Cast<AZodiaqPlayerController>(actor->GetOwner())->GetPlayerState<AZodiaqPlayerState>()->ClientData.UUID;
 	

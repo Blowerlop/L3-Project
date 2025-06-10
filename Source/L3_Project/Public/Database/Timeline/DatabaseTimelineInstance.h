@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Database/DatabaseFunctions.h"
 #include "Dom/JsonObject.h"
+#include "Effects/Effectable.h"
 #include "DatabaseTimelineInstance.generated.h"
 
 USTRUCT()
@@ -42,7 +43,7 @@ private:
 	static TArray<FDynamicCombatEvent> Events;
 	static FString MatchId;
 
-	static TSharedPtr<FJsonObject> ConvertToJson() const;
+	static TSharedPtr<FJsonObject> ConvertToJson();
 
 	static FString GenerateRandomMatchId();
 	static void OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, AActor* actor, FGuid guid);
