@@ -7,6 +7,9 @@
 #include "Effects/EffectType.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+FSrvOnEffectAdded UEffectable::SrvOnEffectAddedDelegate{};
+FSrvOnEffectRemoved UEffectable::SrvOnEffectRemovedDelegate{};
+
 UEffectable::UEffectable()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -26,7 +29,7 @@ UEffectInstance* UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor*
 	Instance->Init(EffectData, Applier, this);
 	Container->AddInstance(Instance);
 	
-	SrvOnEffectAddedDelegate.Broadcast(EffectData, Applier, Instance->InstanceID);
+	SrvOnEffectAddedDelegate.Broadcast(this, EffectData, Applier, Instance->InstanceID);
 
 	Refresh();
 	return Instance;
@@ -50,7 +53,7 @@ void UEffectable::SrvAddEffects(const TArray<UEffectDataAsset*>& Effects, AActor
 		Instance->Init(Effect, Applier, this);
 		Container->AddInstance(Instance);
 
-		SrvOnEffectAddedDelegate.Broadcast(Effect, Applier, Instance->InstanceID);
+		SrvOnEffectAddedDelegate.Broadcast(this, Effect, Applier, Instance->InstanceID);
 	}
 
 	Refresh();
@@ -77,7 +80,7 @@ void UEffectable::SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAs
 		Container->AddInstance(Instance);
 		OutAppliedEffects.Add(Instance);
 
-		SrvOnEffectAddedDelegate.Broadcast(Effect, Applier, Instance->InstanceID);
+		SrvOnEffectAddedDelegate.Broadcast(this, Effect, Applier, Instance->InstanceID);
 	}
 
 	Refresh();
@@ -96,7 +99,7 @@ void UEffectable::SrvRemoveEffect(UEffectInstance* Effect)
 	Container->RemoveInstance(Effect);
 
 	Effect->Release();
-	SrvOnEffectRemovedDelegate.Broadcast(Effect->Data, Effect->InstanceID);
+	SrvOnEffectRemovedDelegate.Broadcast(this, Effect->Data, Effect->InstanceID);
 	
 	Refresh();
 }
@@ -118,7 +121,7 @@ void UEffectable::SrvRemoveEffects(const TArray<UEffectInstance*>& Effects)
 
 		Effect->Release();
 
-		SrvOnEffectRemovedDelegate.Broadcast(Effect->Data, Effect->InstanceID);
+		SrvOnEffectRemovedDelegate.Broadcast(this, Effect->Data, Effect->InstanceID);
 	}
 
 	Refresh();
