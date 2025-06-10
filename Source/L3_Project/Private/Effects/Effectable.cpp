@@ -25,6 +25,8 @@ UEffectInstance* UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor*
 
 	Instance->Init(EffectData, Applier, this);
 	Container->AddInstance(Instance);
+	
+	SrvOnEffectAddedDelegate.Broadcast(EffectData, Applier, Instance->InstanceID);
 
 	Refresh();
 	return Instance;
@@ -47,6 +49,8 @@ void UEffectable::SrvAddEffects(const TArray<UEffectDataAsset*>& Effects, AActor
 
 		Instance->Init(Effect, Applier, this);
 		Container->AddInstance(Instance);
+
+		SrvOnEffectAddedDelegate.Broadcast(Effect, Applier, Instance->InstanceID);
 	}
 
 	Refresh();
@@ -72,6 +76,8 @@ void UEffectable::SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAs
 		Instance->Init(Effect, Applier, this);
 		Container->AddInstance(Instance);
 		OutAppliedEffects.Add(Instance);
+
+		SrvOnEffectAddedDelegate.Broadcast(Effect, Applier, Instance->InstanceID);
 	}
 
 	Refresh();
@@ -90,6 +96,7 @@ void UEffectable::SrvRemoveEffect(UEffectInstance* Effect)
 	Container->RemoveInstance(Effect);
 
 	Effect->Release();
+	SrvOnEffectRemovedDelegate.Broadcast(Effect->Data, Effect->InstanceID);
 	
 	Refresh();
 }
@@ -110,6 +117,8 @@ void UEffectable::SrvRemoveEffects(const TArray<UEffectInstance*>& Effects)
 		Container->RemoveInstance(Effect);
 
 		Effect->Release();
+
+		SrvOnEffectRemovedDelegate.Broadcast(Effect->Data, Effect->InstanceID);
 	}
 
 	Refresh();

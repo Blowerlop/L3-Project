@@ -13,6 +13,9 @@ public:
 	void Init(UEffectDataAsset* EffectAsset, AActor* EffectApplier, UEffectable* EffectParent);
 
 	virtual void BeginDestroy() override;
+
+	UPROPERTY(BlueprintReadOnly)
+	FGuid InstanceID;
 	
 	UPROPERTY(BlueprintReadOnly)
 	UEffectDataAsset* Data;
