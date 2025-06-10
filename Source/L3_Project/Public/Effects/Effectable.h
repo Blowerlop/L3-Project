@@ -51,6 +51,12 @@ public:
 	TArray<UEffectInstance*> Instances;
 };
 
+class UEffectable;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEffectsReplicated);
+DECLARE_MULTICAST_DELEGATE_FourParams(FSrvOnEffectAdded, UEffectable*, UEffectDataAsset*, AActor*, FGuid); 
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FSrvOnEffectRemoved, UEffectable*, UEffectDataAsset*, FGuid);
+
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class L3_PROJECT_API UEffectable : public UActorComponent
 {
@@ -58,6 +64,9 @@ class L3_PROJECT_API UEffectable : public UActorComponent
 	
 public:
 	UEffectable();
+
+	static FSrvOnEffectAdded SrvOnEffectAddedDelegate;
+	static FSrvOnEffectRemoved SrvOnEffectRemovedDelegate;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UEffectSystemConfiguration* Configuration;
@@ -94,6 +103,24 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<EEffectType> ActiveResolvers;
 
+protected:
+	UPROPERTY(BlueprintAssignable)
+	FOnEffectsReplicated OnEffectsReplicatedDelegate;
+	
+	UPROPERTY(BlueprintReadOnly)
+	TMap<UEffectDataAsset*, int> ReplicatedEffects;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void AddEffectMulticast(UEffectDataAsset* Effect);
+	UFUNCTION(NetMulticast, Reliable)
+	void AddEffectsMulticast(const TArray<UEffectDataAsset*>& Effects);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void RemoveEffectMulticast(UEffectDataAsset* Effect);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void RemoveEffectsMulticast(const TArray<UEffectDataAsset*>& Effects);
+	
 private:
 	TArray<UEffectInstance*> RemoveEffectsBuffer{};
 	

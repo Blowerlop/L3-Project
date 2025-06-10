@@ -7,6 +7,9 @@
 #include "Effects/EffectType.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+FSrvOnEffectAdded UEffectable::SrvOnEffectAddedDelegate{};
+FSrvOnEffectRemoved UEffectable::SrvOnEffectRemovedDelegate{};
+
 UEffectable::UEffectable()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -25,8 +28,13 @@ UEffectInstance* UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor*
 
 	Instance->Init(EffectData, Applier, this);
 	Container->AddInstance(Instance);
+	
+	SrvOnEffectAddedDelegate.Broadcast(this, EffectData, Applier, Instance->InstanceID);
 
 	Refresh();
+
+	AddEffectMulticast(EffectData);
+	
 	return Instance;
 }
 
@@ -47,9 +55,14 @@ void UEffectable::SrvAddEffects(const TArray<UEffectDataAsset*>& Effects, AActor
 
 		Instance->Init(Effect, Applier, this);
 		Container->AddInstance(Instance);
+
+		SrvOnEffectAddedDelegate.Broadcast(this, Effect, Applier, Instance->InstanceID);
 	}
 
 	Refresh();
+
+	// Create a new array instance, we don't know what is done with Effects array between multicast scheduling and execution
+	AddEffectsMulticast(TArray(Effects));
 }
 
 void UEffectable::SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, AActor* Applier, TArray<UEffectInstance*>& OutAppliedEffects)
@@ -72,9 +85,14 @@ void UEffectable::SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAs
 		Instance->Init(Effect, Applier, this);
 		Container->AddInstance(Instance);
 		OutAppliedEffects.Add(Instance);
+
+		SrvOnEffectAddedDelegate.Broadcast(this, Effect, Applier, Instance->InstanceID);
 	}
 
 	Refresh();
+
+	// Create a new array instance, we don't know what is done with Effects array between multicast scheduling and execution
+	AddEffectsMulticast(TArray(Effects));
 }
 
 void UEffectable::SrvRemoveEffect(UEffectInstance* Effect)
@@ -90,8 +108,11 @@ void UEffectable::SrvRemoveEffect(UEffectInstance* Effect)
 	Container->RemoveInstance(Effect);
 
 	Effect->Release();
+	SrvOnEffectRemovedDelegate.Broadcast(this, Effect->Data, Effect->InstanceID);
 	
 	Refresh();
+
+	RemoveEffectMulticast(Effect->Data);
 }
 
 void UEffectable::SrvRemoveEffects(const TArray<UEffectInstance*>& Effects)
@@ -102,17 +123,25 @@ void UEffectable::SrvRemoveEffects(const TArray<UEffectInstance*>& Effects)
 		return;
 	}
 
+	TArray<UEffectDataAsset*> AssetsBuffer = {};
+	
 	for(auto& Effect : Effects)
 	{
 		if (Effect == nullptr) continue;
+
+		AssetsBuffer.Add(Effect->Data);
 		
 		const auto Container = GetEffectContainer(Effect->Data->Type);
 		Container->RemoveInstance(Effect);
 
 		Effect->Release();
+
+		SrvOnEffectRemovedDelegate.Broadcast(this, Effect->Data, Effect->InstanceID);
 	}
 
 	Refresh();
+	
+	RemoveEffectsMulticast(AssetsBuffer);
 }
 
 void UEffectable::Cleanse()
@@ -151,6 +180,74 @@ void UEffectable::Debuff()
 	}
 
 	SrvRemoveEffects(RemoveEffectsBuffer);
+}
+
+void UEffectable::AddEffectMulticast_Implementation(UEffectDataAsset* Effect)
+{
+	if (!ReplicatedEffects.Contains(Effect))
+	{
+		ReplicatedEffects.Add(Effect, 1);
+	}
+	else
+	{
+		ReplicatedEffects[Effect] += 1;
+	}
+	
+	OnEffectsReplicatedDelegate.Broadcast();
+}
+
+void UEffectable::RemoveEffectMulticast_Implementation(UEffectDataAsset* Effect)
+{
+	if (ReplicatedEffects.Contains(Effect))
+	{
+		ReplicatedEffects[Effect] -= 1;
+
+		if (ReplicatedEffects[Effect] <= 0)
+		{
+			ReplicatedEffects.Remove(Effect);
+		}
+
+		OnEffectsReplicatedDelegate.Broadcast();
+	}
+}
+
+void UEffectable::AddEffectsMulticast_Implementation(const TArray<UEffectDataAsset*>& Effects)
+{
+	for(auto& Effect : Effects)
+	{
+		if (Effect == nullptr) continue;
+		
+		if (!ReplicatedEffects.Contains(Effect))
+		{
+			ReplicatedEffects.Add(Effect, 1);
+		}
+		else
+		{
+			ReplicatedEffects[Effect] += 1;
+		}
+	}
+	
+	OnEffectsReplicatedDelegate.Broadcast();
+}
+
+void UEffectable::RemoveEffectsMulticast_Implementation(const TArray<UEffectDataAsset*>& Effects)
+{
+	for(auto& Effect : Effects)
+	{
+		if (Effect == nullptr) continue;
+		
+		if (ReplicatedEffects.Contains(Effect))
+		{
+			ReplicatedEffects[Effect] -= 1;
+
+			if (ReplicatedEffects[Effect] <= 0)
+			{
+				ReplicatedEffects.Remove(Effect);
+			}
+		}
+	}
+
+	OnEffectsReplicatedDelegate.Broadcast();
 }
 
 UEffectInstanceContainer* UEffectable::GetEffectContainer(const EEffectType Type)

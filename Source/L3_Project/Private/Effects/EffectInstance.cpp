@@ -11,6 +11,8 @@ void UEffectInstance::Init(UEffectDataAsset* EffectAsset, AActor* EffectApplier,
 	Data = EffectAsset;
 	Applier = EffectApplier;
 	Parent = EffectParent;
+
+	InstanceID = FGuid::NewGuid();
 	
 	if (Data->bUseDuration)
 	{
