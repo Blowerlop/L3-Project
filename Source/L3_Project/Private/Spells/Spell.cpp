@@ -75,13 +75,18 @@ bool ASpell::SrvApply(AActor* Target)
 		Vitals->SrvAdd(EVitalType::Health, Data->Heal);
 
 		auto Damage = Data->Damage;
+		auto TrueDamage = Data->TrueDamage;
 		
 		if(const auto Stats = Caster->GetComponentByClass<UStatsContainer>(); Stats != nullptr)
 		{
-			Damage *= Stats->GetValue(EGameStatType::Attack);
+			const auto AttackStat = Stats->GetValue(EGameStatType::Attack);
+			
+			Damage *= AttackStat;
+			TrueDamage *= AttackStat;
 		}
 		
 		Vitals->SrvRemove(EVitalType::Health, Damage);
+		Vitals->SrvRemove(EVitalType::Health, TrueDamage, /*ignoreModifiers:*/ true);
 		
 		IsValid = true;
 	}

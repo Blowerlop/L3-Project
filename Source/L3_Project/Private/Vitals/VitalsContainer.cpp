@@ -41,21 +41,24 @@ float UVitalsContainer::GetMaxValue_NotPure(EVitalType Type)
 
 void UVitalsContainer::SrvAdd(const EVitalType Type, float Value)
 {
-	if (FVital* Vital = Vitals.Find(Type))
+	if (const FVital* Vital = Vitals.Find(Type))
 	{
 		Value = GetModifiedValue(Type, Value, EVitalUpdateType::Add);
-		
+
 		ChangeValueMulticast(Type, Value);
 
 		UE_LOG(LogTemp, Warning, TEXT("Added %f to %s, new value: %f"), Value, *UEnum::GetDisplayValueAsText(Type).ToString(), Vital->Value);
 	}
 }
 
-void UVitalsContainer::SrvRemove(const EVitalType Type, float Value)
+void UVitalsContainer::SrvRemove(const EVitalType Type, float Value, const bool IgnoreModifiers)
 {
-	if (FVital* Vital = Vitals.Find(Type))
+	if (const FVital* Vital = Vitals.Find(Type))
 	{
-		Value = GetModifiedValue(Type, Value, EVitalUpdateType::Remove);
+		if (!IgnoreModifiers)
+		{
+			Value = GetModifiedValue(Type, Value, EVitalUpdateType::Remove);
+		}
 
 		ChangeValueMulticast(Type, -Value);
 		
