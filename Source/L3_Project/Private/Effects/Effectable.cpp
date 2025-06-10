@@ -364,7 +364,9 @@ void UEffectable::TickComponent(float DeltaTime, enum ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	for(const auto Type : ActiveResolvers)
+	// Error - LogOutputDevice: Array has changed during ranged-for iteration!
+	// Copy the array before iterating to avoid this error
+	for(const auto ActiveResolversCopy = ActiveResolvers; const auto Type : ActiveResolversCopy)
 	{
 		const auto Resolver = ResolversCache[Type];
 		if (!Resolver->bNeedTicking) continue;
