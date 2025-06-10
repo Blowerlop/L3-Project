@@ -73,8 +73,8 @@ public:
 	void SrvAdd(const EVitalType Type, float Value);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SrvRemove(const EVitalType Type, float Value);
-	
+	void SrvRemove(const EVitalType Type, float Value, bool IgnoreModifiers = false);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EVitalType, FVital> Vitals;
@@ -88,7 +88,7 @@ private:
 	
 	UFUNCTION(NetMulticast, Reliable)
 	void ChangeValueMulticast(const EVitalType Type, const float Value);
-
+	
 	void UpdateReplicatedVitals(const EVitalType Type, const FVital* Vital);
 	
 	UFUNCTION()

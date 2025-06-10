@@ -36,6 +36,9 @@ public:
 	int Damage;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int TrueDamage;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int Heal;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Bitmask, BitmaskEnum = ESpellAction))
