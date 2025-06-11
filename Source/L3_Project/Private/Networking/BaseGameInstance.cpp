@@ -211,6 +211,16 @@ void UBaseGameInstance::OnFirebaseLogout()
 	SelfClientData = FClientData();
 }
 
+void UBaseGameInstance::NotifyCharacterLoaded(AZodiaqCharacter* Character)
+{
+	OnCharacterLoaded.Broadcast(Character);
+}
+
+void UBaseGameInstance::NotifyCharacterDestroyed(AZodiaqCharacter* Character)
+{
+	OnCharacterDestroyed.Broadcast(Character);
+}
+
 #pragma endregion
 
 #pragma region Debug

@@ -6,6 +6,7 @@ AZodiaqGameState::AZodiaqGameState()
 {
 	// Disable default unreal network time sync
 	ServerWorldTimeSecondsUpdateFrequency = 0;
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 double AZodiaqGameState::GetServerWorldTimeSeconds() const

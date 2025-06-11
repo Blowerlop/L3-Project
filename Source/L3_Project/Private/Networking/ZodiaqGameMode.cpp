@@ -7,14 +7,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "Networking/BaseGameInstance.h"
 #include "Networking/InstancesManagerSubsystem.h"
-#include "Networking/SessionsManagerSubsystem.h"
 #include "Networking/ZodiaqCharacter.h"
 #include "Networking/ZodiaqPlayerState.h"
 
-void AZodiaqGameMode::OnPlayerStateEndPlay(const AZodiaqPlayerState* PlayerState) const
-{
-	OnClientDestroyedDelegate.Broadcast(PlayerState->ClientData);
-}
+void AZodiaqGameMode::OnPlayerStateEndPlay(const AZodiaqPlayerState* PlayerState) const {}
 
 FString AZodiaqGameMode::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId,
                                        const FString& Options, const FString& Portal)
@@ -84,9 +80,7 @@ FString AZodiaqGameMode::InitNewPlayer(APlayerController* NewPlayerController, c
 	
 	UE_LOG(LogTemp, Warning, TEXT("Player %s connected with UUID %s"), *Name, *UUID);
 	PlayerState->ClientData = FClientData(UUID, Name);
-
-	OnClientSpawnedDelegate.Broadcast(PlayerState->ClientData);
-
+	
 	GetCharacterCallbackDelegate.BindUFunction(this, "GetCharacterCallback");
 	
 	UDatabaseFunctions::GetCharacterData(NewPlayerController, UUID, CUUID, UDatabaseFunctions::GetIdToken(), GetCharacterCallbackDelegate);
