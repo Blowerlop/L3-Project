@@ -13,7 +13,7 @@
 TArray<FDynamicCombatEvent> UDatabaseTimelineInstance::Events;
 FString UDatabaseTimelineInstance::MatchId;
 
-void UDatabaseTimelineInstance::Init()
+void UDatabaseTimelineInstance::InitTimeline()
 {
 	Events.Empty();
 	MatchId = GenerateRandomMatchId();
@@ -29,6 +29,24 @@ void UDatabaseTimelineInstance::AddEvent(const FString& Type, const int32 Timest
 	NewEvent.Data = Data;
 
 	Events.Add(NewEvent);
+}
+
+void UDatabaseTimelineInstance::TimelineEventBossSpawned(const UObject* Sender)
+{
+	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
+	AddEvent("BossSpawned",GetGameTimeSecondsStatic(Sender) , EffectJson);
+}
+
+void UDatabaseTimelineInstance::TimelineEventDefeat(const UObject* Sender)
+{
+	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
+	AddEvent("Defeat",GetGameTimeSecondsStatic(Sender) , EffectJson);
+}
+
+void UDatabaseTimelineInstance::TimelineEventBossKilled(const UObject* Sender)
+{
+	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
+	AddEvent("BossKilled",GetGameTimeSecondsStatic(Sender) , EffectJson);
 }
 
 void UDatabaseTimelineInstance::UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)

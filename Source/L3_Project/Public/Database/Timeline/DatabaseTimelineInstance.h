@@ -19,12 +19,13 @@ struct FDynamicCombatEvent
 };
 
 UCLASS()
-class L3_PROJECT_API UDatabaseTimelineInstance : public UObject
+class L3_PROJECT_API UDatabaseTimelineInstance : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
 public:
-	static void Init();
+	UFUNCTION(BlueprintCallable, Category = "Timeline")
+	static void InitTimeline();
 
 	/**
 	 * Add event to timeline
@@ -34,9 +35,17 @@ public:
 	 */
 	static void AddEvent(const FString& Type, int32 Timestamp, const TSharedPtr<FJsonObject>& Data);
 
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Sender"), Category = "Timeline")
+	static void TimelineEventBossSpawned(const UObject* Sender);
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Sender"), Category = "Timeline")
+	static void TimelineEventDefeat(const UObject* Sender);
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Sender"), Category = "Timeline")
+	static void TimelineEventBossKilled(const UObject* Sender);
+
 	/**
 	 * Send data to DB (HOST ONLY) And should be done at the end of the game for pity
 	 */
+	UFUNCTION(BlueprintCallable, Category = "Timeline")
 	static void UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
 private:
