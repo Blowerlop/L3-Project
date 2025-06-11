@@ -9,6 +9,7 @@
 #include "Engine/GameInstance.h"
 #include "BaseGameInstance.generated.h"
 
+class AZodiaqCharacter;
 class UInstanceDataAsset;
 class UInstancesManagerSubsystem;
 
@@ -25,6 +26,9 @@ enum class ENetTransitionType : uint8
 	LobbyToInstance UMETA(DisplayName="Lobby To Instance"),
 	InstanceToLobby UMETA(DisplayName="Instance To Lobby"), 
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterSpawned, AZodiaqCharacter*, Character);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDestroyed, AZodiaqCharacter*, Character);
 
 /**
  * 
@@ -63,6 +67,15 @@ public:
 	void OnTransitionEntered();
 
 	void OnFirebaseLogout();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnCharacterSpawned OnCharacterLoaded;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnCharacterDestroyed OnCharacterDestroyed;
+
+	void NotifyCharacterLoaded(AZodiaqCharacter* Character);
+	void NotifyCharacterDestroyed(AZodiaqCharacter* Character);
 	
 private:
 	FDelegateHandle LoginDelegateHandle;

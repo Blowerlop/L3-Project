@@ -1,6 +1,8 @@
 #include "Networking/ZodiaqCharacter.h"
 
 #include "Kismet/KismetSystemLibrary.h"
+#include "Net/UnrealNetwork.h"
+#include "Networking/BaseGameInstance.h"
 #include "Networking/ZodiaqGameMode.h"
 #include "Networking/ZodiaqPlayerState.h"
 #include "Spells/SpellController.h"
@@ -9,21 +11,27 @@
 void AZodiaqCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// UE_LOG(LogTemp, Warning, TEXT("AZodiaqCharacter::BeginPlay called for %s"), *GetName());
-	if (!UKismetSystemLibrary::IsServer(this)) return;
-
-	const auto ZodiaqPlayerState = GetPlayerState<AZodiaqPlayerState>();
-
-	if (!IsValid(ZodiaqPlayerState))
-	{
-		// UE_LOG(LogTemp, Error, TEXT("AZodiaqCharacter::BeginPlay: PlayerState is not valid for %s"), *GetName());
-		return;
-	}
 	
-	if (!bIsLoaded && ZodiaqPlayerState->bIsCharacterLoaded)
+	// UE_LOG(LogTemp, Warning, TEXT("AZodiaqCharacter::BeginPlay called for %s"), *GetName());
+	if (UKismetSystemLibrary::IsServer(this))
 	{
-		LoadCharacterFromPlayerState(ZodiaqPlayerState);
+		const auto ZodiaqPlayerState = GetPlayerState<AZodiaqPlayerState>();
+
+		if (IsValid(ZodiaqPlayerState) && (!bIsLoaded && ZodiaqPlayerState->bIsCharacterLoaded))
+		{
+			LoadCharacterFromPlayerState(ZodiaqPlayerState);
+		}
+	}
+}
+
+void AZodiaqCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	const auto GameInstance = GetGameInstance<UBaseGameInstance>();
+	if (IsValid(GameInstance))
+	{
+		GameInstance->NotifyCharacterDestroyed(this);
 	}
 }
 
@@ -37,6 +45,38 @@ void AZodiaqCharacter::LoadCharacterFromPlayerState(AZodiaqPlayerState* ZodiaqPl
 	LoadCharacterFromPlayerState_BP(ZodiaqPlayerState);
 	
 	bIsLoaded = true;
+	
+	if (const auto GameInstance = GetGameInstance<UBaseGameInstance>(); IsValid(GameInstance))
+	{
+		GameInstance->NotifyCharacterLoaded(this);
+	}
+}
+
+FClientData AZodiaqCharacter::GetClientData() const
+{
+	if (UKismetSystemLibrary::IsServer(this))
+	{
+		const auto ZodiaqPlayerState = GetPlayerState<AZodiaqPlayerState>();
+		if (IsValid(ZodiaqPlayerState))
+		{
+			return ZodiaqPlayerState->ClientData;
+		}
+	}
+	else
+	{
+		const auto GameInstance = GetGameInstance<UBaseGameInstance>();
+		if (IsValid(GameInstance))
+		{
+			return GameInstance->SelfClientData;
+		}
+	}
+
+	return {};
+}
+
+void AZodiaqCharacter::OnRep_InstanceId()
+{
+	OnInstanceIdChanged.Broadcast(this, InstanceId);
 }
 
 void AZodiaqCharacter::InitSpells(APlayerController* PlayerController, AZodiaqPlayerState* ZodiaqPlayerState)
@@ -89,3 +129,12 @@ bool AZodiaqCharacter::TeleportFromBP(const FVector& Location, const FRotator& R
 {
 	return TeleportTo(Location, Rotation, bIsATest, bNoCheck); 
 }
+
+void AZodiaqCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(AZodiaqCharacter, InstanceId, COND_OwnerOnly);
+}
+
+
