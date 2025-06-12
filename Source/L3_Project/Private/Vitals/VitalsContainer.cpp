@@ -39,19 +39,19 @@ float UVitalsContainer::GetMaxValue_NotPure(EVitalType Type)
 	return 0;
 }
 
-void UVitalsContainer::SrvAdd(const EVitalType Type, float Value)
+void UVitalsContainer::SrvAdd(const EVitalType Type, float Value, AActor* Instigator)
 {
 	if (const FVital* Vital = Vitals.Find(Type))
 	{
 		Value = GetModifiedValue(Type, Value, EVitalUpdateType::Add);
 
-		ChangeValueMulticast(Type, Value);
+		ChangeValueMulticast(Type, Value, Instigator);
 
 		UE_LOG(LogTemp, Warning, TEXT("Added %f to %s, new value: %f"), Value, *UEnum::GetDisplayValueAsText(Type).ToString(), Vital->Value);
 	}
 }
 
-void UVitalsContainer::SrvRemove(const EVitalType Type, float Value, const bool IgnoreModifiers)
+void UVitalsContainer::SrvRemove(const EVitalType Type, float Value, AActor* Instigator, const bool IgnoreModifiers)
 {
 	if (const FVital* Vital = Vitals.Find(Type))
 	{
@@ -60,13 +60,13 @@ void UVitalsContainer::SrvRemove(const EVitalType Type, float Value, const bool 
 			Value = GetModifiedValue(Type, Value, EVitalUpdateType::Remove);
 		}
 
-		ChangeValueMulticast(Type, -Value);
+		ChangeValueMulticast(Type, -Value, Instigator);
 		
 		UE_LOG(LogTemp, Warning, TEXT("Removed %f from %s, new value: %f"), Value, *UEnum::GetDisplayValueAsText(Type).ToString(), Vital->Value);
 	}
 }
 
-void UVitalsContainer::ChangeValueMulticast_Implementation(const EVitalType Type, const float Value)
+void UVitalsContainer::ChangeValueMulticast_Implementation(const EVitalType Type, const float Value, AActor* Instigator)
 {
 	if (FVital* Vital = Vitals.Find(Type))
 	{
@@ -77,7 +77,7 @@ void UVitalsContainer::ChangeValueMulticast_Implementation(const EVitalType Type
 		const auto Delta = Vital->Value - OldValue;
 		
 		OnVitalChangedDelegate.Broadcast(Type, Vital->Value);
-		OnVitalChangedWDeltaDelegate.Broadcast(Type, Vital->Value, Delta);
+		OnVitalChangedWDeltaDelegate.Broadcast(Type, Vital->Value, Delta, Instigator);
 
 		if (UKismetSystemLibrary::IsServer(this))
 		{

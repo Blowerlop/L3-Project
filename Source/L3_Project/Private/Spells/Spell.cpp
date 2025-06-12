@@ -72,7 +72,7 @@ bool ASpell::SrvApply(AActor* Target)
 	
 	if (const auto Vitals = Target->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
 	{
-		if (Data->Heal != 0) Vitals->SrvAdd(EVitalType::Health, Data->Heal);
+		if (Data->Heal != 0) Vitals->SrvAdd(EVitalType::Health, Data->Heal, Caster);
 
 		auto Damage = Data->Damage;
 		auto TrueDamage = Data->TrueDamage;
@@ -85,8 +85,8 @@ bool ASpell::SrvApply(AActor* Target)
 			TrueDamage *= AttackStat;
 		}
 
-		if (Damage != 0) Vitals->SrvRemove(EVitalType::Health, Damage);
-		if (TrueDamage != 0) Vitals->SrvRemove(EVitalType::Health, TrueDamage, /*ignoreModifiers:*/ true);
+		if (Damage != 0) Vitals->SrvRemove(EVitalType::Health, Damage, Caster);
+		if (TrueDamage != 0) Vitals->SrvRemove(EVitalType::Health, TrueDamage, Caster, /*ignoreModifiers:*/ true);
 		
 		IsValid = true;
 	}

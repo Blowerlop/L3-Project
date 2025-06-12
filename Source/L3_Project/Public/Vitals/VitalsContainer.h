@@ -48,7 +48,7 @@ struct FReplicatedVital
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnVitalChangedDelegate, EVitalType, Type, float, Value);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnVitalChangedWDeltaDelegate, EVitalType, Type, float, Value, float, Delta);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnVitalChangedWDeltaDelegate, EVitalType, Type, float, Value, float, Delta, AActor*, Instigator);
 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class UVitalsContainer : public UActorComponent
@@ -74,10 +74,10 @@ public:
 	float GetMaxValue_NotPure(EVitalType Type);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SrvAdd(const EVitalType Type, float Value);
+	void SrvAdd(const EVitalType Type, float Value, AActor* Instigator);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SrvRemove(const EVitalType Type, float Value, bool IgnoreModifiers = false);
+	void SrvRemove(const EVitalType Type, float Value, AActor* Instigator, bool IgnoreModifiers = false);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -91,7 +91,7 @@ private:
 	TArray<FReplicatedVital> ReplicatedVitals;
 	
 	UFUNCTION(NetMulticast, Reliable)
-	void ChangeValueMulticast(const EVitalType Type, const float Value);
+	void ChangeValueMulticast(const EVitalType Type, const float Value, AActor* Instigator);
 	
 	void UpdateReplicatedVitals(const EVitalType Type, const FVital* Vital);
 	

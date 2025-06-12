@@ -54,10 +54,10 @@ void UProjectCheatManager::ModifyHealth(const int Amount, const int PlayerIndex)
 
 	if (Amount > 0)
 	{
-		VitalsContainer->SrvAdd(EVitalType::Health, Amount);
+		VitalsContainer->SrvAdd(EVitalType::Health, Amount, nullptr);
 	}
 	else
 	{
-		VitalsContainer->SrvRemove(EVitalType::Health, -Amount);
+		VitalsContainer->SrvRemove(EVitalType::Health, -Amount, nullptr);
 	}
 }
