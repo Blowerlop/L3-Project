@@ -72,7 +72,7 @@ bool ASpell::SrvApply(AActor* Target)
 	
 	if (const auto Vitals = Target->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
 	{
-		Vitals->SrvAdd(EVitalType::Health, Data->Heal);
+		if (Data->Heal != 0) Vitals->SrvAdd(EVitalType::Health, Data->Heal);
 
 		auto Damage = Data->Damage;
 		auto TrueDamage = Data->TrueDamage;
@@ -84,9 +84,9 @@ bool ASpell::SrvApply(AActor* Target)
 			Damage *= AttackStat;
 			TrueDamage *= AttackStat;
 		}
-		
-		Vitals->SrvRemove(EVitalType::Health, Damage);
-		Vitals->SrvRemove(EVitalType::Health, TrueDamage, /*ignoreModifiers:*/ true);
+
+		if (Damage != 0) Vitals->SrvRemove(EVitalType::Health, Damage);
+		if (TrueDamage != 0) Vitals->SrvRemove(EVitalType::Health, TrueDamage, /*ignoreModifiers:*/ true);
 		
 		IsValid = true;
 	}
@@ -94,6 +94,8 @@ bool ASpell::SrvApply(AActor* Target)
 	if (const auto Effectable = Target->GetComponentByClass<UEffectable>(); Effectable != nullptr)
 	{
 		HandleSpellActions(Effectable);
+
+		if (Data->Effects.Num() == 0) return true;
 		
 		if (bShouldStoreAppliedEffects)
 		{

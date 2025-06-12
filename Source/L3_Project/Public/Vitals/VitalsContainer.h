@@ -48,6 +48,7 @@ struct FReplicatedVital
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnVitalChangedDelegate, EVitalType, Type, float, Value);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnVitalChangedWDeltaDelegate, EVitalType, Type, float, Value, float, Delta);
 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class UVitalsContainer : public UActorComponent
@@ -59,6 +60,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnVitalChangedDelegate OnVitalChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnVitalChangedWDeltaDelegate OnVitalChangedWDeltaDelegate;
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetValue(const EVitalType Type) const;

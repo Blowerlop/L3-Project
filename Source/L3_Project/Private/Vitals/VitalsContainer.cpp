@@ -70,8 +70,14 @@ void UVitalsContainer::ChangeValueMulticast_Implementation(const EVitalType Type
 {
 	if (FVital* Vital = Vitals.Find(Type))
 	{
+		const auto OldValue = Vital->Value;
+		
 		Vital->Value = FMath::Clamp(Vital->Value + Value, 0.0f, Vital->MaxValue);
+
+		const auto Delta = Vital->Value - OldValue;
+		
 		OnVitalChangedDelegate.Broadcast(Type, Vital->Value);
+		OnVitalChangedWDeltaDelegate.Broadcast(Type, Vital->Value, Delta);
 
 		if (UKismetSystemLibrary::IsServer(this))
 		{
