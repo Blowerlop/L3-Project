@@ -51,6 +51,15 @@ public:
 	TArray<UEffectInstance*> Instances;
 };
 
+USTRUCT(Blueprintable)
+struct FEffectInstancesGroup
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadOnly)
+	TArray<UEffectInstance*> Instances;
+};
+
 class UEffectable;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEffectsReplicated);
@@ -128,7 +137,7 @@ private:
 
 	void Refresh();
 
-	static void GetValueForEachEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts);
+	static void GetValueForEachEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, FEffectInstancesGroup>& EffectCounts);
 
 	UEffectResolver* GetResolver(EEffectType Type);
 

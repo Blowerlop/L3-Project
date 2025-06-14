@@ -261,7 +261,7 @@ UEffectInstanceContainer* UEffectable::GetEffectContainer(const EEffectType Type
 }
 
 // This will count appearances of each effect data asset in the container
-void CountEffects(TMap<UEffectDataAsset*, int>& EffectCounts, const UEffectInstanceContainer* Container)
+void CountEffects(TMap<UEffectDataAsset*, FEffectInstancesGroup>& EffectCounts, const UEffectInstanceContainer* Container)
 {
 	const auto Num = Container->GetNumInstances();
 
@@ -271,18 +271,18 @@ void CountEffects(TMap<UEffectDataAsset*, int>& EffectCounts, const UEffectInsta
 
 		if (!EffectCounts.Contains(Instance->Data))
 		{
-			EffectCounts.Add(Instance->Data, 1);
+			EffectCounts.Add(Instance->Data, FEffectInstancesGroup{{ Instance }});
 		}
 		else
 		{
-			EffectCounts[Instance->Data]++;
+			EffectCounts[Instance->Data].Instances.Add(Instance);
 		}
 	}
 }
 
 void UEffectable::Refresh()
 {
-	TMap<UEffectDataAsset*, int> EffectCounts{};
+	TMap<UEffectDataAsset*, FEffectInstancesGroup> GroupedEffectInstances{};
 	
 	TMap<UEffectDataAsset*, float> Values{};
 	
@@ -310,11 +310,11 @@ void UEffectable::Refresh()
 		// Effects like stun or root don't have value. Don't need to do all this
 		if (UEffectSystemConfiguration::NeedValue(Type))
 		{
-			EffectCounts.Empty();
+			GroupedEffectInstances.Empty();
 			
-			CountEffects(EffectCounts, Container);
+			CountEffects(GroupedEffectInstances, Container);
 			
-			GetValueForEachEffect(Values, EffectCounts);
+			GetValueForEachEffect(Values, GroupedEffectInstances);
 		}
 
 		const auto Resolver = GetResolver(Type);
@@ -325,15 +325,12 @@ void UEffectable::Refresh()
 	}
 }
 
-void UEffectable::GetValueForEachEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, int>& EffectCounts)
+void UEffectable::GetValueForEachEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, FEffectInstancesGroup>& EffectCounts)
 {
-	for(const auto& Pair : EffectCounts)
+	for(const auto& [EffectData, InstancesGroup] : EffectCounts)
 	{
-		const auto Effect = Pair.Key;
-		const auto Count = Pair.Value;
-
-		auto Value = Effect->StackingBehaviour->Stack(Effect, Count);
-		ValuesBuffer.Add(Effect, Value);
+		auto Value = EffectData->StackingBehaviour->Stack(EffectData, InstancesGroup);
+		ValuesBuffer.Add(EffectData, Value);
 	}
 }
 
