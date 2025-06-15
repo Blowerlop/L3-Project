@@ -20,4 +20,7 @@ class L3_PROJECT_API USpellDatabase : public UGameInstanceSubsystem
 public:
 	UPROPERTY(BlueprintReadOnly, Category = "Spell Database")
 	TMap<uint8, USpellDataAsset*> DataAssets;
+
+	UFUNCTION(BlueprintCallable)
+	TArray<USpellDataAsset*> GroupByConditionSpell(TArray<USpellDataAsset*> InSpells);
 };
