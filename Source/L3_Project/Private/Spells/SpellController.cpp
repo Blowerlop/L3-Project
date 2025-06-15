@@ -16,6 +16,8 @@
 #include "Spells/Results/ActorAimResultHolder.h"
 #include "Spells/Results/VectorAimResultHolder.h"
 
+FSrvOnSpellCasted USpellController::SrvOnSpellCasted;
+
 USpellController::USpellController()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -61,6 +63,7 @@ void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int Sp
     CastState->AnimationEndTime = StartTime + CastState->Spell->GetMontageSectionLength(CastState->Spell->ComboIndex);
     
 	OnCastStart.Broadcast(CastState->Spell, CastState->SpellIndex);
+	SrvOnSpellCasted.Broadcast(CastState->Spell, this);
 }
 
 void USpellController::InvalidSpellCastResponseOwnerRpc_Implementation()

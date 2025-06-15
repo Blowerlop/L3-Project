@@ -11,6 +11,7 @@ struct FInputActionValue;
 class UInputAction;
 class ASpellAimer;
 class USpellDataAsset;
+class USpellController;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpellsChanged, USpellController*, SpellController);
 
@@ -18,6 +19,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCooldownReplicated, uint8, Index
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGlobalCooldownChanged, bool, IsActive);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCastStartDelegate, USpellDataAsset*, Spell, int, SpellIndex);
+
+DECLARE_MULTICAST_DELEGATE_TwoParams(FSrvOnSpellCasted, USpellDataAsset*, USpellController*);
 
 UCLASS(Blueprintable)
 class USpellControllerCastState : public UObject
@@ -97,6 +100,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnCastStartDelegate OnCastStart;
+	
+	static FSrvOnSpellCasted SrvOnSpellCasted;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnCooldownReplicated OnCooldownReplicatedDelegate;

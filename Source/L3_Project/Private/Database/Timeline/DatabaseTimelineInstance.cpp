@@ -9,16 +9,26 @@
 #include "Networking/ZodiaqCharacter.h"
 #include "Networking/ZodiaqPlayerController.h"
 #include "Networking/ZodiaqPlayerState.h"
+#include "Spells/SpellController.h"
 
 TArray<FDynamicCombatEvent> UDatabaseTimelineInstance::Events;
 FString UDatabaseTimelineInstance::MatchId;
+FDelegateHandle UDatabaseTimelineInstance::EffectCallback;
+FDelegateHandle UDatabaseTimelineInstance::SpellCallback;
 
 void UDatabaseTimelineInstance::InitTimeline()
 {
 	Events.Empty();
 	MatchId = GenerateRandomMatchId();
 
-	UEffectable::SrvOnEffectAddedDelegate.AddStatic(OnEffectAdded);
+	EffectCallback = UEffectable::SrvOnEffectAddedDelegate.AddStatic(OnEffectAdded);
+	SpellCallback = USpellController::SrvOnSpellCasted.AddStatic(OnSpellCasted);
+}
+
+void UDatabaseTimelineInstance::UnregisterTimeline()
+{
+	UEffectable::SrvOnEffectAddedDelegate.Remove(EffectCallback);
+	USpellController::SrvOnSpellCasted.Remove(SpellCallback);
 }
 
 void UDatabaseTimelineInstance::AddEvent(const FString& Type, const int32 Timestamp, const TSharedPtr<FJsonObject>& Data)
@@ -51,7 +61,7 @@ void UDatabaseTimelineInstance::TimelineEventBossKilled(const UObject* Sender)
 
 void UDatabaseTimelineInstance::UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
-	const FString Path = FString::Printf(TEXT("GAMES/%s"), *MatchId);
+	const FString Path = FString::Printf(TEXT("Analytics/Games/%s"), *MatchId);
 	TSharedPtr<FJsonObject> Payload = ConvertToJson();
 
 	UDatabaseFunctions::SetData(Path, Payload, PlayerIdToken, OnSuccess, OnFailure);
@@ -91,7 +101,7 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 	AZodiaqCharacter* CharacterTarget = Cast<AZodiaqCharacter>(effectable->GetOwner());
 	if (CharacterTarget != nullptr) //Player
 	{
-		const FString Id = Cast<AZodiaqPlayerController>(effectable->GetOwner())->GetPlayerState<AZodiaqPlayerState>()->ClientData.UUID;
+		const FString Id = CharacterTarget->GetClientData().UUID;
 	
 		EffectJson->SetStringField(TEXT("Target"), Id);
 	}
@@ -99,11 +109,12 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 	{
 		EffectJson->SetStringField(TEXT("Target"), "Boss"); //Not beau but osef
 	}
-
-	AZodiaqCharacter* CharacterCaster = Cast<AZodiaqCharacter>(actor->GetOwner());
+	EffectJson->SetStringField(TEXT("Spell name"), effect->GetName());
+	
+	AZodiaqCharacter* CharacterCaster = Cast<AZodiaqCharacter>(actor);
 	if (CharacterCaster != nullptr) //Player
 	{
-		const FString Id = Cast<AZodiaqPlayerController>(actor->GetOwner())->GetPlayerState<AZodiaqPlayerState>()->ClientData.UUID;
+		const FString Id = CharacterCaster->GetClientData().UUID;
 	
 		EffectJson->SetStringField(TEXT("Caster"), Id);
 	}
@@ -141,7 +152,18 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 	}
 	EffectJson->SetNumberField(TEXT("Value"), effect->GetValue(EEffectValueType::Value));
 	
-	AddEvent("Effect",GetGameTimeSecondsStatic(effect) , EffectJson);
+	AddEvent("Effect",GetGameTimeSecondsStatic(actor) , EffectJson);
+}
+
+void UDatabaseTimelineInstance::OnSpellCasted(USpellDataAsset* spellData, USpellController* sender) 
+{
+	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
+
+	EffectJson->SetStringField(TEXT("Name"), spellData->Name.ToString());
+
+	EffectJson->SetStringField(TEXT("Type"), TEXT("Spell"));
+	
+	AddEvent("Effect",GetGameTimeSecondsStatic(sender) , EffectJson);
 }
 
 float UDatabaseTimelineInstance::GetGameTimeSecondsStatic(const UObject* WorldContextObject)
