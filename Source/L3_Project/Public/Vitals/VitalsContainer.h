@@ -1,4 +1,6 @@
 #pragma once
+#include "InstigatorChain.h"
+#include "Effects/Effectable.h"
 #include "VitalsContainer.generated.h"
 
 class UStatsContainer;
@@ -47,8 +49,12 @@ struct FReplicatedVital
 	float MaxValue{};
 };
 
+class UVitalsContainer;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnVitalChangedDelegate, EVitalType, Type, float, Value);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnVitalChangedWDeltaDelegate, EVitalType, Type, float, Value, float, Delta, AActor*, Instigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnVitalChangedWDeltaDelegate, EVitalType, Type, float, Value, float, Delta, AActor*, InstigatorChainOrigin);
+
+DECLARE_MULTICAST_DELEGATE_FiveParams(FSrvOnVitalChanged, UVitalsContainer*, EVitalType, float /*Value*/, float /*Delta*/, const FInstigatorChain&);
 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class UVitalsContainer : public UActorComponent
@@ -63,6 +69,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnVitalChangedWDeltaDelegate OnVitalChangedWDeltaDelegate;
+
+	static FSrvOnVitalChanged SrvOnVitalChanged;
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetValue(const EVitalType Type) const;
@@ -74,11 +82,17 @@ public:
 	float GetMaxValue_NotPure(EVitalType Type);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SrvAdd(const EVitalType Type, float Value, AActor* Instigator);
+	void SrvAdd(const EVitalType Type, float Value, const FInstigatorChain& InstigatorChain);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SrvRemove(const EVitalType Type, float Value, AActor* Instigator, bool IgnoreModifiers = false);
+	void SrvAddMultiple(const EVitalType Type, const TArray<FValueChainPair>& Values);
+	
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SrvRemove(const EVitalType Type, float Value, const FInstigatorChain& InstigatorChain, bool IgnoreModifiers = false);
 
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SrvRemoveMultiple(const EVitalType Type, const TArray<FValueChainPair>& Values, bool IgnoreModifiers = false);
+	
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EVitalType, FVital> Vitals;
@@ -90,8 +104,10 @@ private:
 	UPROPERTY(ReplicatedUsing=OnInitialVitalsRep)
 	TArray<FReplicatedVital> ReplicatedVitals;
 	
+	void SrvChangeValue(const EVitalType Type, const float Value, const FInstigatorChain& InstigatorChain);
+	
 	UFUNCTION(NetMulticast, Reliable)
-	void ChangeValueMulticast(const EVitalType Type, const float Value, AActor* Instigator);
+	void ChangeValueMulticast(const EVitalType Type, const float Value, AActor* InstigatorChainOrigin);
 	
 	void UpdateReplicatedVitals(const EVitalType Type, const FVital* Vital);
 	

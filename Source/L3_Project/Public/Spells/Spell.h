@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Vitals/IInstigatorChainElement.h"
+#include "Vitals/InstigatorChain.h"
 #include "Spell.generated.h"
 
 class UEffectInstanceContainer;
@@ -14,7 +16,7 @@ class UAimResultHolder;
 class USpellDataAsset;
 
 UCLASS()
-class L3_PROJECT_API ASpell : public AActor
+class L3_PROJECT_API ASpell : public AActor, public IInstigatorChainElement
 {
 	GENERATED_BODY()
 	
@@ -35,6 +37,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<EObjectTypeQuery> ApplyObjectType;
 
+	virtual FString GetIdentifier_Implementation() override;
+	
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
 	AController* CasterController;
@@ -72,4 +76,8 @@ private:
 	virtual void OnActorChannelOpen(class FInBunch& InBunch, class UNetConnection* Connection) override;
 	
 	void HandleSpellActions(UEffectable* Effectable) const;
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	FInstigatorChain GetInstigatorChain();
 };

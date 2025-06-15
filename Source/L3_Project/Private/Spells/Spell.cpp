@@ -12,6 +12,7 @@
 #include "Stats/StatsContainer.h"
 #include "Vitals/IAliveState.h"
 #include "Vitals/VitalsContainer.h"
+#include "Vitals/InstigatorChain.h"
 
 ASpell::ASpell()
 {
@@ -38,6 +39,11 @@ void ASpell::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimePr
 
 	DOREPLIFETIME(ASpell, Caster);
 	DOREPLIFETIME(ASpell, Duration);
+}
+
+FString ASpell::GetIdentifier_Implementation()
+{
+	return FString::Printf(TEXT("%d"), Data->AssetID);
 }
 
 bool ASpell::SrvApply(AActor* Target)
@@ -69,10 +75,12 @@ bool ASpell::SrvApply(AActor* Target)
 	}
 	
 	bool IsValid = false;
+
+	auto InstigatorChain = GetInstigatorChain();
 	
 	if (const auto Vitals = Target->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
 	{
-		if (Data->Heal != 0) Vitals->SrvAdd(EVitalType::Health, Data->Heal, Caster);
+		if (Data->Heal != 0) Vitals->SrvAdd(EVitalType::Health, Data->Heal, InstigatorChain);
 
 		auto Damage = Data->Damage;
 		auto TrueDamage = Data->TrueDamage;
@@ -85,8 +93,8 @@ bool ASpell::SrvApply(AActor* Target)
 			TrueDamage *= AttackStat;
 		}
 
-		if (Damage != 0) Vitals->SrvRemove(EVitalType::Health, Damage, Caster);
-		if (TrueDamage != 0) Vitals->SrvRemove(EVitalType::Health, TrueDamage, Caster, /*ignoreModifiers:*/ true);
+		if (Damage != 0) Vitals->SrvRemove(EVitalType::Health, Damage, InstigatorChain);
+		if (TrueDamage != 0) Vitals->SrvRemove(EVitalType::Health, TrueDamage, InstigatorChain, /*ignoreModifiers:*/ true);
 		
 		IsValid = true;
 	}
@@ -104,11 +112,11 @@ bool ASpell::SrvApply(AActor* Target)
 				AppliedEffectsInstances.Add(Target, NewObject<UEffectInstanceContainer>());
 			}
 
-			Effectable->SrvAddEffectsWithBuffer(Data->Effects, Caster, AppliedEffectsInstances[Target]->Instances);
+			Effectable->SrvAddEffectsWithBuffer(Data->Effects, InstigatorChain, AppliedEffectsInstances[Target]->Instances);
 		}
 		else
 		{
-			Effectable->SrvAddEffects(Data->Effects, Caster);
+			Effectable->SrvAddEffects(Data->Effects, InstigatorChain);
 		}
 
 		IsValid = true;
@@ -194,4 +202,17 @@ void ASpell::HandleSpellActions(UEffectable* Effectable) const
 	{
 		Effectable->Debuff();
 	}
+}
+
+FInstigatorChain ASpell::GetInstigatorChain()
+{
+	auto Chain = FInstigatorChain();
+	
+	if (Caster->Implements<UInstigatorChainElement>())
+	{
+		Chain.AddElement(TScriptInterface<IInstigatorChainElement>(Caster));
+	}
+	
+	Chain.AddElement(TScriptInterface<IInstigatorChainElement>(this));
+	return Chain;
 }

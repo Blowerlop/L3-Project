@@ -93,7 +93,7 @@ FString UDatabaseTimelineInstance::GenerateRandomMatchId()
 	return FGuid::NewGuid().ToString(EGuidFormats::Digits); // Format court sans tirets
 }
 
-void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, AActor* actor, FGuid guid) 
+void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, FInstigatorChain& InstigatorChain, FGuid guid) 
 {
 	//TODO c'est pas encore fini
 	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
@@ -111,7 +111,9 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 	}
 	EffectJson->SetStringField(TEXT("Spell name"), effect->GetName());
 	
-	AZodiaqCharacter* CharacterCaster = Cast<AZodiaqCharacter>(actor);
+	const auto OriginActor = InstigatorChain.GetOriginAsActor();
+
+	AZodiaqCharacter* CharacterCaster = Cast<AZodiaqCharacter>(OriginActor);
 	if (CharacterCaster != nullptr) //Player
 	{
 		const FString Id = CharacterCaster->GetClientData().UUID;
@@ -152,7 +154,7 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 	}
 	EffectJson->SetNumberField(TEXT("Value"), effect->GetValue(EEffectValueType::Value));
 	
-	AddEvent("Effect",GetGameTimeSecondsStatic(actor) , EffectJson);
+	AddEvent("Effect",GetGameTimeSecondsStatic(OriginActor) , EffectJson);
 }
 
 void UDatabaseTimelineInstance::OnSpellCasted(USpellDataAsset* spellData, USpellController* sender) 

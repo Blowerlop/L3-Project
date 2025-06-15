@@ -1,8 +1,10 @@
 #pragma once
+#include "Vitals/InstigatorChain.h"
 #include "EffectStackingBehaviour.generated.h"
 
 class UEffectInstance;
 struct FEffectInstancesGroup;
+struct FEffectValueContainer;
 class UEffectDataAsset;
 
 UENUM(BlueprintType, meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
@@ -23,7 +25,7 @@ public:
 	int32 StackingModifierFlags = 0;
 		
 	UFUNCTION(BlueprintImplementableEvent)
-	float Stack(UEffectDataAsset* Effect, FEffectInstancesGroup InstancesGroup);
+	FEffectValueContainer Stack(UEffectDataAsset* Effect, FEffectInstancesGroup InstancesGroup);
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -34,4 +36,10 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
 	float GetModifiedValue(float BaseValue, AActor* Applier) const;
+
+	UFUNCTION(BlueprintCallable)
+	AActor* GetInstigatorChainOrigin(UPARAM(ref)const FInstigatorChain& InstigatorChain) const
+	{
+		return InstigatorChain.GetOriginAsActor();
+	}
 };
