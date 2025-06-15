@@ -44,4 +44,9 @@ public:
 	void OnRep_InstanceId();
 
 	virtual FString GetIdentifier_Implementation() override;
+
+	virtual EInstigatorChainElementType GetElementType_Implementation() override
+	{
+		return EInstigatorChainElementType::Player;
+	}
 };

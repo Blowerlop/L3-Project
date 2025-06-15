@@ -31,6 +31,11 @@ public:
 	void Release();
 
 	virtual FString GetIdentifier_Implementation() override;
+
+	virtual EInstigatorChainElementType GetElementType_Implementation() override
+	{
+		return EInstigatorChainElementType::Effect;
+	}
 	
 private:
 	FTimerHandle LifetimeTimerHandle{};

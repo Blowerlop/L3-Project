@@ -38,6 +38,11 @@ public:
 	TEnumAsByte<EObjectTypeQuery> ApplyObjectType;
 
 	virtual FString GetIdentifier_Implementation() override;
+
+	virtual EInstigatorChainElementType GetElementType_Implementation() override
+	{
+		return EInstigatorChainElementType::Spell;
+	}
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
