@@ -6,6 +6,9 @@
 #include "Effects/Effectable.h"
 #include "DatabaseTimelineInstance.generated.h"
 
+class USpellController;
+class USpellDataAsset;
+
 USTRUCT()
 struct FDynamicCombatEvent
 {
@@ -26,6 +29,8 @@ class L3_PROJECT_API UDatabaseTimelineInstance : public UBlueprintFunctionLibrar
 public:
 	UFUNCTION(BlueprintCallable, Category = "Timeline")
 	static void InitTimeline();
+	UFUNCTION(BlueprintCallable, Category = "Timeline")
+	static void UnregisterTimeline();
 
 	/**
 	 * Add event to timeline
@@ -51,11 +56,14 @@ public:
 private:
 	static TArray<FDynamicCombatEvent> Events;
 	static FString MatchId;
+	static FDelegateHandle EffectCallback;
+	static FDelegateHandle SpellCallback;
 
 	static TSharedPtr<FJsonObject> ConvertToJson();
 
 	static FString GenerateRandomMatchId();
 	static void OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, AActor* actor, FGuid guid);
+	static void OnSpellCasted(USpellDataAsset* spellData, USpellController* sender);
 	static float GetGameTimeSecondsStatic(const UObject* WorldContextObject);
 };
 
