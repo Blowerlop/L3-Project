@@ -62,7 +62,7 @@ private:
 	static TSharedPtr<FJsonObject> ConvertToJson();
 
 	static FString GenerateRandomMatchId();
-	static void OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, AActor* actor, FGuid guid);
+	static void OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, FInstigatorChain& InstigatorChain, FGuid guid);
 	static void OnSpellCasted(USpellDataAsset* spellData, USpellController* sender);
 	static float GetGameTimeSecondsStatic(const UObject* WorldContextObject);
 };

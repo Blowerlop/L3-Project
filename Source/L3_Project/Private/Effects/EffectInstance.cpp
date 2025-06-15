@@ -6,10 +6,13 @@
 #include "Effects/Effectable.h"
 #include "Effects/EffectType.h"
 
-void UEffectInstance::Init(UEffectDataAsset* EffectAsset, AActor* EffectApplier, UEffectable* EffectParent)
+void UEffectInstance::Init(UEffectDataAsset* EffectAsset, const FInstigatorChain& InInstigatorChain, UEffectable* EffectParent)
 {
 	Data = EffectAsset;
-	Applier = EffectApplier;
+	InstigatorChain = InInstigatorChain;
+
+	InstigatorChain.AddElement(TScriptInterface<IInstigatorChainElement>(this));
+	
 	Parent = EffectParent;
 
 	InstanceID = FGuid::NewGuid();
@@ -35,6 +38,11 @@ void UEffectInstance::Release()
 	{
 		LifetimeTimerHandle.Invalidate();
 	}
+}
+
+FString UEffectInstance::GetIdentifier_Implementation()
+{
+	return InstanceID.ToString();
 }
 
 void UEffectInstance::OnTimerEnded()

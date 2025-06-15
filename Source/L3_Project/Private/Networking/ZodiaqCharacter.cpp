@@ -79,6 +79,11 @@ void AZodiaqCharacter::OnRep_InstanceId()
 	OnInstanceIdChanged.Broadcast(this, InstanceId);
 }
 
+FString AZodiaqCharacter::GetIdentifier_Implementation()
+{
+	return GetClientData().UUID;
+}
+
 void AZodiaqCharacter::InitSpells(APlayerController* PlayerController, AZodiaqPlayerState* ZodiaqPlayerState)
 {
 	const auto SpellController = GetComponentByClass<USpellController>();

@@ -20,7 +20,7 @@ public:
 	// Called effects change, only if there is at least one effect for this resolver
 	// Need UPARAM(ref) to make sure Input is an input.
 	UFUNCTION(BlueprintImplementableEvent)
-	void Resolve(UPARAM(ref) TMap<UEffectDataAsset*, float>& Input);
+	void Resolve(UPARAM(ref) TMap<UEffectDataAsset*, FEffectValueContainer>& Input);
 
 	// Called when there is no more effect for this resolver
 	// Useful to remove stun or effects of this kind
@@ -29,4 +29,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Tick(float DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
+	float GetTotalValueForContainer(UPARAM(ref) const FEffectValueContainer& Container);
 };

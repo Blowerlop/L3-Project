@@ -1,6 +1,7 @@
 #pragma once
 #include "GameFramework/Character.h"
 #include "Vitals/IAliveState.h"
+#include "Vitals/IInstigatorChainElement.h"
 #include "ZodiaqCharacter.generated.h"
 
 struct FClientData;
@@ -9,7 +10,7 @@ class AZodiaqPlayerState;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInstanceIdChanged, AZodiaqCharacter*, Character, int, NewInstanceId);
 
 UCLASS(BlueprintType, Blueprintable)
-class AZodiaqCharacter : public ACharacter, public IAliveState
+class AZodiaqCharacter : public ACharacter, public IAliveState, public IInstigatorChainElement
 {
 	GENERATED_BODY()
 
@@ -41,4 +42,6 @@ public:
 
 	UFUNCTION()
 	void OnRep_InstanceId();
+
+	virtual FString GetIdentifier_Implementation() override;
 };

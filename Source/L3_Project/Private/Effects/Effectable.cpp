@@ -15,7 +15,7 @@ UEffectable::UEffectable()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-UEffectInstance* UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier)
+UEffectInstance* UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, FInstigatorChain& InstigatorChain)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -26,10 +26,10 @@ UEffectInstance* UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor*
 	const auto Container = GetEffectContainer(EffectData->Type);
 	const auto Instance = NewObject<UEffectInstance>();
 
-	Instance->Init(EffectData, Applier, this);
+	Instance->Init(EffectData, InstigatorChain, this);
 	Container->AddInstance(Instance);
 	
-	SrvOnEffectAddedDelegate.Broadcast(this, EffectData, Applier, Instance->InstanceID);
+	SrvOnEffectAddedDelegate.Broadcast(this, EffectData, InstigatorChain, Instance->InstanceID);
 
 	Refresh();
 
@@ -38,7 +38,7 @@ UEffectInstance* UEffectable::SrvAddEffect(UEffectDataAsset* EffectData, AActor*
 	return Instance;
 }
 
-void UEffectable::SrvAddEffects(const TArray<UEffectDataAsset*>& Effects, AActor* Applier)
+void UEffectable::SrvAddEffects(const TArray<UEffectDataAsset*>& Effects, FInstigatorChain& InstigatorChain)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -53,10 +53,10 @@ void UEffectable::SrvAddEffects(const TArray<UEffectDataAsset*>& Effects, AActor
 		const auto Container = GetEffectContainer(Effect->Type);
 		const auto Instance = NewObject<UEffectInstance>();
 
-		Instance->Init(Effect, Applier, this);
+		Instance->Init(Effect, InstigatorChain, this);
 		Container->AddInstance(Instance);
 
-		SrvOnEffectAddedDelegate.Broadcast(this, Effect, Applier, Instance->InstanceID);
+		SrvOnEffectAddedDelegate.Broadcast(this, Effect, InstigatorChain, Instance->InstanceID);
 	}
 
 	Refresh();
@@ -65,7 +65,7 @@ void UEffectable::SrvAddEffects(const TArray<UEffectDataAsset*>& Effects, AActor
 	AddEffectsMulticast(TArray(Effects));
 }
 
-void UEffectable::SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, AActor* Applier, TArray<UEffectInstance*>& OutAppliedEffects)
+void UEffectable::SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, FInstigatorChain& InstigatorChain, TArray<UEffectInstance*>& OutAppliedEffects)
 {
 	if (!UKismetSystemLibrary::IsServer(this))
 	{
@@ -82,11 +82,11 @@ void UEffectable::SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAs
 		const auto Container = GetEffectContainer(Effect->Type);
 		const auto Instance = NewObject<UEffectInstance>();
 
-		Instance->Init(Effect, Applier, this);
+		Instance->Init(Effect, InstigatorChain, this);
 		Container->AddInstance(Instance);
 		OutAppliedEffects.Add(Instance);
 
-		SrvOnEffectAddedDelegate.Broadcast(this, Effect, Applier, Instance->InstanceID);
+		SrvOnEffectAddedDelegate.Broadcast(this, Effect, InstigatorChain, Instance->InstanceID);
 	}
 
 	Refresh();
@@ -284,7 +284,7 @@ void UEffectable::Refresh()
 {
 	TMap<UEffectDataAsset*, FEffectInstancesGroup> GroupedEffectInstances{};
 	
-	TMap<UEffectDataAsset*, float> Values{};
+	TMap<UEffectDataAsset*, FEffectValueContainer> Values{};
 	
 	auto Types = TArray<EEffectType>();
 	EffectsByType.GetKeys(Types);
@@ -325,7 +325,7 @@ void UEffectable::Refresh()
 	}
 }
 
-void UEffectable::GetValueForEachEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, FEffectInstancesGroup>& EffectCounts)
+void UEffectable::GetValueForEachEffect(TMap<UEffectDataAsset*, FEffectValueContainer>& ValuesBuffer, TMap<UEffectDataAsset*, FEffectInstancesGroup>& EffectCounts)
 {
 	for(const auto& [EffectData, InstancesGroup] : EffectCounts)
 	{

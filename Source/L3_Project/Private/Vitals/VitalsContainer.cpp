@@ -3,6 +3,8 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 
+FSrvOnVitalChanged UVitalsContainer::SrvOnVitalChanged{};
+
 UVitalsContainer::UVitalsContainer()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -39,34 +41,81 @@ float UVitalsContainer::GetMaxValue_NotPure(EVitalType Type)
 	return 0;
 }
 
-void UVitalsContainer::SrvAdd(const EVitalType Type, float Value, AActor* Instigator)
+void UVitalsContainer::SrvAdd(const EVitalType Type, float Value, const FInstigatorChain& InstigatorChain)
 {
-	if (const FVital* Vital = Vitals.Find(Type))
+	Value = GetModifiedValue(Type, Value, EVitalUpdateType::Add);
+		
+	SrvChangeValue(Type, Value, InstigatorChain);
+		
+	const auto InstigatorChainOrigin = InstigatorChain.GetOriginAsActor();
+	ChangeValueMulticast(Type, Value, InstigatorChainOrigin);
+}
+
+void UVitalsContainer::SrvAddMultiple(const EVitalType Type, const TArray<FValueChainPair>& Values)
+{
+	for(const auto& [InValue, InstigatorChain] : Values)
 	{
-		Value = GetModifiedValue(Type, Value, EVitalUpdateType::Add);
+		const auto Value = GetModifiedValue(Type, InValue, EVitalUpdateType::Add);
 
-		ChangeValueMulticast(Type, Value, Instigator);
+		SrvChangeValue(Type, Value, InstigatorChain);
 
-		UE_LOG(LogTemp, Warning, TEXT("Added %f to %s, new value: %f"), Value, *UEnum::GetDisplayValueAsText(Type).ToString(), Vital->Value);
+		const auto InstigatorChainOrigin = InstigatorChain.GetOriginAsActor();
+		ChangeValueMulticast(Type, Value, InstigatorChainOrigin);
 	}
 }
 
-void UVitalsContainer::SrvRemove(const EVitalType Type, float Value, AActor* Instigator, const bool IgnoreModifiers)
+void UVitalsContainer::SrvRemove(const EVitalType Type, float Value, const FInstigatorChain& InstigatorChain, const bool IgnoreModifiers)
 {
-	if (const FVital* Vital = Vitals.Find(Type))
+	if (!IgnoreModifiers)
 	{
+		Value = GetModifiedValue(Type, Value, EVitalUpdateType::Remove);
+	}
+
+	const auto InstigatorChainOrigin = InstigatorChain.GetOriginAsActor();
+		
+	SrvChangeValue(Type, -Value, InstigatorChain);
+	ChangeValueMulticast(Type, -Value, InstigatorChainOrigin);
+}
+
+void UVitalsContainer::SrvRemoveMultiple(const EVitalType Type, const TArray<FValueChainPair>& Values,
+	bool IgnoreModifiers)
+{
+	for(const auto& [InValue, InstigatorChain] : Values)
+	{
+		auto Value = InValue;
+		
 		if (!IgnoreModifiers)
 		{
-			Value = GetModifiedValue(Type, Value, EVitalUpdateType::Remove);
+			Value = GetModifiedValue(Type, InValue, EVitalUpdateType::Remove);
 		}
 
-		ChangeValueMulticast(Type, -Value, Instigator);
+		const auto InstigatorChainOrigin = InstigatorChain.GetOriginAsActor();
 		
-		UE_LOG(LogTemp, Warning, TEXT("Removed %f from %s, new value: %f"), Value, *UEnum::GetDisplayValueAsText(Type).ToString(), Vital->Value);
+		SrvChangeValue(Type, -Value, InstigatorChain);
+		ChangeValueMulticast(Type, -Value, InstigatorChainOrigin);
 	}
 }
 
-void UVitalsContainer::ChangeValueMulticast_Implementation(const EVitalType Type, const float Value, AActor* Instigator)
+void UVitalsContainer::ChangeValueMulticast_Implementation(const EVitalType Type, const float Value, AActor* InstigatorChainOrigin)
+{
+	if (UKismetSystemLibrary::IsServer(this)) return;
+	
+	if (FVital* Vital = Vitals.Find(Type))
+	{
+		const auto OldValue = Vital->Value;
+		
+		Vital->Value = FMath::Clamp(Vital->Value + Value, 0.0f, Vital->MaxValue);
+
+		const auto Delta = Vital->Value - OldValue;
+
+		const auto NewValue = Vital->Value;
+		
+		OnVitalChangedDelegate.Broadcast(Type, NewValue);
+		OnVitalChangedWDeltaDelegate.Broadcast(Type, NewValue, Delta, InstigatorChainOrigin);
+	}
+}
+
+void UVitalsContainer::SrvChangeValue(const EVitalType Type, const float Value, const FInstigatorChain& InstigatorChain)
 {
 	if (FVital* Vital = Vitals.Find(Type))
 	{
@@ -75,14 +124,16 @@ void UVitalsContainer::ChangeValueMulticast_Implementation(const EVitalType Type
 		Vital->Value = FMath::Clamp(Vital->Value + Value, 0.0f, Vital->MaxValue);
 
 		const auto Delta = Vital->Value - OldValue;
-		
-		OnVitalChangedDelegate.Broadcast(Type, Vital->Value);
-		OnVitalChangedWDeltaDelegate.Broadcast(Type, Vital->Value, Delta, Instigator);
 
-		if (UKismetSystemLibrary::IsServer(this))
-		{
-			UpdateReplicatedVitals(Type, Vital);
-		}
+		const auto NewValue = Vital->Value;
+		
+		OnVitalChangedDelegate.Broadcast(Type, NewValue);
+		OnVitalChangedWDeltaDelegate.Broadcast(Type, NewValue, Delta, InstigatorChain.GetOriginAsActor());
+
+		//UE_LOG(LogTemp, Error, TEXT("Vitals changed: %s"), *InstigatorChain.ToString());
+		SrvOnVitalChanged.Broadcast(this, Type, NewValue, Delta, InstigatorChain);
+		
+		UpdateReplicatedVitals(Type, Vital);
 	}
 }
 

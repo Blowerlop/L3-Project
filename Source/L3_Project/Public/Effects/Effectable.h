@@ -1,4 +1,5 @@
 #pragma once
+#include "Vitals/InstigatorChain.h"
 #include "Effectable.generated.h"
 
 class UEffectResolver;
@@ -60,10 +61,31 @@ struct FEffectInstancesGroup
 	TArray<UEffectInstance*> Instances;
 };
 
+USTRUCT(Blueprintable)
+struct FValueChainPair
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadWrite)
+	float Value;
+
+	UPROPERTY(BlueprintReadWrite)
+	FInstigatorChain InstigatorChain;
+};
+
+USTRUCT(Blueprintable)
+struct FEffectValueContainer
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FValueChainPair> Values;
+};
+
 class UEffectable;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEffectsReplicated);
-DECLARE_MULTICAST_DELEGATE_FourParams(FSrvOnEffectAdded, UEffectable*, UEffectDataAsset*, AActor*, FGuid); 
+DECLARE_MULTICAST_DELEGATE_FourParams(FSrvOnEffectAdded, UEffectable*, UEffectDataAsset*, FInstigatorChain&, FGuid); 
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FSrvOnEffectRemoved, UEffectable*, UEffectDataAsset*, FGuid);
 
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
@@ -82,14 +104,14 @@ public:
 
 	// pas ouf les 3 mêmes fonctions
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	UEffectInstance* SrvAddEffect(UEffectDataAsset* EffectData, AActor* Applier);
+	UEffectInstance* SrvAddEffect(UEffectDataAsset* EffectData, FInstigatorChain& InstigatorChain);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SrvAddEffects(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, AActor* Applier);
+	void SrvAddEffects(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, FInstigatorChain& InstigatorChain);
 
 	// Unreal UFunction doesn't support overloading
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	void SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, AActor* Applier, TArray<UEffectInstance*>& OutAppliedEffects);
+	void SrvAddEffectsWithBuffer(UPARAM(ref) const TArray<UEffectDataAsset*>& Effects, FInstigatorChain& InstigatorChain, TArray<UEffectInstance*>& OutAppliedEffects);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvRemoveEffect(UEffectInstance* Effect);
@@ -137,7 +159,7 @@ private:
 
 	void Refresh();
 
-	static void GetValueForEachEffect(TMap<UEffectDataAsset*, float>& ValuesBuffer, TMap<UEffectDataAsset*, FEffectInstancesGroup>& EffectCounts);
+	static void GetValueForEachEffect(TMap<UEffectDataAsset*, FEffectValueContainer>& ValuesBuffer, TMap<UEffectDataAsset*, FEffectInstancesGroup>& EffectCounts);
 
 	UEffectResolver* GetResolver(EEffectType Type);
 
