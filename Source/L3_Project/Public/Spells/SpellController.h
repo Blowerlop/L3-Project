@@ -79,19 +79,31 @@ public:
 	TArray<float> RepCooldowns;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	int MaxSpells = 6;
+	int MaxSpells = 7;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int WeaponSpellIndex = 0;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int DashSpellIndex = 1;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int HealSpellIndex = 2;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	int SpellFirstIndex = 2;
+	int SpellFirstIndex = 3;
 
 	UPROPERTY(Blueprintable, EditAnywhere, BlueprintReadOnly)
 	float GlobalCooldownValue = 0.5f;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float CooldownsReplicationDelay = 1.0f;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	USpellDataAsset* DashSpell;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	USpellDataAsset* HealSpell;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnSpellsChanged OnSpellDatasChanged;
