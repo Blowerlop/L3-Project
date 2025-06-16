@@ -81,12 +81,15 @@ struct FSerializableCharacterData
 	GENERATED_BODY()
 
 	FSerializableCharacterData() = default;
-	FSerializableCharacterData(const uint8 InSelectedWeaponID, const int32 InSelectedSpellsID)
-		: SelectedWeaponID(InSelectedWeaponID), SelectedSpellsID(InSelectedSpellsID) {}
+	FSerializableCharacterData(const uint8 InSelectedWeaponID, const int32 InSelectedSpellsID, const int InSelectedSkin)
+		: SelectedWeaponID(InSelectedWeaponID), SelectedSpellsID(InSelectedSpellsID), SelectedSkin(InSelectedSkin) {}
 
 	UPROPERTY(BlueprintReadWrite)
 	uint8 SelectedWeaponID{};
 	
 	UPROPERTY(BlueprintReadWrite)
 	int32 SelectedSpellsID{};
+
+	UPROPERTY(BlueprintReadWrite)
+	int SelectedSkin{};
 };

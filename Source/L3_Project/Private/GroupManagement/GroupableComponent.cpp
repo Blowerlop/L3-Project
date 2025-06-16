@@ -34,6 +34,38 @@ void UGroupableComponent::InviteToGroup(UGroupableComponent* Invited)
 	InviteToGroupServerRpc(Invited);
 }
 
+void UGroupableComponent::TryOpenInstanceUI_Implementation()
+{
+	if (!ReplicatedGroupData.IsValid)
+	{
+		FGroupManager::CreateGroup(this);
+		TryOpenInstanceUIResponse(true, FString());
+		return;
+	}
+
+	const auto Group = FGroupManager::GetGroup(ReplicatedGroupData.GroupId);
+
+	if (Group == nullptr)
+	{
+		TryOpenInstanceUIResponse(false, FString());
+		return;
+	}
+	
+	const auto Members = Group->GetMembersAsString();
+	if (Members.Num() == 0)
+	{
+		TryOpenInstanceUIResponse(false, FString());
+		return;
+	}
+	
+	TryOpenInstanceUIResponse(FGroupManager::IsGroupLeader(this), Members[0]);
+}
+
+void UGroupableComponent::TryOpenInstanceUIResponse_Implementation(bool Value, const FString& LeaderName)
+{
+	OnTryOpenInstanceUIResponse.Broadcast(Value, LeaderName);
+}
+
 void UGroupableComponent::AcceptGroupInvite(int32 InviteId)
 {
 	AcceptGroupInviteServerRPC(InviteId);

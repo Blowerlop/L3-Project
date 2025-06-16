@@ -4,6 +4,7 @@
 #include "Vitals/IInstigatorChainElement.h"
 #include "ZodiaqCharacter.generated.h"
 
+class USpellDataAsset;
 struct FClientData;
 class AZodiaqPlayerState;
 
