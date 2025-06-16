@@ -12,6 +12,8 @@
 #include "Spells/SpellController.h"
 #include "Spells/SpellDataAsset.h"
 
+FSrvOnSpellCasted ASpellManager::SrvOnSpellCasted{};
+
 ASpellManager::ASpellManager()
 {
 	// Not needed
@@ -125,6 +127,7 @@ ASpell* ASpellManager::TryCastSpell(USpellDataAsset* SpellData, AActor* Caster, 
 		
 		UGameplayStatics::FinishSpawningActor(MySpawningActor, SpawnTransform);
 
+		SrvOnSpellCasted.Broadcast(SpellData, Caster);
 		return SpellInstance;
 	}
 

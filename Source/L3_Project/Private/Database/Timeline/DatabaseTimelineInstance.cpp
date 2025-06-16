@@ -10,6 +10,7 @@
 #include "Networking/ZodiaqPlayerController.h"
 #include "Networking/ZodiaqPlayerState.h"
 #include "Spells/SpellController.h"
+#include "Spells/SpellManager.h"
 
 TArray<FDynamicCombatEvent> UDatabaseTimelineInstance::Events;
 FString UDatabaseTimelineInstance::MatchId;
@@ -22,13 +23,13 @@ void UDatabaseTimelineInstance::InitTimeline()
 	MatchId = GenerateRandomMatchId();
 
 	EffectCallback = UEffectable::SrvOnEffectAddedDelegate.AddStatic(OnEffectAdded);
-	SpellCallback = USpellController::SrvOnSpellCasted.AddStatic(OnSpellCasted);
+	SpellCallback = ASpellManager::SrvOnSpellCasted.AddStatic(OnSpellCasted);
 }
 
 void UDatabaseTimelineInstance::UnregisterTimeline()
 {
 	UEffectable::SrvOnEffectAddedDelegate.Remove(EffectCallback);
-	USpellController::SrvOnSpellCasted.Remove(SpellCallback);
+	ASpellManager::SrvOnSpellCasted.Remove(SpellCallback);
 }
 
 void UDatabaseTimelineInstance::AddEvent(const FString& Type, const int32 Timestamp, const TSharedPtr<FJsonObject>& Data)
@@ -157,7 +158,7 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 	AddEvent("Effect",GetGameTimeSecondsStatic(OriginActor) , EffectJson);
 }
 
-void UDatabaseTimelineInstance::OnSpellCasted(USpellDataAsset* spellData, USpellController* sender) 
+void UDatabaseTimelineInstance::OnSpellCasted(USpellDataAsset* spellData, AActor* sender) 
 {
 	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
 
