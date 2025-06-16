@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/BTDecorator.h"
-#include "BTDecorator_CustomCooldown.generated.h"
+#include "BehaviorTree/Decorators/BTDecorator_BlackboardBase.h"
+#include "BTDecorator_CooldownWithMultiplicator.generated.h"
 
 /**
  * 
@@ -17,15 +17,13 @@ struct FBTCooldownDecoratorMemory
 };
 
 UCLASS(HideCategories=(Condition))
-class L3_PROJECT_API UBTDecorator_CustomCooldown : public UBTDecorator
+class L3_PROJECT_API UBTDecorator_CooldownWithMultiplicator : public UBTDecorator_BlackboardBase
 {
 	GENERATED_UCLASS_BODY()
 
 	/** max allowed time for execution of underlying node */
 	UPROPERTY(Category=Decorator, EditAnywhere)
 	float CoolDownTime;
-	UPROPERTY(Category=Decorator, EditAnywhere)
-	FBlackboardKeySelector MultiplicatorBlackboardKey;
 
 	//~ Begin UObject Interface
 	virtual void PostLoad() override;

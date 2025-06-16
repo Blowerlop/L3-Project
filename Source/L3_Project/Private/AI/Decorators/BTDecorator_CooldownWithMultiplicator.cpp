@@ -1,44 +1,44 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/Decorators/BTDecorator_CustomCooldown.h"
+#include "AI/Decorators/BTDecorator_CooldownWithMultiplicator.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Float.h"
 #include "Engine/World.h"
 
-UBTDecorator_CustomCooldown::UBTDecorator_CustomCooldown(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+UBTDecorator_CooldownWithMultiplicator::UBTDecorator_CooldownWithMultiplicator(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	NodeName = "Cooldown with multiplicator";
 	INIT_DECORATOR_NODE_NOTIFY_FLAGS();
 	CoolDownTime = 5.0f;
-	MultiplicatorBlackboardKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTDecorator_CustomCooldown, MultiplicatorBlackboardKey));
+	BlackboardKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTDecorator_CooldownWithMultiplicator, BlackboardKey));
 	
 	// aborting child nodes doesn't makes sense, cooldown starts after leaving this branch
 	bAllowAbortChildNodes = false;
 }
 
-void UBTDecorator_CustomCooldown::PostLoad()
+void UBTDecorator_CooldownWithMultiplicator::PostLoad()
 {
 	Super::PostLoad();
 	bNotifyTick = (FlowAbortMode != EBTFlowAbortMode::None);
 }
 
-bool UBTDecorator_CustomCooldown::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
+bool UBTDecorator_CooldownWithMultiplicator::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
 	FBTCooldownDecoratorMemory* DecoratorMemory = CastInstanceNodeMemory<FBTCooldownDecoratorMemory>(NodeMemory);
 	const double RecalcTime = (OwnerComp.GetWorld()->GetTimeSeconds() - GetCoolDownTimeWithMultiplicator(OwnerComp));
 	return RecalcTime >= DecoratorMemory->LastUseTimestamp;
 }
 
-void UBTDecorator_CustomCooldown::OnNodeDeactivation(FBehaviorTreeSearchData& SearchData, EBTNodeResult::Type NodeResult)
+void UBTDecorator_CooldownWithMultiplicator::OnNodeDeactivation(FBehaviorTreeSearchData& SearchData, EBTNodeResult::Type NodeResult)
 {
 	FBTCooldownDecoratorMemory* DecoratorMemory = GetNodeMemory<FBTCooldownDecoratorMemory>(SearchData);
 	DecoratorMemory->LastUseTimestamp = SearchData.OwnerComp.GetWorld()->GetTimeSeconds();
 	DecoratorMemory->bRequestedRestart = false;
 }
 
-void UBTDecorator_CustomCooldown::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UBTDecorator_CooldownWithMultiplicator::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	FBTCooldownDecoratorMemory* DecoratorMemory = CastInstanceNodeMemory<FBTCooldownDecoratorMemory>(NodeMemory);
 	if (!DecoratorMemory->bRequestedRestart)
@@ -52,27 +52,27 @@ void UBTDecorator_CustomCooldown::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	}
 }
 
-FString UBTDecorator_CustomCooldown::GetStaticDescription() const
+FString UBTDecorator_CooldownWithMultiplicator::GetStaticDescription() const
 {
 	// basic info: result after time
-	return FString::Printf(TEXT("%s: lock for %.1fs after execution and return %s"), *Super::GetStaticDescription(),
-		CoolDownTime, *UBehaviorTreeTypes::DescribeNodeResult(EBTNodeResult::Failed));
+	return FString::Printf(TEXT("%s: lock for %.1fs * %s after execution and return %s"), *Super::GetStaticDescription(),
+		CoolDownTime, *GetSelectedBlackboardKey().ToString(), *UBehaviorTreeTypes::DescribeNodeResult(EBTNodeResult::Failed));
 }
 
-float UBTDecorator_CustomCooldown::GetCoolDownTimeWithMultiplicator(const UBehaviorTreeComponent& OwnerComp) const
+float UBTDecorator_CooldownWithMultiplicator::GetCoolDownTimeWithMultiplicator(const UBehaviorTreeComponent& OwnerComp) const
 {
 	float CooldownTimeWithMultiplicator = CoolDownTime;
 
-	if (MultiplicatorBlackboardKey.SelectedKeyType == UBlackboardKeyType_Float::StaticClass())
+	if (BlackboardKey.SelectedKeyType == UBlackboardKeyType_Float::StaticClass())
 	{
-		const float Multiplicator = OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Float>(MultiplicatorBlackboardKey.GetSelectedKeyID());
+		const float Multiplicator = OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Float>(BlackboardKey.GetSelectedKeyID());
 		CooldownTimeWithMultiplicator *= Multiplicator;
 	}
 
 	return CooldownTimeWithMultiplicator;
 }
 
-void UBTDecorator_CustomCooldown::DescribeRuntimeValues(const UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTDescriptionVerbosity::Type Verbosity, TArray<FString>& Values) const
+void UBTDecorator_CooldownWithMultiplicator::DescribeRuntimeValues(const UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTDescriptionVerbosity::Type Verbosity, TArray<FString>& Values) const
 {
 	Super::DescribeRuntimeValues(OwnerComp, NodeMemory, Verbosity, Values);
 
@@ -87,12 +87,12 @@ void UBTDecorator_CustomCooldown::DescribeRuntimeValues(const UBehaviorTreeCompo
 	}
 }
 
-uint16 UBTDecorator_CustomCooldown::GetInstanceMemorySize() const
+uint16 UBTDecorator_CooldownWithMultiplicator::GetInstanceMemorySize() const
 {
 	return sizeof(FBTCooldownDecoratorMemory);
 }
 
-void UBTDecorator_CustomCooldown::InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const
+void UBTDecorator_CooldownWithMultiplicator::InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const
 {
 	FBTCooldownDecoratorMemory* DecoratorMemory = InitializeNodeMemory<FBTCooldownDecoratorMemory>(NodeMemory, InitType);
 	if (InitType == EBTMemoryInit::Initialize)
@@ -103,14 +103,14 @@ void UBTDecorator_CustomCooldown::InitializeMemory(UBehaviorTreeComponent& Owner
 	DecoratorMemory->bRequestedRestart = false; ;
 }
 
-void UBTDecorator_CustomCooldown::CleanupMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryClear::Type CleanupType) const
+void UBTDecorator_CooldownWithMultiplicator::CleanupMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryClear::Type CleanupType) const
 {
 	CleanupNodeMemory<FBTCooldownDecoratorMemory>(NodeMemory, CleanupType);
 }
 
 #if WITH_EDITOR
 
-FName UBTDecorator_CustomCooldown::GetNodeIconName() const
+FName UBTDecorator_CooldownWithMultiplicator::GetNodeIconName() const
 {
 	return FName("BTEditor.Graph.BTNode.Decorator.Cooldown.Icon");
 }
