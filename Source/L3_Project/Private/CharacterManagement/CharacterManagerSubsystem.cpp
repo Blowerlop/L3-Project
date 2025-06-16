@@ -1,6 +1,6 @@
-#include "CharacterManagerSubsystem.h"
+#include "CharacterManagement/CharacterManagerSubsystem.h"
 
-#include "CharacterData.h"
+#include "CharacterManagement/CharacterData.h"
 #include "Database/DatabaseFunctions.h"
 #include "Networking/BaseGameInstance.h"
 
@@ -54,10 +54,12 @@ void UCharacterManagerSubsystem::LoadCharactersSuccess(const FString& Data)
 			const auto Name = JsonObj->GetStringField(TEXT("Name"));
 			const auto SelectedWeaponID = static_cast<uint8>(JsonObj->GetIntegerField(TEXT("WeaponID")));
 			const auto SelectedSpellsID = JsonObj->GetIntegerField(TEXT("SelectedSpells"));
+			const auto SelectedSkin = JsonObj->GetIntegerField(TEXT("SelectedSkin"));
 			
 			CharacterData->SetName(Name);
 			CharacterData->SelectedWeaponID = SelectedWeaponID;
 			CharacterData->SelectedSpellsID = SelectedSpellsID;
+			CharacterData->SelectedSkin = SelectedSkin;
 
 			CharactersData.Add(Value.Key, CharacterData);
 		}
@@ -107,10 +109,12 @@ void UCharacterManagerSubsystem::SaveCharacter(UCharacterData* TempCharacter, FS
 	auto FieldArray = TArray<FString>();
 	FieldArray.Add("WeaponID");
 	FieldArray.Add("SelectedSpells");
+	FieldArray.Add("SelectedSkin");
 	
 	auto ValuesArray = TArray<int>();
 	ValuesArray.Add(TempCharacter->SelectedWeaponID);
 	ValuesArray.Add(TempCharacter->SelectedSpellsID);
+	ValuesArray.Add(TempCharacter->SelectedSkin);
 
 	SuccessCallback.BindUFunction(this, "SaveCharacterSuccess");
 	FailedCallback.BindUFunction(this, "SaveCharacterFailed");
@@ -132,6 +136,7 @@ void UCharacterManagerSubsystem::SaveCharacterSuccess(const FString& Result)
 	{
 		SelectedCharacter->SelectedWeaponID = JsonResponse->GetIntegerField(TEXT("WeaponID"));
 		SelectedCharacter->SelectedSpellsID = JsonResponse->GetIntegerField(TEXT("SelectedSpells"));
+		SelectedCharacter->SelectedSkin = JsonResponse->GetIntegerField(TEXT("SelectedSkin"));
 
 		SaveCharacterCallback.ExecuteIfBound("");
 		OnCharactersChanged.Broadcast();

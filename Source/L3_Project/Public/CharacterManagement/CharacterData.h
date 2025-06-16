@@ -6,6 +6,7 @@ class USpellDataAsset;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpellChanged, USpellDataAsset*, Spell, uint8, Index);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponChanged, USpellDataAsset*, Spell);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkinChanged, int, Skin);
 
 UCLASS(BlueprintType)
 class L3_PROJECT_API UCharacterData : public UObject
@@ -18,7 +19,8 @@ public:
 	
 	UCharacterData() = default;
 	
-	UCharacterData(FString InUUID, FString InName) : UUID(InUUID), Name(InName), SelectedWeaponID(0), SelectedSpellsID(0){}
+	UCharacterData(FString InUUID, FString InName) : UUID(InUUID), Name(InName), SelectedWeaponID(0), SelectedSpellsID(0)
+	, SelectedSkin(0) {}
 	
 	UPROPERTY(BlueprintReadWrite)
 	FString UUID{};
@@ -26,6 +28,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	FString Name{};
 
+	UPROPERTY(BlueprintReadWrite)
+	int SelectedSkin;
+	
 	UPROPERTY(BlueprintReadWrite)
 	uint8 SelectedWeaponID{};
 	
@@ -37,6 +42,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnWeaponChanged OnWeaponChanged{};
+
+	UPROPERTY(BlueprintAssignable)
+	FOnSkinChanged OnSkinChanged{};
 	
 	void SetUUID(FString NewUUID)
 	{
@@ -51,6 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SelectSpell(USpellDataAsset* SpellDataAsset, uint8 Index);
 
+	UFUNCTION(BlueprintCallable)
+	void SelectSkin(int NewSkin);
+	
 	UFUNCTION(BlueprintCallable)
 	USpellDataAsset* GetSpellAt(UObject* WorldContext, uint8 Index);
 	

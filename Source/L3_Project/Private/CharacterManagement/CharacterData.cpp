@@ -1,4 +1,4 @@
-#include "CharacterData.h"
+#include "CharacterManagement/CharacterData.h"
 
 #include "Spells/SpellDataAsset.h"
 #include "Spells/SpellDatabase.h"
@@ -37,6 +37,12 @@ void UCharacterData::SelectSpell(USpellDataAsset* SpellDataAsset, const uint8 In
 	}
 
 	OnSpellChanged.Broadcast(SpellDataAsset, Index);
+}
+
+void UCharacterData::SelectSkin(int NewSkin)
+{
+	SelectedSkin = NewSkin;
+	OnSkinChanged.Broadcast(NewSkin);
 }
 
 USpellDataAsset* UCharacterData::GetSpellAt(UObject* WorldContext, const uint8 Index)
