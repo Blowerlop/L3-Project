@@ -20,6 +20,8 @@ enum ESpellRequestValidity
 	Combo
 };
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FSrvOnSpellCasted, USpellDataAsset*, AActor*);
+
 UCLASS()
 class L3_PROJECT_API ASpellManager : public AActor
 {
@@ -27,7 +29,9 @@ class L3_PROJECT_API ASpellManager : public AActor
 	
 public:	
 	ASpellManager();
-
+	
+	static FSrvOnSpellCasted SrvOnSpellCasted;
+	
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;

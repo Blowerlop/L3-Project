@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Spells/SpellController.h"
 
 #include "EnhancedInputComponent.h"
@@ -15,8 +14,6 @@
 #include "Spells/SpellManager.h"
 #include "Spells/Results/ActorAimResultHolder.h"
 #include "Spells/Results/VectorAimResultHolder.h"
-
-FSrvOnSpellCasted USpellController::SrvOnSpellCasted;
 
 USpellController::USpellController()
 {
@@ -63,7 +60,6 @@ void USpellController::SpellCastResponseMultiCastRpc_Implementation(const int Sp
     CastState->AnimationEndTime = StartTime + CastState->Spell->GetMontageSectionLength(CastState->Spell->ComboIndex);
     
 	OnCastStart.Broadcast(CastState->Spell, CastState->SpellIndex);
-	SrvOnSpellCasted.Broadcast(CastState->Spell, this);
 }
 
 void USpellController::InvalidSpellCastResponseOwnerRpc_Implementation()

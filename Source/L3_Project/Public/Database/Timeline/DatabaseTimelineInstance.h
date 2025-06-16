@@ -63,7 +63,7 @@ private:
 
 	static FString GenerateRandomMatchId();
 	static void OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, FInstigatorChain& InstigatorChain, FGuid guid);
-	static void OnSpellCasted(USpellDataAsset* spellData, USpellController* sender);
+	static void OnSpellCasted(USpellDataAsset* spellData, AActor* sender);
 	static float GetGameTimeSecondsStatic(const UObject* WorldContextObject);
 };
 

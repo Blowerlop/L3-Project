@@ -20,8 +20,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGlobalCooldownChanged, bool, IsAc
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCastStartDelegate, USpellDataAsset*, Spell, int, SpellIndex);
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FSrvOnSpellCasted, USpellDataAsset*, USpellController*);
-
 UCLASS(Blueprintable)
 class USpellControllerCastState : public UObject
 {
@@ -100,8 +98,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnCastStartDelegate OnCastStart;
-	
-	static FSrvOnSpellCasted SrvOnSpellCasted;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnCooldownReplicated OnCooldownReplicatedDelegate;
