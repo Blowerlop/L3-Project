@@ -1,5 +1,7 @@
 #include "Database/Timeline/DatabaseTimelineInstance.h"
 
+#include <string>
+
 #include "Database/DatabaseFunctions.h"
 #include "Effects/Effectable.h"
 #include "Effects/EffectDataAsset.h"
@@ -7,29 +9,34 @@
 #include "Misc/Guid.h"
 #include "Components/ActorComponent.h"
 #include "Networking/ZodiaqCharacter.h"
-#include "Networking/ZodiaqPlayerController.h"
 #include "Networking/ZodiaqPlayerState.h"
-#include "Spells/SpellController.h"
 #include "Spells/SpellManager.h"
+#include "Vitals/VitalsContainer.h"
 
 TArray<FDynamicCombatEvent> UDatabaseTimelineInstance::Events;
 FString UDatabaseTimelineInstance::MatchId;
-FDelegateHandle UDatabaseTimelineInstance::EffectCallback;
+FDelegateHandle UDatabaseTimelineInstance::AddedEffectCallback;
+FDelegateHandle UDatabaseTimelineInstance::RemovedEffectCallback;
 FDelegateHandle UDatabaseTimelineInstance::SpellCallback;
+FDelegateHandle UDatabaseTimelineInstance::VitalCallback;
 
 void UDatabaseTimelineInstance::InitTimeline()
 {
 	Events.Empty();
 	MatchId = GenerateRandomMatchId();
 
-	EffectCallback = UEffectable::SrvOnEffectAddedDelegate.AddStatic(OnEffectAdded);
+	AddedEffectCallback = UEffectable::SrvOnEffectAddedDelegate.AddStatic(OnEffectAdded);
+	RemovedEffectCallback = UEffectable::SrvOnEffectRemovedDelegate.AddStatic(OnEffectRemoved);
 	SpellCallback = ASpellManager::SrvOnSpellCasted.AddStatic(OnSpellCasted);
+	VitalCallback = UVitalsContainer::SrvOnVitalChanged.AddStatic(OnVitalChanged);
 }
 
 void UDatabaseTimelineInstance::UnregisterTimeline()
 {
-	UEffectable::SrvOnEffectAddedDelegate.Remove(EffectCallback);
+	UEffectable::SrvOnEffectAddedDelegate.Remove(AddedEffectCallback);
+	UEffectable::SrvOnEffectRemovedDelegate.Remove(RemovedEffectCallback);
 	ASpellManager::SrvOnSpellCasted.Remove(SpellCallback);
+	UVitalsContainer::SrvOnVitalChanged.Remove(VitalCallback);
 }
 
 void UDatabaseTimelineInstance::AddEvent(const FString& Type, const int32 Timestamp, const TSharedPtr<FJsonObject>& Data)
@@ -44,20 +51,34 @@ void UDatabaseTimelineInstance::AddEvent(const FString& Type, const int32 Timest
 
 void UDatabaseTimelineInstance::TimelineEventBossSpawned(const UObject* Sender)
 {
-	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
-	AddEvent("BossSpawned",GetGameTimeSecondsStatic(Sender) , EffectJson);
+	const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
+	AddEvent("BossSpawned",GetGameTimeSecondsStatic(Sender) , Json);
 }
 
 void UDatabaseTimelineInstance::TimelineEventDefeat(const UObject* Sender)
 {
-	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
-	AddEvent("Defeat",GetGameTimeSecondsStatic(Sender) , EffectJson);
+	const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
+	AddEvent("Defeat",GetGameTimeSecondsStatic(Sender) , Json);
 }
 
 void UDatabaseTimelineInstance::TimelineEventBossKilled(const UObject* Sender)
 {
-	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
-	AddEvent("BossKilled",GetGameTimeSecondsStatic(Sender) , EffectJson);
+	const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
+	AddEvent("BossKilled",GetGameTimeSecondsStatic(Sender) , Json);
+}
+
+void UDatabaseTimelineInstance::TimelineEventPlayerJoined(const UObject* Sender, FString PlayerID)
+{
+	const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
+	Json->SetStringField(TEXT("PlayerID"), PlayerID);
+	AddEvent("PlayerSpawned",GetGameTimeSecondsStatic(Sender) , Json);
+}
+
+void UDatabaseTimelineInstance::TimelineEventPlayerLeaved(const UObject* Sender, FString PlayerID)
+{
+	const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
+	Json->SetStringField(TEXT("PlayerID"), PlayerID);
+	AddEvent("PlayedLeaved",GetGameTimeSecondsStatic(Sender) , Json);
 }
 
 void UDatabaseTimelineInstance::UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
@@ -66,6 +87,17 @@ void UDatabaseTimelineInstance::UploadTimeline(const FString& PlayerIdToken, con
 	TSharedPtr<FJsonObject> Payload = ConvertToJson();
 
 	UDatabaseFunctions::SetData(Path, Payload, PlayerIdToken, OnSuccess, OnFailure);
+}
+
+float UDatabaseTimelineInstance::GetEntityHP(const FString& EntityID, const float& Hp)
+{
+	static TMap<FString, float> EntitiesHp = {};
+
+	if (EntitiesHp.Contains(EntityID))
+		return EntitiesHp[EntityID];
+
+	EntitiesHp.Add(EntityID, Hp);
+	return Hp;
 }
 
 TSharedPtr<FJsonObject> UDatabaseTimelineInstance::ConvertToJson()
@@ -94,13 +126,14 @@ FString UDatabaseTimelineInstance::GenerateRandomMatchId()
 	return FGuid::NewGuid().ToString(EGuidFormats::Digits); // Format court sans tirets
 }
 
-void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, FInstigatorChain& InstigatorChain, FGuid guid) 
+void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* Effectable, UEffectDataAsset* Effect, FInstigatorChain& InstigatorChain, FGuid guid) 
 {
 	//TODO c'est pas encore fini
 	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
 
-	AZodiaqCharacter* CharacterTarget = Cast<AZodiaqCharacter>(effectable->GetOwner());
-	if (CharacterTarget != nullptr) //Player
+	EffectJson->SetStringField(TEXT("Guid"), guid.ToString());
+
+	if (const AZodiaqCharacter* CharacterTarget = Cast<AZodiaqCharacter>(Effectable->GetOwner()); CharacterTarget != nullptr) //Player
 	{
 		const FString Id = CharacterTarget->GetClientData().UUID;
 	
@@ -110,12 +143,11 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 	{
 		EffectJson->SetStringField(TEXT("Target"), "Boss"); //Not beau but osef
 	}
-	EffectJson->SetStringField(TEXT("Spell name"), effect->GetName());
+	EffectJson->SetStringField(TEXT("Spell name"), Effect->GetName());
 	
 	const auto OriginActor = InstigatorChain.GetOriginAsActor();
 
-	AZodiaqCharacter* CharacterCaster = Cast<AZodiaqCharacter>(OriginActor);
-	if (CharacterCaster != nullptr) //Player
+	if (const AZodiaqCharacter* CharacterCaster = Cast<AZodiaqCharacter>(OriginActor); CharacterCaster != nullptr) //Player
 	{
 		const FString Id = CharacterCaster->GetClientData().UUID;
 	
@@ -126,47 +158,125 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* effectable, UEffectDa
 		EffectJson->SetStringField(TEXT("Caster"), "Boss"); //Not beau but osef
 	}
 	
-	switch (effect->Type)
+	switch (Effect->Type)
 	{
 	case EEffectType::Attack:
 		EffectJson->SetStringField(TEXT("Type"), TEXT("Attack"));
+		EffectJson->SetNumberField(TEXT("Value"), Effect->GetValue(EEffectValueType::Value));
 		break;
 	case EEffectType::Defense:
 		EffectJson->SetStringField(TEXT("Type"), TEXT("Defense"));
+		EffectJson->SetNumberField(TEXT("Value"), Effect->GetValue(EEffectValueType::Value));
 		break;
 	case EEffectType::MoveSpeed:
 		EffectJson->SetStringField(TEXT("Type"), TEXT("MoveSpeed"));
+		EffectJson->SetNumberField(TEXT("Value"), Effect->GetValue(EEffectValueType::Value));
+		EffectJson->SetNumberField(TEXT("Duration"), Effect->GetValue(EEffectValueType::Duration));
 		break;
 	case EEffectType::HealBonus:
 		EffectJson->SetStringField(TEXT("Type"), TEXT("HealBonus"));
+		EffectJson->SetNumberField(TEXT("Value"), Effect->GetValue(EEffectValueType::Value));
 		break;
 	case EEffectType::Stun:
 		EffectJson->SetStringField(TEXT("Type"), TEXT("Stun"));
+		EffectJson->SetNumberField(TEXT("Duration"), Effect->GetValue(EEffectValueType::Duration));
 		break;
 	case EEffectType::Root:
 		EffectJson->SetStringField(TEXT("Type"), TEXT("Root"));
+		EffectJson->SetNumberField(TEXT("Duration"), Effect->GetValue(EEffectValueType::Duration));
 		break;
 	case EEffectType::DamageOverTime:
 		EffectJson->SetStringField(TEXT("Type"), TEXT("DamageOverTime"));
+		EffectJson->SetNumberField(TEXT("Value"), Effect->GetValue(EEffectValueType::Value));
+		EffectJson->SetNumberField(TEXT("Duration"), Effect->GetValue(EEffectValueType::Duration));
+		EffectJson->SetNumberField(TEXT("Duration"), Effect->GetValue(EEffectValueType::Rate));
 		break;
 	case EEffectType::HealOverTime:
 		EffectJson->SetStringField(TEXT("Type"), TEXT("HealOverTime"));
+		EffectJson->SetNumberField(TEXT("Value"), Effect->GetValue(EEffectValueType::Value));
+		EffectJson->SetNumberField(TEXT("Rate"), Effect->GetValue(EEffectValueType::Duration));
+		EffectJson->SetNumberField(TEXT("Rate"), Effect->GetValue(EEffectValueType::Rate));
 		break;
 	}
-	EffectJson->SetNumberField(TEXT("Value"), effect->GetValue(EEffectValueType::Value));
 	
-	AddEvent("Effect",GetGameTimeSecondsStatic(OriginActor) , EffectJson);
+	AddEvent("EffectStart",GetGameTimeSecondsStatic(OriginActor) , EffectJson);
 }
 
-void UDatabaseTimelineInstance::OnSpellCasted(USpellDataAsset* spellData, AActor* sender) 
+void UDatabaseTimelineInstance::OnEffectRemoved(UEffectable* Effectable, UEffectDataAsset* Effect, FGuid guid)
 {
 	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
 
-	EffectJson->SetStringField(TEXT("Name"), spellData->Name.ToString());
-
-	EffectJson->SetStringField(TEXT("Type"), TEXT("Spell"));
+	EffectJson->SetStringField(TEXT("Guid"), guid.ToString());
 	
-	AddEvent("Effect",GetGameTimeSecondsStatic(sender) , EffectJson);
+	AddEvent("EffectEnd",GetGameTimeSecondsStatic(Effectable->GetOwner()) , EffectJson);
+}
+
+void UDatabaseTimelineInstance::OnSpellCasted(USpellDataAsset* SpellData, AActor* Sender) 
+{
+	const TSharedPtr<FJsonObject> EffectJson = MakeShareable(new FJsonObject);
+
+	EffectJson->SetStringField(TEXT("Name"), SpellData->Name.ToString());
+
+	if (const AZodiaqCharacter* CharacterSender = Cast<AZodiaqCharacter>(Sender); CharacterSender != nullptr) //Player
+	{
+		const FString Id = CharacterSender->GetClientData().UUID;
+	
+		EffectJson->SetStringField(TEXT("Sender"), Id);
+	}
+	else //BOSS
+	{
+		EffectJson->SetStringField(TEXT("Sender"), "Boss");
+	}
+	
+	AddEvent("Spell",GetGameTimeSecondsStatic(Sender) , EffectJson);
+}
+
+void UDatabaseTimelineInstance::OnVitalChanged(UVitalsContainer* Container, EVitalType Type, float Value, float Delta,
+	const FInstigatorChain& Chain)
+{
+	const TSharedPtr<FJsonObject> VitalJson = MakeShareable(new FJsonObject);
+
+	if (const AZodiaqCharacter* CharacterTarget = Cast<AZodiaqCharacter>(Chain.GetOriginAsActor()->GetOwner()); CharacterTarget != nullptr) //Player
+	{
+		const FString Id = CharacterTarget->GetClientData().UUID;
+	
+		VitalJson->SetStringField(TEXT("Sender"), Id);
+	}
+	else //BOSS
+	{
+		VitalJson->SetStringField(TEXT("Sender"), "Boss");
+	}
+
+	if (const AZodiaqCharacter* CharacterTarget = Cast<AZodiaqCharacter>(Container->GetOwner()); CharacterTarget != nullptr) //Player
+	{
+		const FString Id = CharacterTarget->GetClientData().UUID;
+	
+		VitalJson->SetStringField(TEXT("Target"), Id);
+	}
+	else //BOSS
+	{
+		VitalJson->SetStringField(TEXT("Target"), "Boss");
+	}
+
+	switch (Type)
+	{
+	case EVitalType::Shield:
+		VitalJson->SetStringField(TEXT("Type"), TEXT("Shield"));
+		VitalJson->SetNumberField(TEXT("Type"), Container->GetValue(EVitalType::Shield));
+		break;
+	case EVitalType::Health:
+		VitalJson->SetStringField(TEXT("Type"), TEXT("Health"));
+		float NewValue = Container->GetValue(EVitalType::Health);
+		VitalJson->SetNumberField(TEXT("Value"), NewValue);
+		float OldValue = GetEntityHP(VitalJson->GetStringField("Target"), NewValue);
+		if (OldValue == NewValue)
+			OldValue = Container->GetMaxValue(EVitalType::Health);
+		VitalJson->SetNumberField(TEXT("OldValue"), OldValue);
+		VitalJson->SetNumberField(TEXT("Max"), Container->GetMaxValue(EVitalType::Health));
+		break;
+	}
+	
+	AddEvent("Vital",GetGameTimeSecondsStatic(Container->GetOwner()) , VitalJson);
 }
 
 float UDatabaseTimelineInstance::GetGameTimeSecondsStatic(const UObject* WorldContextObject)

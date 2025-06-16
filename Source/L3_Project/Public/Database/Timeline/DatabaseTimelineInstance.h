@@ -6,8 +6,10 @@
 #include "Effects/Effectable.h"
 #include "DatabaseTimelineInstance.generated.h"
 
+enum class EVitalType : uint8;
 class USpellController;
 class USpellDataAsset;
+class UVitalsContainer;
 
 USTRUCT()
 struct FDynamicCombatEvent
@@ -46,6 +48,10 @@ public:
 	static void TimelineEventDefeat(const UObject* Sender);
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Sender"), Category = "Timeline")
 	static void TimelineEventBossKilled(const UObject* Sender);
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Sender"), Category = "Timeline")
+	static void TimelineEventPlayerJoined(const UObject* Sender, FString PlayerID);
+	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Sender"), Category = "Timeline")
+	static void TimelineEventPlayerLeaved(const UObject* Sender, FString PlayerID);
 
 	/**
 	 * Send data to DB (HOST ONLY) And should be done at the end of the game for pity
@@ -54,16 +60,22 @@ public:
 	static void UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure);
 
 private:
+	static float GetEntityHP(const FString& EntityID, const float& Hp);
+	
 	static TArray<FDynamicCombatEvent> Events;
 	static FString MatchId;
-	static FDelegateHandle EffectCallback;
+	static FDelegateHandle AddedEffectCallback;
+	static FDelegateHandle RemovedEffectCallback;
 	static FDelegateHandle SpellCallback;
+	static FDelegateHandle VitalCallback;
 
 	static TSharedPtr<FJsonObject> ConvertToJson();
 
 	static FString GenerateRandomMatchId();
-	static void OnEffectAdded(UEffectable* effectable, UEffectDataAsset* effect, FInstigatorChain& InstigatorChain, FGuid guid);
-	static void OnSpellCasted(USpellDataAsset* spellData, AActor* sender);
+	static void OnEffectAdded(UEffectable* Effectable, UEffectDataAsset* Effect, FInstigatorChain& InstigatorChain, FGuid guid);
+	static void OnEffectRemoved(UEffectable* Effectable, UEffectDataAsset* Effect, FGuid guid);
+	static void OnSpellCasted(USpellDataAsset* SpellData, AActor* Sender);
+	static void OnVitalChanged(UVitalsContainer* Container, EVitalType Type, float Value, float Delta, const FInstigatorChain& Chain);
 	static float GetGameTimeSecondsStatic(const UObject* WorldContextObject);
 };
 
