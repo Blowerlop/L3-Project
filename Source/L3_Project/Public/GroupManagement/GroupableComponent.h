@@ -9,6 +9,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGroupChangedDelegate, FReplicatedGroupData, GroupData);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInvitesChangedDelegate, const TArray<FInviteData>&, Invites);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnIsGroupLeaderResponse, bool, Value, FString, LeaderName);
 
 UCLASS( ClassGroup=(Custom), Blueprintable, meta=(BlueprintSpawnableComponent) )
 class L3_PROJECT_API UGroupableComponent : public UActorComponent
@@ -39,6 +40,15 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnInvitesChangedDelegate OnInvitesChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnIsGroupLeaderResponse OnTryOpenInstanceUIResponse;
+
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void TryOpenInstanceUI();
+
+	UFUNCTION(Client, Reliable)
+	void TryOpenInstanceUIResponse(bool Value, const FString& LeaderName);
 	
 private:
 	UPROPERTY(ReplicatedUsing=OnRep_PendingInvites)

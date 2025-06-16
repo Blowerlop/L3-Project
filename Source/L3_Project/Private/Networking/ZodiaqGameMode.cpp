@@ -120,6 +120,7 @@ void AZodiaqGameMode::GetCharacterCallback(const bool CharacterValid, const FStr
 	{
 		const auto SelectedWeapon = JsonResponse->GetIntegerField(TEXT("WeaponID"));
 		const auto SelectedSpells = JsonResponse->GetIntegerField(TEXT("SelectedSpells"));
+		const auto SelectedSkin = JsonResponse->GetIntegerField(TEXT("SelectedSkin"));
 
 		if (SelectedWeapon <= 0 || SelectedSpells <= 0)
 		{
@@ -130,7 +131,7 @@ void AZodiaqGameMode::GetCharacterCallback(const bool CharacterValid, const FStr
 			return;
 		}
 		
-		PlayerState->LoadCharacter(FSerializableCharacterData(SelectedWeapon, SelectedSpells));
+		PlayerState->LoadCharacter(FSerializableCharacterData(SelectedWeapon, SelectedSpells, SelectedSkin));
 		
 		UE_LOG(LogTemp, Warning, TEXT("Player %s validated with CharacterData: WeaponID: %d, SpellsID: %d"),
 		       *PlayerState->ClientData.Name, PlayerState->ClientData.CharacterData.SelectedWeaponID, PlayerState->ClientData.CharacterData.SelectedSpellsID);
