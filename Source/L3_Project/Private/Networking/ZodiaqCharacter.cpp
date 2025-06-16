@@ -105,6 +105,8 @@ void AZodiaqCharacter::InitSpells(APlayerController* PlayerController, AZodiaqPl
 
 	// bShouldReplicate false. Replicate everything after every spell is assigned.
 	SpellController->SrvSelectSpell(SpellController->WeaponSpellIndex, Weapon, false);
+	SpellController->SrvSelectSpell(SpellController->DashSpellIndex, SpellController->DashSpell, false);
+	SpellController->SrvSelectSpell(SpellController->HealSpellIndex, SpellController->HealSpell, false);
 	
 	const auto SpellsCount = SpellController->MaxSpells - SpellController->SpellFirstIndex;
 	
