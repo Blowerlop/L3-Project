@@ -70,14 +70,14 @@ void UDatabaseTimelineInstance::TimelineEventBossKilled(const UObject* Sender)
 void UDatabaseTimelineInstance::TimelineEventPlayerJoined(const UObject* Sender, FString PlayerID)
 {
 	const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
-	Json->SetStringField(TEXT("PlayerID"), PlayerID);
+	Json->SetStringField(TEXT("PlayerID"), PlayerID.IsEmpty() ? TEXT("Patric") : PlayerID);
 	AddEvent("PlayerSpawned",GetGameTimeSecondsStatic(Sender) , Json);
 }
 
 void UDatabaseTimelineInstance::TimelineEventPlayerLeaved(const UObject* Sender, FString PlayerID)
 {
 	const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
-	Json->SetStringField(TEXT("PlayerID"), PlayerID);
+	Json->SetStringField(TEXT("PlayerID"), PlayerID.IsEmpty() ? TEXT("Patric") : PlayerID);
 	AddEvent("PlayedLeaved",GetGameTimeSecondsStatic(Sender) , Json);
 }
 
@@ -137,7 +137,7 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* Effectable, UEffectDa
 	{
 		const FString Id = CharacterTarget->GetClientData().UUID;
 	
-		EffectJson->SetStringField(TEXT("Target"), Id);
+		EffectJson->SetStringField(TEXT("Target"), Id.IsEmpty() ? TEXT("Patric") : Id);
 	}
 	else //BOSS
 	{
@@ -151,7 +151,7 @@ void UDatabaseTimelineInstance::OnEffectAdded(UEffectable* Effectable, UEffectDa
 	{
 		const FString Id = CharacterCaster->GetClientData().UUID;
 	
-		EffectJson->SetStringField(TEXT("Caster"), Id);
+		EffectJson->SetStringField(TEXT("Caster"), Id.IsEmpty() ? TEXT("Patric") : Id);
 	}
 	else //BOSS
 	{
@@ -221,7 +221,7 @@ void UDatabaseTimelineInstance::OnSpellCasted(USpellDataAsset* SpellData, AActor
 	{
 		const FString Id = CharacterSender->GetClientData().UUID;
 	
-		EffectJson->SetStringField(TEXT("Sender"), Id);
+		EffectJson->SetStringField(TEXT("Sender"), Id.IsEmpty() ? TEXT("Patric") : Id);
 	}
 	else //BOSS
 	{
@@ -236,11 +236,11 @@ void UDatabaseTimelineInstance::OnVitalChanged(UVitalsContainer* Container, EVit
 {
 	const TSharedPtr<FJsonObject> VitalJson = MakeShareable(new FJsonObject);
 
-	if (const AZodiaqCharacter* CharacterTarget = Cast<AZodiaqCharacter>(Chain.GetOriginAsActor()->GetOwner()); CharacterTarget != nullptr) //Player
+	if (const AZodiaqCharacter* CharacterTarget = Cast<AZodiaqCharacter>(Chain.GetOriginAsActor()); CharacterTarget != nullptr) //Player
 	{
 		const FString Id = CharacterTarget->GetClientData().UUID;
 	
-		VitalJson->SetStringField(TEXT("Sender"), Id);
+		VitalJson->SetStringField(TEXT("Sender"), Id.IsEmpty() ? TEXT("Patric") : Id);
 	}
 	else //BOSS
 	{
@@ -251,7 +251,7 @@ void UDatabaseTimelineInstance::OnVitalChanged(UVitalsContainer* Container, EVit
 	{
 		const FString Id = CharacterTarget->GetClientData().UUID;
 	
-		VitalJson->SetStringField(TEXT("Target"), Id);
+		VitalJson->SetStringField(TEXT("Target"), Id.IsEmpty() ? TEXT("Patric") : Id);
 	}
 	else //BOSS
 	{
