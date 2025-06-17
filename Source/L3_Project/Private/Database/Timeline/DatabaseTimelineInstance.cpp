@@ -277,6 +277,8 @@ void UDatabaseTimelineInstance::OnVitalChanged(UVitalsContainer* Container, EVit
 		VitalJson->SetStringField(TEXT("Target"), "Boss");
 	}
 
+	bool IsDead = false;
+	
 	switch (Type)
 	{
 	case EVitalType::Shield:
@@ -292,10 +294,20 @@ void UDatabaseTimelineInstance::OnVitalChanged(UVitalsContainer* Container, EVit
 			OldValue = Container->GetMaxValue(EVitalType::Health);
 		VitalJson->SetNumberField(TEXT("OldValue"), OldValue);
 		VitalJson->SetNumberField(TEXT("Max"), Container->GetMaxValue(EVitalType::Health));
+		if (NewValue <= 0)
+			IsDead = true;
 		break;
 	}
 	
 	AddEvent("Vital",GetGameTimeSecondsStatic(Container->GetOwner()) , VitalJson);
+
+	if (IsDead && VitalJson->GetStringField("Target") != TEXT("Boss"))
+	{
+		const FString SpellId = IInstigatorChainElement::Execute_GetIdentifier(Chain.GetElementAt(1));
+		const FVector Position = Chain.GetOriginAsActor()->GetActorLocation();
+		TimelineEventPlayerKilled(Container->GetOwner(), VitalJson->GetStringField(TEXT("Target")),
+			UDatabaseFunctions::GetIdToken(), SpellId, Position.X, Position.Y);
+	}
 }
 
 float UDatabaseTimelineInstance::GetGameTimeSecondsStatic(const UObject* WorldContextObject)
