@@ -596,6 +596,7 @@ FString UDatabaseFunctions::CreateCharacter(const FString& UserName, const FStri
     CharacterJson->SetStringField("Name", CharacterName);
     CharacterJson->SetNumberField("WeaponID", WeaponID);
     CharacterJson->SetNumberField("SelectedSpells", SelectedSpells);
+    CharacterJson->SetNumberField("SelectedSkin", 0);
     CharacterJson->SetNumberField("Death", 0);
     CharacterJson->SetNumberField("Win", 0);
     CharacterJson->SetNumberField("Lose", 0);
@@ -672,23 +673,4 @@ void UDatabaseFunctions::GetAllCharacters(const FString& UID, const FString& IdT
     });
 
     Request->ProcessRequest();
-}
-
-void UDatabaseFunctions::AddDeathData(const FString& UserName, const FString& IdToken, const FString& SpellId, const int PosX, const int PosY, const FSuccess& OnSuccess, const FFailed& OnFailure)
-{
-    TSharedPtr<FJsonObject> CharacterJson = MakeShareable(new FJsonObject);
-    
-    TSharedPtr<FJsonObject> PositionJson = MakeShareable(new FJsonObject);
-    
-    CharacterJson->SetStringField("PlayerName", UserName);
-    CharacterJson->SetStringField("KillSource", SpellId);
-    PositionJson->SetNumberField("PosX", PosX);
-    PositionJson->SetNumberField("PosY", PosY);
-    CharacterJson->SetObjectField("Position", PositionJson);
-
-    // code gen
-    FString DeathId = FString::Printf(TEXT("death_%lld_%04X"), FDateTime::UtcNow().ToUnixTimestamp(), FMath::RandHelper(0xFFFF));
-    
-    FString Path = "Analytics/Death/" + DeathId;
-    SetData(Path, CharacterJson, IdToken, OnSuccess, OnFailure);
 }

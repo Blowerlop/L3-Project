@@ -52,6 +52,8 @@ public:
 	static void TimelineEventPlayerJoined(const UObject* Sender, FString PlayerID);
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Sender"), Category = "Timeline")
 	static void TimelineEventPlayerLeaved(const UObject* Sender, FString PlayerID);
+	//Add new Death
+	static void TimelineEventPlayerKilled(const UObject* Sender, const FString& UserName, const FString& IdToken, const FString& SpellId, int PosX, int PosY);
 
 	/**
 	 * Send data to DB (HOST ONLY) And should be done at the end of the game for pity
