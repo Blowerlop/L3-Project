@@ -53,7 +53,6 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Sender"), Category = "Timeline")
 	static void TimelineEventPlayerLeaved(const UObject* Sender, FString PlayerID);
 	//Add new Death
-	UFUNCTION(BlueprintCallable, Category = "Firebase")
 	static void TimelineEventPlayerKilled(const UObject* Sender, const FString& UserName, const FString& IdToken, const FString& SpellId, int PosX, int PosY);
 
 	/**

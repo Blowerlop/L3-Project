@@ -23,11 +23,17 @@ struct FInstigatorChain
 
 		return *this;
 	}
+	
+	UObject* GetElementAt(int32 Index) const
+	{
+		return Chain.IsValidIndex(Index) ? Chain[Index].GetObject() : nullptr;
+	}
 
 	AActor* GetOriginAsActor() const
 	{
 		return Chain.IsValidIndex(0) ? Cast<AActor>(Chain[0].GetObject()) : nullptr;
 	}
+
 
 	FString ToString() const
 	{

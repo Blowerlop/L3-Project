@@ -596,6 +596,7 @@ FString UDatabaseFunctions::CreateCharacter(const FString& UserName, const FStri
     CharacterJson->SetStringField("Name", CharacterName);
     CharacterJson->SetNumberField("WeaponID", WeaponID);
     CharacterJson->SetNumberField("SelectedSpells", SelectedSpells);
+    CharacterJson->SetNumberField("SelectedSkin", 0);
     CharacterJson->SetNumberField("Death", 0);
     CharacterJson->SetNumberField("Win", 0);
     CharacterJson->SetNumberField("Lose", 0);
