@@ -20,14 +20,18 @@ struct FInstancePlayerData
 
 	FInstancePlayerData() = default;
 	
-	explicit FInstancePlayerData(const int InInstanceId, const FString& InName, const EInstancePlayerState InState = EInstancePlayerState::Connecting)
-		: InstanceId(InInstanceId), Name(InName), State(InState) {}
+	explicit FInstancePlayerData(const int InInstanceId, const FString& InName, const uint8 InSelectedWeaponId,
+		const EInstancePlayerState InState = EInstancePlayerState::Connecting)
+		: InstanceId(InInstanceId), Name(InName), SelectedWeaponId(InSelectedWeaponId), State(InState) {}
 	
 	UPROPERTY(BlueprintReadOnly)
 	int InstanceId{};
 
 	UPROPERTY(BlueprintReadOnly)
 	FString Name{};
+
+	UPROPERTY(BlueprintReadOnly)
+	uint8 SelectedWeaponId{};
 
 	UPROPERTY(BlueprintReadOnly)
 	EInstancePlayerState State{};

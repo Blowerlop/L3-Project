@@ -1,6 +1,7 @@
 #include "GroupManagement/GroupManager.h"
 #include "GameFramework/PlayerState.h"
 #include "GroupManagement/GroupableComponent.h"
+#include "Networking/ZodiaqCharacter.h"
 #include "Networking/ZodiaqPlayerState.h"
 
 TMap<int32, FServerGroupData> FGroupManager::Groups = TMap<int, FServerGroupData>();
@@ -47,6 +48,28 @@ TArray<FString> FServerGroupData::GetMembersAsString() const
 	for (const auto GroupMember : GroupMembers)
 	{
 		Members.Add(GetGroupMemberName(GroupMember));
+	}
+		
+	return Members;
+}
+
+TArray<FReplicatedGroupMemberData> FServerGroupData::GetAsReplicatedData() const
+{
+	TArray<FReplicatedGroupMemberData> Members;
+	Members.Reserve(GroupMembers.Num());
+
+	for (const auto GroupMember : GroupMembers)
+	{
+		const auto AsCharacter = Cast<AZodiaqCharacter>(GroupMember->GetOwner());
+
+		uint8 SelectedWeaponId = 0;
+
+		if(AsCharacter)
+		{
+			SelectedWeaponId = AsCharacter->GetClientData().CharacterData.SelectedWeaponID;
+		}
+		
+		Members.Add({ GetGroupMemberName(GroupMember), SelectedWeaponId });
 	}
 		
 	return Members;
@@ -144,7 +167,7 @@ void FGroupManager::RefreshGroup(FServerGroupData* Group)
 		return;
 	}
 	
-	const auto Members = Group->GetMembersAsString();
+	const auto Members = Group->GetAsReplicatedData();
 	
 	for (UGroupableComponent* GroupMember : Group->GroupMembers)
 	{

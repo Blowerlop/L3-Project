@@ -3,6 +3,7 @@
 
 #include "InstanceSettings.generated.h"
 
+struct FReplicatedGroupMemberData;
 class UInstanceDataAsset;
 
 USTRUCT(BlueprintType)
@@ -51,5 +52,5 @@ struct FInstanceSettings
 	int32 SessionID{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instance Settings")
-	TArray<FString> Players{};
+	TArray<FReplicatedGroupMemberData> Players{};
 };

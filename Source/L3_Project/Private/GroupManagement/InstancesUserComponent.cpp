@@ -84,7 +84,7 @@ void UInstancesUserComponent::StartInstanceServerRPC_Implementation(UInstanceDat
 	const FInstanceSettings ClientSettings = {
 		InstanceDataAsset,
 		SessionId,
-		Group->GetMembersAsString()
+		Group->GetAsReplicatedData()
 	};
 	
 	// Do not send this callback to the leader

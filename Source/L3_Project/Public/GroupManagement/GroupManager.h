@@ -1,8 +1,8 @@
 #pragma once
 #include "CoreMinimal.h"
-#include "Networking/InstanceSettings.h"
 #include "GroupManager.generated.h"
 
+struct FClientData;
 class UGroupableComponent;
 
 USTRUCT(BlueprintType)
@@ -18,6 +18,18 @@ struct FInviteData
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FString> GroupMembers{};
+};
+
+USTRUCT(BlueprintType)
+struct FReplicatedGroupMemberData
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FString Name{};
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	uint8 SelectedWeapon{};
 };
 
 class FServerGroupData
@@ -43,6 +55,8 @@ public:
 	}
 
 	TArray<FString> GetMembersAsString() const;
+	
+	TArray<FReplicatedGroupMemberData> GetAsReplicatedData() const;
 
 	TArray<FClientData> GetMembersAsClientData() const;
 };
@@ -59,7 +73,7 @@ struct FReplicatedGroupData
 	int32 GroupId{};
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<FString> GroupMembers{};
+	TArray<FReplicatedGroupMemberData> GroupMembers{};
 };
 
 class FGroupManager

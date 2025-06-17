@@ -19,8 +19,7 @@ public:
 	
 	UCharacterData() = default;
 	
-	UCharacterData(FString InUUID, FString InName) : UUID(InUUID), Name(InName), SelectedWeaponID(0), SelectedSpellsID(0)
-	, SelectedSkin(0) {}
+	UCharacterData(FString InUUID, FString InName) : UUID(InUUID), Name(InName)	, SelectedSkin(0), SelectedWeaponID(0), SelectedSpellsID(0) {}
 	
 	UPROPERTY(BlueprintReadWrite)
 	FString UUID{};

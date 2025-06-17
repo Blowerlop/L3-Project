@@ -51,14 +51,14 @@ void UGroupableComponent::TryOpenInstanceUI_Implementation()
 		return;
 	}
 	
-	const auto Members = Group->GetMembersAsString();
+	const auto Members = Group->GetAsReplicatedData();
 	if (Members.Num() == 0)
 	{
 		TryOpenInstanceUIResponse(false, FString());
 		return;
 	}
 	
-	TryOpenInstanceUIResponse(FGroupManager::IsGroupLeader(this), Members[0]);
+	TryOpenInstanceUIResponse(FGroupManager::IsGroupLeader(this), Members[0].Name);
 }
 
 void UGroupableComponent::TryOpenInstanceUIResponse_Implementation(bool Value, const FString& LeaderName)

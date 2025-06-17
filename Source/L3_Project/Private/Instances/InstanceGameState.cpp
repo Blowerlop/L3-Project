@@ -34,7 +34,7 @@ void AInstanceGameState::BeginPlay()
 	{
 		const int InstanceId = FMath::RandRange(-9999999, 9999999);
 		
-		InstancePlayers.Add(FInstancePlayerData(InstanceId, Player.Name, EInstancePlayerState::Connecting));
+		InstancePlayers.Add(FInstancePlayerData(InstanceId, Player.Name, Player.CharacterData.SelectedWeaponID, EInstancePlayerState::Connecting));
 		ClientUUIDToInstanceId.Add(Player.UUID, InstanceId);
 	}
 
