@@ -81,6 +81,21 @@ void UDatabaseTimelineInstance::TimelineEventPlayerLeaved(const UObject* Sender,
 	AddEvent("PlayedLeaved",GetGameTimeSecondsStatic(Sender) , Json);
 }
 
+void UDatabaseTimelineInstance::TimelineEventPlayerKilled(const UObject* Sender, const FString& UserName, const FString& IdToken, const FString& SpellId, const int PosX, const int PosY)
+{
+	TSharedPtr<FJsonObject> CharacterJson = MakeShareable(new FJsonObject);
+    
+	TSharedPtr<FJsonObject> PositionJson = MakeShareable(new FJsonObject);
+    
+	CharacterJson->SetStringField("PlayerName", UserName);
+	CharacterJson->SetStringField("KillSource", SpellId);
+	PositionJson->SetNumberField("PosX", PosX);
+	PositionJson->SetNumberField("PosY", PosY);
+	CharacterJson->SetObjectField("Position", PositionJson);
+	
+	AddEvent("Death", GetGameTimeSecondsStatic(Sender), CharacterJson);
+}
+
 void UDatabaseTimelineInstance::UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
 	const FString Path = FString::Printf(TEXT("Analytics/Games/%s"), *MatchId);
@@ -94,7 +109,11 @@ float UDatabaseTimelineInstance::GetEntityHP(const FString& EntityID, const floa
 	static TMap<FString, float> EntitiesHp = {};
 
 	if (EntitiesHp.Contains(EntityID))
-		return EntitiesHp[EntityID];
+	{
+		const float OldHp = EntitiesHp[EntityID];
+		EntitiesHp[EntityID] = Hp;
+		return OldHp;
+	}
 
 	EntitiesHp.Add(EntityID, Hp);
 	return Hp;
