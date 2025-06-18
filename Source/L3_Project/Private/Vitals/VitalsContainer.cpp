@@ -171,6 +171,29 @@ void UVitalsContainer::OnInitialVitalsRep()
 	}
 }
 
+void UVitalsContainer::UpdateByPlayerCount()
+{
+	const int32 PlayerCount = GetWorld()->GetNumPlayerControllers();
+	const auto Alpha = (PlayerCount - 1) / 3.0f;
+	
+	for(const auto& VitalTuple : Vitals)
+	{
+		const auto Vital = Vitals.Find(VitalTuple.Key);
+
+		if (Vital == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Vital %s not found in local map"), *UEnum::GetDisplayValueAsText(VitalTuple.Key).ToString());
+			return;
+		}
+
+		constexpr auto Multiplier = 3;
+		Vital->Value = FMath::Lerp(Vital->Value, Vital->Value * Multiplier, Alpha);
+		Vital->MaxValue = FMath::Lerp(Vital->MaxValue, Vital->MaxValue * Multiplier, Alpha);
+
+		UpdateReplicatedVitals(VitalTuple.Key, Vital);
+	}
+}
+
 void UVitalsContainer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

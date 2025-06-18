@@ -92,6 +92,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void SrvRemoveMultiple(const EVitalType Type, const TArray<FValueChainPair>& Values, bool IgnoreModifiers = false);
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void UpdateByPlayerCount();
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
