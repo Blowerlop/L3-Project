@@ -14,6 +14,12 @@ class L3_PROJECT_API UEffectDataAsset : public UPrimaryDataAsset
 
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	FText Name;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	FText Description;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UTexture2D* Icon;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
