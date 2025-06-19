@@ -127,11 +127,10 @@ void UVitalsContainer::SrvChangeValue(const EVitalType Type, const float Value, 
 
 		const auto NewValue = Vital->Value;
 		
+		SrvOnVitalChanged.Broadcast(this, Type, NewValue, Delta, InstigatorChain);
+		
 		OnVitalChangedDelegate.Broadcast(Type, NewValue);
 		OnVitalChangedWDeltaDelegate.Broadcast(Type, NewValue, Delta, InstigatorChain.GetOriginAsActor());
-
-		//UE_LOG(LogTemp, Error, TEXT("Vitals changed: %s"), *InstigatorChain.ToString());
-		SrvOnVitalChanged.Broadcast(this, Type, NewValue, Delta, InstigatorChain);
 		
 		UpdateReplicatedVitals(Type, Vital);
 	}
