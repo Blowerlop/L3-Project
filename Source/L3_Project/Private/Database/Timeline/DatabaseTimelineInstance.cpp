@@ -299,7 +299,15 @@ void UDatabaseTimelineInstance::OnVitalChanged(UVitalsContainer* Container, EVit
 		break;
 	}
 	
-	const FString SpellId = IInstigatorChainElement::Execute_GetIdentifier(Chain.GetElementAt(1));
+	// We should use Get identifier and get type everywhere instead of using arbitrary indexes
+	const auto ChainSecondElement = Chain.GetElementAt(1);
+	if (ChainSecondElement == nullptr)
+	{
+		AddEvent("Vital",GetGameTimeSecondsStatic(Container->GetOwner()) , VitalJson);
+		return;
+	}
+
+	const FString SpellId = IInstigatorChainElement::Execute_GetIdentifier(ChainSecondElement);
 	
 	VitalJson->SetStringField(TEXT("Spell"), SpellId);
 	

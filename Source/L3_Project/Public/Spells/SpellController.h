@@ -132,6 +132,9 @@ public:
 	void StartGlobalCooldown();
 	void StartCooldown(int Index);
 
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SrvResetAllCooldowns();
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	void SendSpellCastResponse(int SpellIndex, UAimResultHolder* Result, USpellDataAsset* NextSpell);
@@ -223,6 +226,9 @@ private:
 	UFUNCTION(Client, Reliable)
 	void ReplicateCooldownRpc(uint8 Index, float CooldownValue);
 
+	UFUNCTION(Client, Reliable)
+	void ResetCooldownsRpc();
+	
 	UFUNCTION()
 	void OnGlobalCooldownReplicated();
 
