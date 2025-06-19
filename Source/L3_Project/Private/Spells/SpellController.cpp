@@ -279,7 +279,9 @@ void USpellController::SetupInputs()
 			const auto Input = SpellInputs[i];
 			
 			EnhancedInputComponent->BindAction(Input, ETriggerEvent::Started, this, &USpellController::OnSpellInputStarted, i);
-			EnhancedInputComponent->BindAction(Input, ETriggerEvent::Completed, this, &USpellController::OnSpellInputStopped, i);
+
+			// Commented -> Normal Cast , Uncommented -> SmartCast
+			//EnhancedInputComponent->BindAction(Input, ETriggerEvent::Completed, this, &USpellController::OnSpellInputStopped, i);
 		}
 
 		EnhancedInputComponent->BindAction(ValidateInput, ETriggerEvent::Started, this, &USpellController::OnValidateInputStarted);
