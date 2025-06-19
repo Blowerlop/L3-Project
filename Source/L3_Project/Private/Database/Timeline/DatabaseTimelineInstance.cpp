@@ -315,7 +315,7 @@ void UDatabaseTimelineInstance::OnVitalChanged(UVitalsContainer* Container, EVit
 
 	if (IsDead && VitalJson->GetStringField("Target") != TEXT("Boss"))
 	{
-		const FVector Position = Chain.GetOriginAsActor()->GetActorLocation();
+		const FVector Position = Container->GetOwner()->GetActorLocation();
 		TimelineEventPlayerKilled(Container->GetOwner(), VitalJson->GetStringField(TEXT("Target")),
 			UDatabaseFunctions::GetIdToken(), SpellId, Position.X, Position.Y);
 	}
