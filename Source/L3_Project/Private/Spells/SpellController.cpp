@@ -219,6 +219,16 @@ void USpellController::ReplicateCooldownRpc_Implementation(uint8 Index, float Co
 	OnCooldownReplicatedDelegate.Broadcast(Index, CooldownValue);
 }
 
+void USpellController::ResetCooldownsRpc_Implementation()
+{
+	for(int i = 0; i < RepCooldowns.Num(); i++)
+	{
+		RepCooldowns[i] = 0.0f;
+
+		OnCooldownReplicatedDelegate.Broadcast(i, 0.0f);
+	}
+}
+
 void USpellController::OnGlobalCooldownReplicated()
 {
 	OnGlobalCooldownChanged.Broadcast(bIsInGlobalCooldown);
@@ -388,6 +398,27 @@ void USpellController::StartCooldown(const int Index)
 	RepCooldowns[Index] = Value;
 
 	SrvReplicateCooldown(Index, Value);
+}
+
+void USpellController::SrvResetAllCooldowns()
+{
+	const auto IsLocallyControlled = IsOwnerLocallyControlled();
+
+	for(int i = 0; i < Cooldowns.Num(); i++)
+	{
+		Cooldowns[i] = 0.0f;
+		RepCooldowns[i] = 0.0f;
+
+		if(IsLocallyControlled)
+		{
+			OnCooldownReplicatedDelegate.Broadcast(i, 0.0f);
+		}
+	}
+
+	if (!IsLocallyControlled)
+	{
+		ResetCooldownsRpc();
+	}
 }
 
 void USpellController::UpdateCooldowns(float DeltaTime)
