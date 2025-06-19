@@ -299,11 +299,14 @@ void UDatabaseTimelineInstance::OnVitalChanged(UVitalsContainer* Container, EVit
 		break;
 	}
 	
+	const FString SpellId = IInstigatorChainElement::Execute_GetIdentifier(Chain.GetElementAt(1));
+	
+	VitalJson->SetStringField(TEXT("Spell"), SpellId);
+	
 	AddEvent("Vital",GetGameTimeSecondsStatic(Container->GetOwner()) , VitalJson);
 
 	if (IsDead && VitalJson->GetStringField("Target") != TEXT("Boss"))
 	{
-		const FString SpellId = IInstigatorChainElement::Execute_GetIdentifier(Chain.GetElementAt(1));
 		const FVector Position = Chain.GetOriginAsActor()->GetActorLocation();
 		TimelineEventPlayerKilled(Container->GetOwner(), VitalJson->GetStringField(TEXT("Target")),
 			UDatabaseFunctions::GetIdToken(), SpellId, Position.X, Position.Y);
