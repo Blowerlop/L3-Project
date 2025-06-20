@@ -141,6 +141,16 @@ void UBaseGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, E
 {
 	UE_LOG(LogTemp, Error, TEXT("Network failure. %s %d"), *String, Arg);
 
+	LastNetworkFailure = Arg == ENetworkFailure::ConnectionLost ? TEXT("Connection Lost") :
+		Arg == ENetworkFailure::NetDriverAlreadyExists ? TEXT("Net Driver Already Exists") :
+		Arg == ENetworkFailure::NetDriverCreateFailure ? TEXT("Net Driver Create Failure") :
+		Arg == ENetworkFailure::OutdatedClient ? TEXT("Outdated Client") :
+		Arg == ENetworkFailure::OutdatedServer ? TEXT("Outdated Server") :
+		Arg == ENetworkFailure::ConnectionTimeout ? TEXT("Connection Timeout") :
+		TEXT("Unknown Failure");
+	
+	GetSubsystem<USessionsManagerSubsystem>()->DestroySession();
+	
 	// todo: Try to return to lobby if in instance
 	// If already in lobby, or can't return to lobby, go back to main menu
 }
