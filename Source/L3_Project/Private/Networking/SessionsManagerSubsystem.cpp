@@ -90,10 +90,23 @@ void USessionsManagerSubsystem::DestroySession(FName OSSName)
 
 	if (!Session->DestroySession(RunningSessionName))
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to destroy session.")); 
+		UE_LOG(LogTemp, Error, TEXT("Failed to destroy session."));
+
+		DestroySessionDelegate.ExecuteIfBound(false);
+		DestroySessionDelegate.Unbind();
+		
+		BP_DestroySessionDelegate.ExecuteIfBound(false);
+		BP_DestroySessionDelegate.Unbind();
+		
 		Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionDelegateHandle);
 		DestroySessionDelegateHandle.Reset();
 	}
+}
+
+void USessionsManagerSubsystem::DestroySessionWithBPCallback(FDestroySessionDelegateBP Delegate, FName OSSName)
+{
+	BP_DestroySessionDelegate = Delegate;
+	DestroySession(OSSName);
 }
 
 void USessionsManagerSubsystem::DestroySessionWithCallback(const DSWCFunc& Func, FName OSSName)
@@ -120,6 +133,9 @@ void USessionsManagerSubsystem::HandleDestroySessionCompleted(FName EosSessionNa
 
 	(void)DestroySessionDelegate.ExecuteIfBound(bWasSuccessful);
 	DestroySessionDelegate.Unbind();
+
+	BP_DestroySessionDelegate.ExecuteIfBound(bWasSuccessful);
+	BP_DestroySessionDelegate.Unbind();
 
 	SessionInterface->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionDelegateHandle);
 }
