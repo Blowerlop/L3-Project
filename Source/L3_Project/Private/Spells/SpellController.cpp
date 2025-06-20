@@ -87,7 +87,7 @@ void USpellController::OnAnimationEndedNotify()
 	
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 
-	if (CastState->Spell->bHasCombo)
+	if (CastState->Spell != nullptr && CastState->Spell->bHasCombo)
 	{
 		StartCooldown(CastState->SpellIndex);
 	}
@@ -151,6 +151,11 @@ void USpellController::BeginPlay()
 	CastState->SpellIndex = -1;
 
 	RepCooldowns.SetNum(MaxSpells);
+
+	if (SpellDatas.Num() > 0)
+	{
+		UpdateSpellAimers();
+	}
 	
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
