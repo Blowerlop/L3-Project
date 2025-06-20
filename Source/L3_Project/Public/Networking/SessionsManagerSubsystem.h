@@ -35,6 +35,8 @@ class L3_PROJECT_API USessionsManagerSubsystem : public UGameInstanceSubsystem
 	
 	DECLARE_DYNAMIC_DELEGATE_TwoParams(FFindSessionsDelegate, bool, bWasSuccessful, const FBlueprintSessionSearchResult&, Search);
 	DECLARE_DYNAMIC_DELEGATE_TwoParams(FCreateSessionDelegate, FName, SessionName, bool, bWasSuccessful);
+
+	DECLARE_DYNAMIC_DELEGATE_OneParam(FDestroySessionDelegateBP, bool, bWasSuccessful);
 	
 	DECLARE_DELEGATE_OneParam(FDestroySessionDelegate, bool);
 	DECLARE_DELEGATE_TwoParams(FFindSessionsDelegateCPP, bool bWasSuccessful, const FBlueprintSessionSearchResult& Search);
@@ -52,6 +54,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
 	void DestroySession(FName OSSName = "EOS");
 
+	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
+	void DestroySessionWithBPCallback(FDestroySessionDelegateBP Delegate, FName OSSName = "EOS");
+	
 	typedef std::function<void(const bool)> DSWCFunc;
 	void DestroySessionWithCallback(const DSWCFunc& Func, FName OSSName = "EOS");
 	
@@ -77,6 +82,8 @@ private:
 	
 	FDelegateHandle DestroySessionDelegateHandle;
 	FDestroySessionDelegate DestroySessionDelegate;
+
+	FDestroySessionDelegateBP BP_DestroySessionDelegate;
 
 	FDelegateHandle FindSessionsDelegateHandle;
 	FFindSessionsDelegate BP_FindSessionsDelegate;
