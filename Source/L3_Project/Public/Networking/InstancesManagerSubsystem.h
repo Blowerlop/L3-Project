@@ -60,8 +60,6 @@ public:
 	}
 
 private:
-	const FName LobbyOnlineSubsystem = "EOS";
-	
 	void StartListenServer(const FString& InstanceMapPath) const;
 
 	bool TryGetBaseGameInstance(UBaseGameInstance*& Out) const
