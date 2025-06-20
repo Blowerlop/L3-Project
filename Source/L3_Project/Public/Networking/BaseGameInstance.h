@@ -46,6 +46,9 @@ public:
 	static const FString CharacterUUIDConnectOptionsKey;
 	
 	static FString FirebaseIdToken;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString LastNetworkFailure{};
 	
 	UPROPERTY(BlueprintReadWrite)
 	FClientData SelfClientData;
