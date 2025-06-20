@@ -10,7 +10,8 @@ enum class EEffectType : uint8
 	Stun,
 	Root,
 	DamageOverTime,
-	HealOverTime
+	HealOverTime,
+	EasyMode
 };
 
 UENUM(Blueprintable)

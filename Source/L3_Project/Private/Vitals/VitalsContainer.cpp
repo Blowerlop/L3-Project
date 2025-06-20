@@ -68,9 +68,16 @@ void UVitalsContainer::SrvRemove(const EVitalType Type, float Value, const FInst
 {
 	if (!IgnoreModifiers)
 	{
-		Value = GetModifiedValue(Type, Value, EVitalUpdateType::Remove);
+		if (IsEasyMode)
+		{
+			Value = EasyModeDamages;
+		}
+		else
+		{
+			Value = GetModifiedValue(Type, Value, EVitalUpdateType::Remove);
+		}
 	}
-
+	
 	const auto InstigatorChainOrigin = InstigatorChain.GetOriginAsActor();
 		
 	SrvChangeValue(Type, -Value, InstigatorChain);
@@ -86,7 +93,14 @@ void UVitalsContainer::SrvRemoveMultiple(const EVitalType Type, const TArray<FVa
 		
 		if (!IgnoreModifiers)
 		{
-			Value = GetModifiedValue(Type, InValue, EVitalUpdateType::Remove);
+			if (IsEasyMode)
+			{
+				Value = EasyModeDamages;
+			}
+			else
+			{
+				Value = GetModifiedValue(Type, InValue, EVitalUpdateType::Remove);
+			}
 		}
 
 		const auto InstigatorChainOrigin = InstigatorChain.GetOriginAsActor();
@@ -191,6 +205,11 @@ void UVitalsContainer::UpdateByPlayerCount()
 
 		UpdateReplicatedVitals(VitalTuple.Key, Vital);
 	}
+}
+
+void UVitalsContainer::SetEasyMode(const bool bIsEasyMode)
+{
+	IsEasyMode = bIsEasyMode;
 }
 
 void UVitalsContainer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
