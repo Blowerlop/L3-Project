@@ -38,7 +38,6 @@ void UGroupableComponent::TryOpenInstanceUI_Implementation()
 {
 	if (!ReplicatedGroupData.IsValid)
 	{
-		FGroupManager::CreateGroup(this);
 		TryOpenInstanceUIResponse(true, FString());
 		return;
 	}
