@@ -30,11 +30,11 @@ void AZodiaqGameState::Tick(float DeltaSeconds)
 	
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(
+		/*GEngine->AddOnScreenDebugMessage(
 			5778676,                        // ID constant → remplace le message précédent
 			0.0f,                     // 0 = affiche uniquement pour ce frame
 			FColor::Cyan,            // Couleur du texte
 			FString::Printf(TEXT("Estimated Server Time: %.3f"), GetServerWorldTimeSeconds())
-		);
+		);*/
 	}
 }
