@@ -316,12 +316,9 @@ void USpellController::OnSpellInputStarted(const int Index)
 	ASpellAimer* Aimer = nullptr;
 	if (!TryGetSpellAimer(Index, Aimer)) return;
 	
-	if (IsAiming())
-	{
-		OnCancelInputStarted();
-	}
+	if (IsAiming()) OnCancelInputStarted();
+
 	if (!CanStartAiming(Index)) return;
-	
 	const auto Spell = GetSpellData(Index);
 	
 	if (Spell->IsInstantAiming)
