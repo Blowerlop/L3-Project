@@ -20,6 +20,8 @@ FDelegateHandle UDatabaseTimelineInstance::RemovedEffectCallback;
 FDelegateHandle UDatabaseTimelineInstance::SpellCallback;
 FDelegateHandle UDatabaseTimelineInstance::VitalCallback;
 
+static TMap<FString, float> EntitiesHp = {};
+
 void UDatabaseTimelineInstance::InitTimeline()
 {
 	Events.Empty();
@@ -81,6 +83,11 @@ void UDatabaseTimelineInstance::TimelineEventPlayerLeaved(const UObject* Sender,
 	AddEvent("PlayedLeaved",GetGameTimeSecondsStatic(Sender) , Json);
 }
 
+void UDatabaseTimelineInstance::TimelineEventResetTempsData()
+{
+	EntitiesHp = {};
+}
+
 void UDatabaseTimelineInstance::TimelineEventPlayerKilled(const UObject* Sender, const FString& UserName, const FString& IdToken, const FString& SpellId, const int PosX, const int PosY)
 {
 	TSharedPtr<FJsonObject> CharacterJson = MakeShareable(new FJsonObject);
@@ -115,8 +122,6 @@ void UDatabaseTimelineInstance::UploadTimeline(const FString& PlayerIdToken, con
 
 float UDatabaseTimelineInstance::GetEntityHP(const FString& EntityID, const float& Hp)
 {
-	static TMap<FString, float> EntitiesHp = {};
-
 	if (EntitiesHp.Contains(EntityID))
 	{
 		const float OldHp = EntitiesHp[EntityID];
