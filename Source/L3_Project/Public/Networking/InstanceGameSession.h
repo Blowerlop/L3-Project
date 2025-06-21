@@ -16,6 +16,4 @@ class L3_PROJECT_API AInstanceGameSession : public ABaseGameSession
 	
 	virtual void HandleRegisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful) override;
 	virtual void HandleUnregisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful) override;
-
-	virtual FName GetOnlineSubsystemName() const override;
 };

@@ -31,8 +31,3 @@ void AInstanceGameSession::HandleUnregisterPlayerCompleted(FName EosSessionName,
 		InstancesManager->ReturnToLobby();
 	}
 }
-
-FName AInstanceGameSession::GetOnlineSubsystemName() const
-{
-	return UInstancesManagerSubsystem::GetOnlineSubsystemName();
-}

@@ -13,14 +13,14 @@ bool USessionsManagerSubsystem::HasRunningSession{};
 	
 FName USessionsManagerSubsystem::RunningSessionName{};
 
-FName USessionsManagerSubsystem::UsedOssName = "EOS";
-
 void USessionsManagerSubsystem::CreateSession(FName SessionName, FCreateSessionDelegate Delegate, FName KeyName,
                                               FString KeyValue, bool bDedicatedServer)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 
+	UE_LOG(LogTemp, Error, TEXT("Creating session subsystem name: %s"), *Subsystem->GetSubsystemName().ToString());
+	
 	BP_CreateSessionDelegate = Delegate;
     CreateSessionDelegateHandle =
         SessionInterface->AddOnCreateSessionCompleteDelegate_Handle(FOnCreateSessionCompleteDelegate::CreateUObject(
@@ -29,7 +29,7 @@ void USessionsManagerSubsystem::CreateSession(FName SessionName, FCreateSessionD
     // Session settings 
     TSharedRef<FOnlineSessionSettings> SessionSettings = MakeShared<FOnlineSessionSettings>();
     SessionSettings->NumPublicConnections = MaxNumberOfPlayersInSession;
-	SessionSettings->bIsLANMatch = UsedOssName == "NULL"; // If the session is LAN or not
+	SessionSettings->bIsLANMatch = Subsystem->GetSubsystemName() == "NULL"; // If the session is LAN or not
     SessionSettings->bShouldAdvertise = true; //True = searchable, False = unsearchable
     SessionSettings->bUsesPresence = false;   //Idk
     SessionSettings->bAllowJoinViaPresence = false; // superset by bShouldAdvertise and will be true on the backend
@@ -56,7 +56,7 @@ void USessionsManagerSubsystem::CreateSession(FName SessionName, FCreateSessionD
 
 void USessionsManagerSubsystem::HandleCreateSessionCompleted(FName EosSessionName, bool bWasSuccessful)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 	
 	if (bWasSuccessful)
@@ -82,7 +82,7 @@ void USessionsManagerSubsystem::HandleCreateSessionCompleted(FName EosSessionNam
 void USessionsManagerSubsystem::DestroySession()
 {
 	UE_LOG(LogTemp, Log, TEXT("Destroying session..."));
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 
 	DestroySessionDelegateHandle =
@@ -119,7 +119,7 @@ void USessionsManagerSubsystem::DestroySessionWithCallback(const DSWCFunc& Func)
 
 void USessionsManagerSubsystem::HandleDestroySessionCompleted(FName EosSessionName, bool bWasSuccessful)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 
 	if (bWasSuccessful)
@@ -156,13 +156,13 @@ void USessionsManagerSubsystem::FindSessions(FName SearchKey, FString SearchValu
 
 void USessionsManagerSubsystem::FindSessions(FName SearchKey, FString SearchValue)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 	TSharedRef<FOnlineSessionSearch> Search = MakeShared<FOnlineSessionSearch>();
  
 	// Remove the default search parameters that FOnlineSessionSearch sets up.
 	Search->QuerySettings.SearchParams.Empty();
-	Search->bIsLanQuery = UsedOssName == "NULL"; // If the session is LAN or not
+	Search->bIsLanQuery = Subsystem->GetSubsystemName() == "NULL"; // If the session is LAN or not
  
 	Search->QuerySettings.Set(SearchKey, SearchValue, EOnlineComparisonOp::Equals); // Key/Value used to get a specific session
 	FindSessionsDelegateHandle =
@@ -181,7 +181,7 @@ void USessionsManagerSubsystem::FindSessions(FName SearchKey, FString SearchValu
 
 void USessionsManagerSubsystem::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
  
 	if (bWasSuccessful)
@@ -220,7 +220,7 @@ void USessionsManagerSubsystem::HandleFindSessionsCompleted(bool bWasSuccessful,
 
 void USessionsManagerSubsystem::JoinSession(FName SessionName, FBlueprintSessionSearchResult SessionData)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
  
 	JoinSessionDelegateHandle = 
@@ -238,7 +238,7 @@ void USessionsManagerSubsystem::JoinSession(FName SessionName, FBlueprintSession
 
 void USessionsManagerSubsystem::RegisterSelf()
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineIdentityPtr IdentityInterface = Subsystem->GetIdentityInterface();
 
 	if(APlayerController* PlayerController = GetWorld()->GetFirstPlayerController(); PlayerController != nullptr)
@@ -252,7 +252,7 @@ void USessionsManagerSubsystem::RegisterSelf()
 
 void USessionsManagerSubsystem::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), UsedOssName);
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
 	const IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
 	
 	if (Result == EOnJoinSessionCompleteResult::Success)

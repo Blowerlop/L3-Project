@@ -46,8 +46,6 @@ public:
 	static bool HasRunningSession;
 	
 	static FName RunningSessionName;
-
-	static FName UsedOssName;
 	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session", meta = (AutoCreateRefTerm = "Delegate"))
 	void CreateSession(FName SessionName, FCreateSessionDelegate Delegate, FName KeyName = "KeyName",

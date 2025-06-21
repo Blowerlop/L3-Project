@@ -15,6 +15,4 @@ class L3_PROJECT_API ALobbyGameSession : public ABaseGameSession
 	GENERATED_BODY()
 	
 	virtual void UnregisterPlayer(const APlayerController* ExitingPlayer) override;
-
-	virtual FName GetOnlineSubsystemName() const override;
 };

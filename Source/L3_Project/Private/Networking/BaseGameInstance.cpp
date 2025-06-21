@@ -58,7 +58,13 @@ void UBaseGameInstance::Logout() const
 
 bool UBaseGameInstance::IsLoggedIn() const
 {
-	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld(), "EOS");
+	const IOnlineSubsystem* Subsystem = Online::GetSubsystem(GetWorld());
+
+	if (Subsystem->GetSubsystemName() == "NULL")
+	{
+		return true;
+	}
+	
 	const IOnlineIdentityPtr IdentityInterface = Subsystem->GetIdentityInterface();
 
 	return IdentityInterface->GetLoginStatus(0) == ELoginStatus::LoggedIn;

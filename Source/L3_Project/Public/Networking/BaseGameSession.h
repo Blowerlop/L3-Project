@@ -41,11 +41,4 @@ protected:
 	
 	virtual void HandleRegisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful);
 	virtual void HandleUnregisterPlayerCompleted(FName EosSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccessful);
-
-	virtual FName GetOnlineSubsystemName() const;
-	
-	IOnlineSubsystem* GetOnlineSubsystem() const
-	{
-		return Online::GetSubsystem(GetWorld(), GetOnlineSubsystemName());
-	}
 };
