@@ -98,7 +98,16 @@ void UDatabaseTimelineInstance::TimelineEventPlayerKilled(const UObject* Sender,
 
 void UDatabaseTimelineInstance::UploadTimeline(const FString& PlayerIdToken, const FSuccess& OnSuccess, const FFailed& OnFailure)
 {
+#if WITH_EDITOR
+	// Code compilé uniquement dans l'éditeur
+	const FString Path = FString::Printf(TEXT("Debug/Games/%s"), *MatchId);
+	UE_LOG(LogTemp, Error, TEXT("1"));
+#else
+	// Code compilé pour la build (Shipping, Development)
 	const FString Path = FString::Printf(TEXT("Analytics/Games/%s"), *MatchId);
+	UE_LOG(LogTemp, Error, TEXT("2"));
+#endif
+	
 	TSharedPtr<FJsonObject> Payload = ConvertToJson();
 
 	UDatabaseFunctions::SetData(Path, Payload, PlayerIdToken, OnSuccess, OnFailure);
