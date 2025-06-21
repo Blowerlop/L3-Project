@@ -87,7 +87,7 @@ void USpellController::OnAnimationEndedNotify()
 	
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 
-	if (CastState->Spell->bHasCombo)
+	if (CastState->Spell != nullptr && CastState->Spell->bHasCombo)
 	{
 		StartCooldown(CastState->SpellIndex);
 	}
@@ -151,6 +151,11 @@ void USpellController::BeginPlay()
 	CastState->SpellIndex = -1;
 
 	RepCooldowns.SetNum(MaxSpells);
+
+	if (SpellDatas.Num() > 0)
+	{
+		UpdateSpellAimers();
+	}
 	
 	if (!UKismetSystemLibrary::IsServer(this)) return;
 	
@@ -292,6 +297,11 @@ void USpellController::SetupInputs()
 
 			// Commented -> Normal Cast , Uncommented -> SmartCast
 			//EnhancedInputComponent->BindAction(Input, ETriggerEvent::Completed, this, &USpellController::OnSpellInputStopped, i);
+
+			//EnhancedInput de l'auto est a 0 et en modifier pulse
+			if(i == 0)
+				EnhancedInputComponent->BindAction(Input, ETriggerEvent::Triggered, this, &USpellController::OnSpellInputStarted, i );
+
 		}
 
 		EnhancedInputComponent->BindAction(ValidateInput, ETriggerEvent::Started, this, &USpellController::OnValidateInputStarted);

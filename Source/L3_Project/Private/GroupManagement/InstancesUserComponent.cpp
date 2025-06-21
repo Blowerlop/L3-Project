@@ -67,6 +67,11 @@ void UInstancesUserComponent::StartInstanceServerRPC_Implementation(UInstanceDat
 		UE_LOG(LogTemp, Error, TEXT("Can't start instance because there is no GroupableComponent on InstancesUser Owner!"));
 		return;
 	}
+
+	if (!GroupableComponent->ReplicatedGroupData.IsValid)
+	{
+		FGroupManager::CreateGroup(GroupableComponent);
+	}
 	
 	if (!FGroupManager::IsGroupLeader(GroupableComponent)) return;
 

@@ -95,8 +95,17 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
 	void UpdateByPlayerCount();
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	void SetEasyMode(const bool bIsEasyMode);
 	
 protected:
+	UPROPERTY(BlueprintReadOnly)
+	bool IsEasyMode{};
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	float EasyModeDamages = 1;
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TMap<EVitalType, FVital> Vitals;
 

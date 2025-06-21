@@ -54,6 +54,12 @@ bool ASpell::SrvApply(AActor* Target)
 		return false;
 	}
 
+	if (!Caster)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvApply - Caster is null!"));
+		return false;
+	}
+
 	if (!Target)
 	{
 		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvApply - Target is null!"));
@@ -64,6 +70,15 @@ bool ASpell::SrvApply(AActor* Target)
 	{
 		UE_LOG(LogTemp, Error, TEXT("ASpell::SrvApply - Data is null!"));
 		return false;
+	}
+
+	if (const auto Vitals = Caster->GetComponentByClass<UVitalsContainer>(); Vitals != nullptr)
+	{
+		if (Vitals->GetValue(EVitalType::Health) <= 0)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ASpell::SrvApply - Caster is dead!"));
+			return false;
+		}
 	}
 
 	if (const auto AliveState = Cast<IAliveState>(Target); AliveState != nullptr)

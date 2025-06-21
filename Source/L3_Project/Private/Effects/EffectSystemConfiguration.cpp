@@ -15,6 +15,7 @@ bool UEffectSystemConfiguration::NeedDuration(const EEffectType Type)
 	case EEffectType::Root:
 	case EEffectType::DamageOverTime:
 	case EEffectType::HealOverTime:
+	case EEffectType::EasyMode:
 		return true;
 	}
 
@@ -34,6 +35,7 @@ bool UEffectSystemConfiguration::NeedValue(const EEffectType Type)
 		return true;
 	case EEffectType::Stun:
 	case EEffectType::Root:
+	case EEffectType::EasyMode:
 		return false;
 	}
 
@@ -50,6 +52,7 @@ bool UEffectSystemConfiguration::NeedRate(const EEffectType Type)
 	case EEffectType::HealBonus:
 	case EEffectType::Stun:
 	case EEffectType::Root:
+	case EEffectType::EasyMode:
 		return false;
 	case EEffectType::DamageOverTime:
 	case EEffectType::HealOverTime:
