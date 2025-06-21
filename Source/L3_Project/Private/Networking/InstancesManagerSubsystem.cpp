@@ -53,7 +53,7 @@ void UInstancesManagerSubsystem::StartNewInstance(FServerInstanceSettings Settin
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	SessionManager->DestroySessionWithCallback(OnSessionDestroyed, LobbyOnlineSubsystem);
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
 void UInstancesManagerSubsystem::StartListenServer(const FString& InstanceMapPath) const
@@ -178,7 +178,7 @@ void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessi
 	}
 
 	auto OnTransition = [this, SessionName, SessionData, SessionManager]() {
-		SessionManager->JoinSession(SessionName, SessionData, GetOnlineSubsystemName());
+		SessionManager->JoinSession(SessionName, SessionData);
 	};
 	
 	auto OnSessionDestroyed = [this, OnTransition, GameInstance](const bool bWasSuccessful) {
@@ -193,7 +193,7 @@ void UInstancesManagerSubsystem::JoinInstance(FName SessionName, FBlueprintSessi
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	SessionManager->DestroySessionWithCallback(OnSessionDestroyed, LobbyOnlineSubsystem);
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
 void UInstancesManagerSubsystem::ReturnToLobby()
@@ -226,11 +226,11 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 			return;
 		}
 
-		SessionManager->JoinSession("Lobby", Search, LobbyOnlineSubsystem);
+		SessionManager->JoinSession("Lobby", Search);
 	};
 	
 	auto OnTransition = [this, OnSessionFound, SessionManager]() {
-		SessionManager->FindSessions("TYPE", "Lobby", OnSessionFound, LobbyOnlineSubsystem);
+		SessionManager->FindSessions("TYPE", "Lobby", OnSessionFound);
 	};
 	
 	auto OnSessionDestroyed = [this, OnTransition, GameInstance](const bool bWasSuccessful) {
@@ -245,7 +245,7 @@ void UInstancesManagerSubsystem::ReturnToLobby()
 		GameInstance->StartTransition(ENetTransitionType::LobbyToInstance, OnTransition);
 	};
 	
-	SessionManager->DestroySessionWithCallback(OnSessionDestroyed, GetOnlineSubsystemName());
+	SessionManager->DestroySessionWithCallback(OnSessionDestroyed);
 }
 
 

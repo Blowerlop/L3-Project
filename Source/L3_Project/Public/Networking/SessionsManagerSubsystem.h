@@ -46,37 +46,37 @@ public:
 	static bool HasRunningSession;
 	
 	static FName RunningSessionName;
+
+	static FName UsedOssName;
 	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session", meta = (AutoCreateRefTerm = "Delegate"))
 	void CreateSession(FName SessionName, FCreateSessionDelegate Delegate, FName KeyName = "KeyName",
-	                   FString KeyValue = "KeyValue", bool bDedicatedServer = true, FName OSSName = "EOS");
+	                   FString KeyValue = "KeyValue", bool bDedicatedServer = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void DestroySession(FName OSSName = "EOS");
+	void DestroySession();
 
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void DestroySessionWithBPCallback(FDestroySessionDelegateBP Delegate, FName OSSName = "EOS");
+	void DestroySessionWithBPCallback(FDestroySessionDelegateBP Delegate);
 	
 	typedef std::function<void(const bool)> DSWCFunc;
-	void DestroySessionWithCallback(const DSWCFunc& Func, FName OSSName = "EOS");
+	void DestroySessionWithCallback(const DSWCFunc& Func);
 	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session", meta = (AutoCreateRefTerm = "Delegate"))
-	void FindSessions(FName SearchKey, FString SearchValue, FFindSessionsDelegate Delegate, FName OSSName = "EOS");
+	void FindSessions(FName SearchKey, FString SearchValue, FFindSessionsDelegate Delegate);
 
 	typedef std::function<void(bool bWasSuccessful, const FBlueprintSessionSearchResult& Search)> FindSessionFunc;
-	void FindSessions(FName SearchKey, FString SearchValue, const FindSessionFunc& Func, FName OSSName = "EOS");
+	void FindSessions(FName SearchKey, FString SearchValue, const FindSessionFunc& Func);
 
-	void FindSessions(FName SearchKey, FString SearchValue, FName OSSName = "EOS");
+	void FindSessions(FName SearchKey, FString SearchValue);
 	
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void JoinSession(FName SessionName, FBlueprintSessionSearchResult SessionData, FName OSSName = "EOS");
+	void JoinSession(FName SessionName, FBlueprintSessionSearchResult SessionData);
 
 	UFUNCTION(BlueprintCallable, Category = "Custom Online Session")
-	void RegisterSelf(FName OSSName = "EOS");
+	void RegisterSelf();
 	
 private:
-	FName LastUsedOSSName;
-	
 	FDelegateHandle CreateSessionDelegateHandle;
 	FCreateSessionDelegate BP_CreateSessionDelegate;
 	
@@ -99,9 +99,6 @@ private:
 	
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
 	void HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
-
-	IOnlineSubsystem* UseOnlineSubsystem(FName OSSName);
-	IOnlineSubsystem* UseLastOnlineSubsystem() const;
 	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
