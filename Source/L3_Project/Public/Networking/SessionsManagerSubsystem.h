@@ -97,6 +97,8 @@ private:
 	
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
 	void HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+
+	static bool IsValidSession(const IOnlineSubsystem* Subsystem, const FOnlineSessionSearchResult& Result, TSharedRef<FOnlineSessionSearch> Search);
 	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;

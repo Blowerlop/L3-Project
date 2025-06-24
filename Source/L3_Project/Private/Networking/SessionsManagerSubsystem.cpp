@@ -196,17 +196,39 @@ void USessionsManagerSubsystem::HandleFindSessionsCompleted(bool bWasSuccessful,
 			(void)BP_FindSessionsDelegate.ExecuteIfBound(false, {});
 			(void)CPP_FindSessionsDelegate.ExecuteIfBound(false, {});
 		}
+
+		auto OneValidSession = false;
 		
 		for (const auto& SessionInSearchResult : Search->SearchResults)
 		{
-			// Just get the first session found. There should not be more than one session corresponding to given search key/value.
+			if (!IsValidSession(Subsystem, SessionInSearchResult, Search))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("session not validated params:"))
+				
+				for (auto [Name, Setting] : SessionInSearchResult.Session.SessionSettings.Settings)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("   - %s %s"), *Name.ToString(), *Setting.Data.ToString())
+				}
+				
+				continue;
+			}
 			UE_LOG(LogTemp, Log, TEXT("Found one session."));
 
 			const auto BPResults = FBlueprintSessionSearchResult::GetFromCPP(SessionInSearchResult);
 			
 			(void)BP_FindSessionsDelegate.ExecuteIfBound(true, BPResults);
 			(void)CPP_FindSessionsDelegate.ExecuteIfBound(true, BPResults);
+
+			OneValidSession = true;
 			break;
+		}
+
+		if (!OneValidSession)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Couldn't find any valid session."));
+
+			(void)BP_FindSessionsDelegate.ExecuteIfBound(false, {});
+			(void)CPP_FindSessionsDelegate.ExecuteIfBound(false, {});
 		}
 	}
 	else
@@ -303,6 +325,24 @@ void USessionsManagerSubsystem::HandleJoinSessionCompleted(FName SessionName, EO
 	
 	SessionInterface->ClearOnJoinSessionCompleteDelegate_Handle(JoinSessionDelegateHandle);
 	JoinSessionDelegateHandle.Reset();
+}
+
+bool USessionsManagerSubsystem::IsValidSession(const IOnlineSubsystem* Subsystem, const FOnlineSessionSearchResult& Result,
+	TSharedRef<FOnlineSessionSearch> Search)
+{
+	if (Subsystem->GetSubsystemName() != "NULL") return true;
+	
+	FString Value{};
+	
+	for (auto [Name, Params] : Search->QuerySettings.SearchParams)
+	{
+		if (!Result.Session.SessionSettings.Get(Name, Value) || Value != Params.Data.ToString())
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void USessionsManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
