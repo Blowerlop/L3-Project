@@ -22,3 +22,7 @@ Team up, adapt, and overcome!
 
 # Gameplay
 [![Gameplay](https://img.youtube.com/vi/3vZ3rDpK1EE/hqdefault.jpg)](https://www.youtube.com/watch?v=3vZ3rDpK1EE)
+
+# Gifs
+![Cinematic](./Assets/Readme/Gifs/Cinematic.gif)
+![Gameplay](./Assets/Readme/Gifs/Gameplay.gif)
