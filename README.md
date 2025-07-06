@@ -9,7 +9,7 @@ Figure out bosses’ patterns and adapt with your team to defeat THEM.
 This game is heavily centered around teamwork and team spirit. 
 Team up, adapt, and overcome!
 
-# Developpers
+# DEVELOPPERS
 
 - [Quoc-Bao NGUYEN](https://github.com/Baokebab)
 - [Nathan GIROD](https://github.com/Blowerlop)
@@ -17,12 +17,12 @@ Team up, adapt, and overcome!
 - [Helias GAMONET](https://github.com/LeBliblib)
 - [Leo JEGOUSSE](https://github.com/26LeoJ)
 
-# Trailer
+# TRAILER
 [![Trailer](https://img.youtube.com/vi/YPPt4yNKmbs/hqdefault.jpg)](https://www.youtube.com/watch?v=YPPt4yNKmbs)
 
-# Gameplay
+# GAMEPLAY
 [![Gameplay](https://img.youtube.com/vi/3vZ3rDpK1EE/hqdefault.jpg)](https://www.youtube.com/watch?v=3vZ3rDpK1EE)
 
-# Gifs
+# GIFS
 ![Cinematic](./Assets/Readme/Gifs/Cinematic.gif)
 ![Gameplay](./Assets/Readme/Gifs/Gameplay.gif)
