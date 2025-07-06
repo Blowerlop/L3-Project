@@ -16,3 +16,7 @@ Team up, adapt, and overcome!
 - [Guillaume WIART](https://github.com/Drainor-GameDev)
 - [Helias GAMONET](https://github.com/LeBliblib)
 - [Leo JEGOUSSE](https://github.com/26LeoJ)
+
+# Videos
+[![Trailer](https://img.youtube.com/vi/YPPt4yNKmbs/hqdefault.jpg)](https://www.youtube.com/watch?v=YPPt4yNKmbs)
+[![Gameplay](https://img.youtube.com/vi/3vZ3rDpK1EE/hqdefault.jpg)](https://www.youtube.com/watch?v=3vZ3rDpK1EE)
