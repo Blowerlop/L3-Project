@@ -17,12 +17,14 @@ Team up, adapt, and overcome!
 - [Helias GAMONET](https://github.com/LeBliblib)
 - [Leo JEGOUSSE](https://github.com/26LeoJ)
 
-# TRAILER
+# FOOTAGES
+
+## TRAILER
 [![Trailer](https://img.youtube.com/vi/YPPt4yNKmbs/hqdefault.jpg)](https://www.youtube.com/watch?v=YPPt4yNKmbs)
 
-# GAMEPLAY
+## GAMEPLAY
 [![Gameplay](https://img.youtube.com/vi/3vZ3rDpK1EE/hqdefault.jpg)](https://www.youtube.com/watch?v=3vZ3rDpK1EE)
 
-# GIFS
+## GIFS
 ![Cinematic](./Assets/Readme/Gifs/Cinematic.gif)
 ![Gameplay](./Assets/Readme/Gifs/Gameplay.gif)
