@@ -34,9 +34,9 @@ Team up, adapt, and overcome!
 ![Gameplay](./Assets/Readme/Gifs/Gameplay.gif)
 
 ## SCREENSHOTS
-![Stillframe](./Assets/Readme/Screenshots/Stillframe.png)
-![Customization](./Assets/Readme/Screenshots/Customization.png)
-![Lobby](./Assets/Readme/Screenshots/Lobby.png)
+![Stillframe](./Assets/Readme/Screenshots/Stillframe.jpeg)
+![Customization](./Assets/Readme/Screenshots/Customization.jpeg)
+![Lobby](./Assets/Readme/Screenshots/Lobby.jpeg)
 ![Gameplay 1](./Assets/Readme/Screenshots/Gameplay1.jpeg)
 ![Gameplay 2](./Assets/Readme/Screenshots/Gameplay2.jpeg)
 ![Gameplay 3](./Assets/Readme/Screenshots/Gameplay3.jpeg)
