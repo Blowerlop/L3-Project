@@ -29,10 +29,6 @@ Team up, adapt, and overcome!
 ![Cinematic](./Assets/Readme/Gifs/Cinematic.gif)
 ![Gameplay](./Assets/Readme/Gifs/Gameplay.gif)
 
-## GIFS
-![Cinematic](./Assets/Readme/Gifs/Cinematic.gif)
-![Gameplay](./Assets/Readme/Gifs/Gameplay.gif)
-
 ## SCREENSHOTS
 ![Stillframe](./Assets/Readme/Screenshots/Stillframe.jpeg)
 ![Customization](./Assets/Readme/Screenshots/Customization.jpeg)
